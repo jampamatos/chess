@@ -7,6 +7,8 @@ class Square
   BLACK_COLOR = :blue
   YELLOW_COLOR = :light_yellow
 
+  attr_reader :piece, :color, :selected
+
   def initialize(x, y, color, piece = nil, selected = false)
     @x = x
     @y = y
@@ -31,17 +33,21 @@ class Square
     end
   end
 
-  def set_piece; end
+  def add_piece(piece)
+    @piece = piece unless occupied?
+  end
 
-  def remove_piece; end
+  def remove_piece
+    @piece = nil if occupied?
+  end
 
-  def select; end
+  def select
+    @selected = true unless @selected
+  end
 
-  def deselect; end
-
-  def reachable_by?(piece); end
-
-  def attacked_by?(piece); end
+  def deselect
+    @selected = false if @selected
+  end
 
   private
 

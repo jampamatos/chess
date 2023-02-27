@@ -115,4 +115,88 @@ describe Square do
       end
     end
   end
+
+  describe '#add_piece' do
+    context 'when the square is not occupied' do
+      let(:piece) { double('Piece') }
+      let(:square) { Square.new(1, 1, :white) }
+
+      it 'adds a piece to the square' do
+        expect(square.add_piece(piece)).to eq(piece)
+        expect(square.occupied?).to be true
+      end
+    end
+
+    context 'when the square is already occupied' do
+      let(:piece1) { double('Piece1') }
+      let(:piece2) { double('Piece2') }
+      let(:square) { Square.new(1, 1, :white, piece1) }
+
+      it 'does not add the piece to the square' do
+        expect(square.add_piece(piece2)).to be_nil
+        expect(square.occupied?).to be true
+      end
+    end
+  end
+
+  describe '#remove_piece' do
+    context 'when the square is occupied' do
+      let(:piece) { double('Piece') }
+      let(:square) { Square.new(1, 1, :white, piece) }
+
+      it 'removes the piece from the square' do
+        expect(square.remove_piece).to be_nil
+        expect(square.occupied?).to be false
+      end
+    end
+
+    context 'when the square is not occupied' do
+      let(:square) { Square.new(1, 1, :white) }
+
+      it 'does not remove anything from the square' do
+        expect(square.remove_piece).to be_nil
+        expect(square.occupied?).to be false
+      end
+    end
+  end
+
+  describe '#select' do
+    context 'when the square is unselected' do
+      subject { Square.new(x, y, color, piece) }
+
+      it 'selects the square' do
+        subject.select
+        expect(subject.instance_variable_get(:@selected)).to be true
+      end
+    end
+
+    context 'when the square is already selected' do
+      subject { Square.new(x, y, color, piece, true) }
+
+      it 'does not change the selected attribute' do
+        subject.select
+        expect(subject.instance_variable_get(:@selected)).to be true
+      end
+    end
+  end
+
+  describe '#deselect' do
+    context 'when the square is selected' do
+      subject { Square.new(x, y, color, piece, true) }
+
+      it 'deselects the square' do
+        subject.deselect
+        expect(subject.instance_variable_get(:@selected)).to be false
+      end
+    end
+
+    context 'when the square is not selected' do
+      subject { Square.new(x, y, color, piece) }
+
+      it 'does not change the selected attribute' do
+        subject.deselect
+        expect(subject.instance_variable_get(:@selected)).to be false
+      end
+    end
+  end
 end
