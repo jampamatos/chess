@@ -6,11 +6,11 @@ class Piece
 
   attr_reader :color, :type, :position
 
-  def initialize(color, type, position, symbol)
+  def initialize(color, type, symbol, position = nil)
     @color = color
     @type = type
-    @position = position
     @symbol = symbol
+    @position = position
   end
 
   def to_s
