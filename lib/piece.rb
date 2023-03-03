@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
+require 'colorize'
+
 class Piece
+
+  attr_reader :color, :type, :position
+
   def initialize(color, type, position, symbol)
     @color = color
     @type = type
@@ -9,7 +14,7 @@ class Piece
   end
 
   def to_s
-    @symbol
+    @symbol.colorize(color)
   end
 
   def moves; end
