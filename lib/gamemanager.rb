@@ -2,7 +2,11 @@
 
 require_relative 'dependencies'
 
+START_ROW = { 'white' => 7, 'black' => 0 }
+
 class GameManager
+  attr_reader :board
+
   def initialize
     @board = Board.new
 
@@ -26,41 +30,64 @@ class GameManager
 
   def create_pawns(color)
     pawns = []
+    start_pawn_row = color == 'white' ? 6 : 1
+
     8.times do |i|
-      pawns << Pawn.new(color.to_s)
-      self.instance_variable_set("@#{color}_pawn#{i+1}", pawns[i])
+      position = [start_pawn_row, i]
+      pawn = Pawn.new(color, position)
+      pawns << pawn
+      set_piece(pawn, position)
+      self.instance_variable_set("@#{color}_pawn#{i+1}", pawn)
     end
   end
 
   def create_rooks(color)
     rooks = []
     2.times do |i|
-      rooks << Rook.new(color.to_s)
-      self.instance_variable_set("@#{color}_rook#{i+1}", rooks[i])
+      rook = Rook.new(color.to_s)
+      rooks << rook
+      set_piece(rook, [START_ROW[color], i == 0 ? 0 : 7])
+      self.instance_variable_set("@#{color}_rook#{i+1}", rook)
     end
   end
 
   def create_knights(color)
     knights = []
     2.times do |i|
-      knights << Knight.new(color.to_s)
-      self.instance_variable_set("@#{color}_knight#{i+1}", knights[i])
+      knight = Knight.new(color.to_s)
+      knights << knight
+      set_piece(knight, [START_ROW[color], i == 0 ? 1 : 6])
+      self.instance_variable_set("@#{color}_knight#{i+1}", knight)
     end
   end
 
   def create_bishops(color)
     bishops = []
     2.times do |i|
-      bishops << Bishop.new(color.to_s)
-      self.instance_variable_set("@#{color}_bishop#{i+1}", bishops[i])
+      bishop = Bishop.new(color.to_s)
+      bishops << bishop
+      set_piece(bishop, [START_ROW[color], i == 0 ? 2 : 5])
+      self.instance_variable_set("@#{color}_bishop#{i+1}", bishop)
     end
   end
 
   def create_queen(color)
-    self.instance_variable_set("@#{color}_queen", Queen.new(color))
+    queen = Queen.new(color)
+    set_piece(queen, [START_ROW[color], 3])
+    self.instance_variable_set("@#{color}_queen", queen)
+  end
+  
+  def create_king(color)
+    king = King.new(color)
+    set_piece(king, [START_ROW[color], 4])
+    self.instance_variable_set("@#{color}_king", king)
   end
 
-  def create_king(color)
-    self.instance_variable_set("@#{color}_king", King.new(color))
+  def set_piece(piece, position)
+    row, col = position
+    raise "Cannot set piece: position #{position} is not empty" unless @board.grid[row][col] == nil
+  
+    @board.grid[row][col] = piece
+    piece.position = position
   end
 end

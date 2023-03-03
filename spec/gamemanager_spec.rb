@@ -38,6 +38,71 @@ describe GameManager do
       expect(white_pieces.size).to eq(16)
       expect(black_pieces.size).to eq(16)
     end
+
+    describe "piece positions" do
+      let(:board) { GameManager.new.instance_variable_get("@board") }
+
+      it "places white rooks correctly" do
+        expect(board.grid[7][0]).to be_an_instance_of(Rook)
+        expect(board.grid[7][0].color).to eq("white")
+        expect(board.grid[7][7]).to be_an_instance_of(Rook)
+        expect(board.grid[7][7].color).to eq("white")
+      end
+
+      it "places black rooks correctly" do
+        expect(board.grid[0][0]).to be_an_instance_of(Rook)
+        expect(board.grid[0][0].color).to eq("black")
+        expect(board.grid[0][7]).to be_an_instance_of(Rook)
+        expect(board.grid[0][7].color).to eq("black")
+      end
+
+      it "places white knights correctly" do
+        expect(board.grid[7][1]).to be_an_instance_of(Knight)
+        expect(board.grid[7][1].color).to eq("white")
+        expect(board.grid[7][6]).to be_an_instance_of(Knight)
+        expect(board.grid[7][6].color).to eq("white")
+      end
+
+      it "places black knights correctly" do
+        expect(board.grid[0][1]).to be_an_instance_of(Knight)
+        expect(board.grid[0][1].color).to eq("black")
+        expect(board.grid[0][6]).to be_an_instance_of(Knight)
+        expect(board.grid[0][6].color).to eq("black")
+      end
+
+      it "places white bishops correctly" do
+        expect(board.grid[7][2]).to be_an_instance_of(Bishop)
+        expect(board.grid[7][2].color).to eq("white")
+        expect(board.grid[7][2]).to be_an_instance_of(Bishop)
+        expect(board.grid[7][2].color).to eq("white")
+      end
+
+      it "places black bishops correctly" do
+        expect(board.grid[0][2]).to be_an_instance_of(Bishop)
+        expect(board.grid[0][2].color).to eq("black")
+        expect(board.grid[0][5]).to be_an_instance_of(Bishop)
+        expect(board.grid[0][5].color).to eq("black")
+      end
+
+      it "places white queen correctly" do
+        expect(board.grid[7][3]).to be_an_instance_of(Queen)
+        expect(board.grid[7][3].color).to eq("white")
+      end
+
+      it "places black queen correctly" do
+        expect(board.grid[0][3]).to be_an_instance_of(Queen)
+        expect(board.grid[0][3].color).to eq("black")
+      end
+
+      it "places white king correctly" do
+        expect(board.grid[7][4]).to be_an_instance_of(King)
+        expect(board.grid[7][4].color).to eq("white")
+      end
+
+      it "places black king correctly" do
+        expect(board.grid[0][4]).to be_an_instance_of(King)
+        expect(board.grid[0][4].color).to eq("black")
+      end
+    end
   end
 end
-
