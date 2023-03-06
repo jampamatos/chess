@@ -12,4 +12,67 @@ class Rook < Piece
   def to_unicode
     @color == 'white' ? "\u2656 " : "\u265C "
   end
+
+  def possible_moves(position, board)
+    moves = []
+
+    moves += horizontal_and_vertical_moves(board, position, 1, 0) # Right
+    moves += horizontal_and_vertical_moves(board, position, -1, 0) # Left
+    moves += horizontal_and_vertical_moves(board, position, 0, 1) # Up
+    moves += horizontal_and_vertical_moves(board, position, 0, -1) # Down
+
+    moves
+  end
+
+  private
+
+  def horizontal_and_vertical_moves(board, position, row_step, col_step)
+    moves = []
+    current_row, current_col = position
+  
+    (1..7).each do |i|
+      row = current_row + i * row_step
+      col = current_col + i * col_step
+      break unless valid_position?([row, col])
+  
+      destination = [row, col]
+      if can_move_horizontally_or_vertically?(position, destination, board)
+        moves << destination
+        break unless board[destination].nil?
+      else
+        break
+      end
+    end
+  
+    # sort moves from top to bottom
+    moves.sort_by! { |move| [-move[0], move[1]] }
+  
+    moves
+  end
+
+  def can_move_horizontally_or_vertically?(position, destination, board)
+    dest_row, dest_col = destination
+    curr_row, curr_col = position
+
+    if dest_row == curr_row
+      min_col, max_col = [curr_col, dest_col].minmax
+      (min_col + 1...max_col).each do |col|
+        return false unless board[[curr_row, col]].nil?
+      end
+    elsif dest_col == curr_col
+      min_row, max_row = [curr_row, dest_row].minmax
+      (min_row + 1...max_row).each do |row|
+        return false unless board[[row, curr_col]].nil?
+      end
+    else
+      return false
+    end
+
+    true
+  end
+
+  def valid_position?(position)
+    row, col = position
+    row.between?(0, 7) && col.between?(0, 7)
+  end
 end

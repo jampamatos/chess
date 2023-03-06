@@ -3,10 +3,9 @@
 require_relative 'dependencies'
 
 START_ROW = { 'white' => 7, 'black' => 0 }.freeze
-BG_COLOR = :light_black
 
 class GameManager
-  attr_reader :board
+  attr_reader :board, :white_pawn1
 
   def initialize
     @board = Board.new
@@ -19,16 +18,11 @@ class GameManager
   end
 
   def draw_board(board = @board)
-    puts "\n   A  B  C  D  E  F  G  H\n"
-    board.grid.each_with_index do |row, i|
-      print "#{8 - i} "
-      row.each_with_index do |piece, j|
-        bg_color = (i + j).even? ? BG_COLOR : :default
-        print piece ? piece.to_unicode.colorize(background: bg_color) : '  '.colorize(background: bg_color)
-      end
-      print " #{8 - i}\n"
-    end
-    puts "\n   A  B  C  D  E  F  G  H\n"
+    board.draw_board
+  end
+
+  def set_piece(piece, position)
+    @board.set_piece(piece, position)
   end
 
   private
@@ -95,13 +89,5 @@ class GameManager
     king = King.new(color)
     set_piece(king, [START_ROW[color], 4])
     self.instance_variable_set("@#{color}_king", king)
-  end
-
-  def set_piece(piece, position)
-    row, col = position
-    raise "Cannot set piece: position #{position} is not empty" unless @board.grid[row][col] == nil
-
-    @board.grid[row][col] = piece
-    piece.position = position
   end
 end

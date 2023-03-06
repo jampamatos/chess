@@ -18,7 +18,9 @@ class Piece
     @symbol.colorize(color)
   end
 
-  def moves; end
+  def possible_moves(_board, _position = @position)
+    []
+  end
 
   def move_to(position); end
 

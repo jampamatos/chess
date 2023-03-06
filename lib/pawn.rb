@@ -4,9 +4,9 @@ require_relative 'piece'
 require 'colorize'
 
 class Pawn < Piece
-  def initialize(color, position, moved = false)
+  def initialize(color, moved = false)
     symbol = color == :white ? '♙'.colorize(color) : '♟'.colorize(color)
-    super(color, :pawn, symbol, position)
+    super(color, :pawn, symbol)
     @moved = moved
   end
 
