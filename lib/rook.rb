@@ -29,12 +29,12 @@ class Rook < Piece
   def horizontal_and_vertical_moves(board, position, row_step, col_step)
     moves = []
     current_row, current_col = position
-  
+
     (1..7).each do |i|
       row = current_row + i * row_step
       col = current_col + i * col_step
       break unless valid_position?([row, col])
-  
+
       destination = [row, col]
       if can_move_horizontally_or_vertically?(position, destination, board)
         moves << destination
@@ -43,10 +43,9 @@ class Rook < Piece
         break
       end
     end
-  
-    # sort moves from top to bottom
+
     moves.sort_by! { |move| [-move[0], move[1]] }
-  
+
     moves
   end
 
@@ -57,12 +56,24 @@ class Rook < Piece
     if dest_row == curr_row
       min_col, max_col = [curr_col, dest_col].minmax
       (min_col + 1...max_col).each do |col|
-        return false unless board[[curr_row, col]].nil?
+        if board[[curr_row, col]].nil?
+          next
+        elsif board[[curr_row, col]].color != @color
+          return true
+        else
+          return false
+        end
       end
     elsif dest_col == curr_col
       min_row, max_row = [curr_row, dest_row].minmax
       (min_row + 1...max_row).each do |row|
-        return false unless board[[row, curr_col]].nil?
+        if board[[row, curr_col]].nil?
+          next
+        elsif board[[row, curr_col]].color != @color
+          return true
+        else
+          return false
+        end
       end
     else
       return false

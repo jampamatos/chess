@@ -29,7 +29,7 @@ describe Rook do
         board.set_piece(Pawn.new(:white), [6, 3])
         board.draw_board
 
-        expected_moves = [[0, 3], [2, 3], [3, 0], [3, 2], [3, 4], [3, 5], [3, 7], [4, 3], [5, 3], [7, 3]]
+        expected_moves = [[1, 3], [2, 3], [3, 1], [3, 2], [3, 4], [3, 5], [3, 6], [4, 3], [5, 3], [6, 3]]
         expect(rook.possible_moves([3, 3], board)).to match_array(expected_moves)
       end
     end
