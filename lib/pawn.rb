@@ -9,4 +9,8 @@ class Pawn < Piece
     super(color, :pawn, symbol, position)
     @moved = moved
   end
+
+  def to_unicode
+    @color == 'white' ? "\u2659 " : "\u265F "
+  end
 end

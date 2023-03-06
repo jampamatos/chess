@@ -8,4 +8,8 @@ class King < Piece
     symbol = color == :white ? '♔'.colorize(color) : '♚'.colorize(color)
     super(color, :king, symbol)
   end
+
+  def to_unicode
+    @color == 'white' ? "\u2654 " : "\u265A "
+  end
 end
