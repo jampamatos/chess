@@ -13,7 +13,6 @@ RSpec.describe Knight do
 
       before do
         board.set_piece(knight, [3, 3])
-        board.draw_board
       end
 
       it 'returns an array of 8 possible moves' do
@@ -26,7 +25,6 @@ RSpec.describe Knight do
         board.set_piece(Pawn.new(:white), [4, 5])
         board.set_piece(Pawn.new(:white), [2, 1])
         board.set_piece(Pawn.new(:white), [2, 5])
-        board.draw_board
         expected_moves = [[5, 4], [5, 2], [1, 4], [1, 2]]
         expect(knight.possible_moves(board)).to match_array(expected_moves)
       end
@@ -36,7 +34,6 @@ RSpec.describe Knight do
         board.set_piece(Pawn.new(:black), [4, 5])
         board.set_piece(Pawn.new(:black), [2, 1])
         board.set_piece(Pawn.new(:black), [2, 5])
-        board.draw_board
         expected_moves = [[5, 4], [5, 2], [1, 4], [1, 2], [4, 5], [4, 1], [2, 5], [2, 1]]
         expect(knight.possible_moves(board)).to match_array(expected_moves)
       end
@@ -54,7 +51,6 @@ RSpec.describe Knight do
         board.set_piece(Pawn.new(:white), [2, 2])
         board.set_piece(Pawn.new(:white), [4, 2])
         board.set_piece(Pawn.new(:white), [2, 4])
-        board.draw_board
 
         expect(knight.possible_moves(board)).to contain_exactly([1, 2], [1, 4], [2, 1], [2, 5], [4, 1], [4, 5], [5, 2], [5, 4])
       end
@@ -94,8 +90,8 @@ RSpec.describe Knight do
         board.set_piece(knight, [3, 3])
       end
 
-      it 'does not move to the destination and returns false' do
-        expect(knight.move([4, 4], board)).to be_falsey
+      it 'does not move to the destination and throw error' do
+        expect { knight.move([4, 4], board) }.to raise_error(InvalidMoveError)
         expect(board[[4, 4]]).to be_nil
       end
     end

@@ -9,19 +9,9 @@ require_relative 'lib/gamemanager'
 
 board = Board.new
 white_bishop = Bishop.new('white')
-black_pawn1 = Pawn.new('black')
-black_pawn2 = Pawn.new('black')
-black_pawn3 = Pawn.new('black')
-black_pawn4 = Pawn.new('black')
-black_pawn5 = Pawn.new('black')
-black_pawn6 = Pawn.new('black')
+black_pawn = Pawn.new('black')
 
 board.set_piece(white_bishop, [4, 4])
-board.set_piece(black_pawn1, [4, 3])
-board.set_piece(black_pawn2, [3, 4])
-board.set_piece(black_pawn3, [2, 2])
-board.set_piece(black_pawn4, [2, 6])
-board.set_piece(black_pawn5, [6, 2])
-board.set_piece(black_pawn6, [6, 6])
+board.set_piece(black_pawn, [5,5])
 
 board.draw_board

@@ -27,7 +27,6 @@ describe Rook do
         board.set_piece(Pawn.new(:black), [3, 6])
         board.set_piece(Pawn.new(:black), [1, 3])
         board.set_piece(Pawn.new(:white), [6, 3])
-        board.draw_board
 
         expected_moves = [[1, 3], [2, 3], [3, 1], [3, 2], [3, 4], [3, 5], [3, 6], [4, 3], [5, 3], [6, 3]]
         expect(rook.possible_moves(board, [3, 3])).to match_array(expected_moves)
@@ -49,7 +48,6 @@ describe Rook do
 
         # Move the rook to a valid position
         expect(rook.move([3, 6], board).uncolorize).to eq("♖g5")
-        board.draw_board
 
         # Check that the rook's position has been updated
         expect(rook.position).to eq([3, 6])
@@ -72,15 +70,15 @@ describe Rook do
         board.set_piece(rook, [3, 3])
       end
 
-      it 'returns false and does not update position' do
+      it 'throws error and does not update position' do
         # Try to move the rook to an invalid position
-        expect(rook.move([5, 5], board)).to eq(false)
+        expect { rook.move([5, 5], board) }.to raise_error(InvalidMoveError)
 
         # Check that the rook's position has not been updated
         expect(rook.position).to eq([3, 3])
       end
       it 'does not update the @moved variable to true' do
-        rook.move([5, 5], board)
+        expect { rook.move([5, 5], board) }.to raise_error(InvalidMoveError)
         expect(rook.instance_variable_get(:@moved)).to be_falsey
       end
     end

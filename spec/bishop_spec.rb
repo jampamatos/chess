@@ -6,7 +6,7 @@ require_relative '../lib/board'
 
 RSpec.describe Bishop do
   describe Bishop do
-    let(:board) { instance_double('Board') }
+    let(:board) { Board.new }
     let(:bishop) { Bishop.new(:white) }
 
     describe '#possible_moves' do
@@ -37,24 +37,57 @@ RSpec.describe Bishop do
       context 'when there are pieces of different colors on the board' do
         before do
           bishop.position = [4, 4]
-          allow(board).to receive(:[]).and_return(
-            nil,
-            instance_double('Piece', color: :black), # [4, 3]
-            instance_double('Piece', color: :white), # [3, 4]
-            nil, nil, nil, nil, nil, nil, nil, nil, nil, nil,
-            instance_double('Piece', color: :white), # [2, 2]
-            nil, nil, nil, nil, nil,
-            instance_double('Piece', color: :black), # [2, 6]
-            nil, nil, nil, nil, nil, nil, nil,
-            instance_double('Piece', color: :black), # [6, 2]
-            nil, nil, nil, nil, nil, nil, nil,
-            instance_double('Piece', color: :white)  # [6, 6]
-          )
         end
-      
-        it 'returns only the possible moves that do not capture a piece of the same color' do
+
+        it 'returns all the possible moves' do
+          board.set_piece(Pawn.new(:black), [4, 3])
+          board.set_piece(Pawn.new(:black), [3, 4])
+          board.set_piece(Pawn.new(:black), [2, 2])
+          board.set_piece(Pawn.new(:black), [2, 6])
+          board.set_piece(Pawn.new(:black), [6, 2])
+          board.set_piece(Pawn.new(:black), [6, 6])
           expect(bishop.possible_moves(board)).to contain_exactly([2, 2], [3, 3], [3, 5], [2, 6], [5, 3], [6, 2], [5, 5], [6, 6])
         end
+      end
+    end
+
+    describe '#move' do
+      context 'when the destination square is empty' do
+        it 'moves the bishop to the destination square and returns the move notation' do
+          board.set_piece(bishop, [4, 4])
+          expect(bishop.move([5, 5], board).uncolorize).to eq('♗f3')
+          expect(bishop.position).to eq([5, 5])
+          expect(board[[5, 5]]).to eq(bishop)
+          expect(board[[4, 4]]).to be_nil
+        end
+      end
+
+      context 'when the destination square is not diagonal to the current position' do
+        it 'raises an InvalidMoveError' do
+          board.set_piece(bishop, [4, 4])
+          expect { bishop.move([5, 4], board) }.to raise_error(InvalidMoveError)
+          expect(board[[4, 4]]).to eq(bishop)
+        end
+      end
+
+      context 'when the destination square is occupied by a piece of the same color' do
+        it 'raises an InvalidMoveError' do
+          board.set_piece(bishop, [4, 4])
+          board.set_piece(Pawn.new(:white), [5, 5])
+          expect { bishop.move([5, 5], board) }.to raise_error(InvalidMoveError)
+          expect(board[[4, 4]]).to eq(bishop)
+        end
+      end
+
+      context 'when the destination square is occupied by a piece of a different color' do
+        it 'moves the bishop to the destination square and returns the move notation' do
+          board.set_piece(bishop, [4, 4])
+          board.set_piece(Pawn.new(:black), [5, 5])
+          expect(bishop.move([5, 5], board).uncolorize).to eq('♗e4x♟f3')
+          expect(board[[5, 5]]).to eq(bishop)
+          expect(board[[4, 4]]).to be_nil
+          expect(board[[5, 6]]).to be_nil
+          end
       end
     end
   end
