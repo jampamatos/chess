@@ -10,10 +10,10 @@ class Rook < Piece
   end
 
   def to_unicode
-    @color == 'white' ? "\u2656 " : "\u265C "
+    @color == 'white' ? " \u2656 " : " \u265C "
   end
 
-  def possible_moves(position, board)
+  def possible_moves(board, position = @position)
     moves = []
 
     moves += horizontal_and_vertical_moves(board, position, 1, 0) # Right
@@ -22,6 +22,28 @@ class Rook < Piece
     moves += horizontal_and_vertical_moves(board, position, 0, -1) # Down
 
     moves
+  end
+
+  def move(destination, board)
+    return false unless possible_moves(board).include?(destination)
+
+    row, col = destination
+    prev_row, prev_col = @position
+    piece = board[destination]
+    capture = ''
+    if piece && piece.color != @color
+      board.remove_piece(destination)
+      capture = "x#{to_chess_notation(row, col, piece.symbol)}"
+    end
+
+    board.set_piece(self, destination)
+    @position = destination
+
+    if capture.to_s.strip.empty?
+      "#{to_chess_notation(position[0], position[1])}"
+    else
+      "#{to_chess_notation(prev_row, prev_col)}#{capture}"
+    end
   end
 
   private

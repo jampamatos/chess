@@ -11,6 +11,6 @@ class Pawn < Piece
   end
 
   def to_unicode
-    @color == 'white' ? "\u2659 " : "\u265F "
+    @color == 'white' ? " \u2659 " : " \u265F "
   end
 end

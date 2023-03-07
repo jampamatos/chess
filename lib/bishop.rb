@@ -10,6 +10,6 @@ class Bishop < Piece
   end
 
   def to_unicode
-    @color == 'white' ? "\u2657 " : "\u265D "
+    @color == 'white' ? " \u2657 " : " \u265D "
   end
 end

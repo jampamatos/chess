@@ -10,6 +10,6 @@ class King < Piece
   end
 
   def to_unicode
-    @color == 'white' ? "\u2654 " : "\u265A "
+    @color == 'white' ? " \u2654 " : " \u265A "
   end
 end

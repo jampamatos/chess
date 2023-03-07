@@ -24,6 +24,10 @@ class Board
     end
   end
 
+  def remove_piece(position)
+    @grid[position[0]][position[1]] = nil
+  end
+
   def [](position)
     row, col = position
     @grid[row][col]
@@ -35,7 +39,7 @@ class Board
       print "#{8 - i} "
       row.each_with_index do |piece, j|
         bg_color = (i + j).even? ? BG_COLOR : :default
-        print piece ? piece.to_unicode.colorize(background: bg_color) : '  '.colorize(background: bg_color)
+        print piece ? piece.to_unicode.colorize(background: bg_color) : '   '.colorize(background: bg_color)
       end
       print " #{8 - i}\n"
     end
