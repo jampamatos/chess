@@ -37,16 +37,20 @@ describe Rook do
 
   describe '#move' do
     let(:board) { Board.new }
-  
+
     context 'when destination is a valid move' do
-      it 'updates position and returns chess notation of the move' do
-        rook = Rook.new(:white)
+      let(:rook) { Rook.new(:white) }
+
+      before do
         board.set_piece(rook, [3, 3])
-  
+      end
+
+      it 'updates position and returns chess notation of the move' do
+
         # Move the rook to a valid position
         expect(rook.move([3, 6], board).uncolorize).to eq("♖g5")
         board.draw_board
-  
+
         # Check that the rook's position has been updated
         expect(rook.position).to eq([3, 6])
         expect(board[[3, 6]]).to eq(rook)
@@ -54,33 +58,45 @@ describe Rook do
         # Check that the rook's previous position has been updated
         expect(board[[3, 3]]).to be_nil
       end
+
+      it 'updates the @moved variable to true' do
+        expect { rook.move([3, 6], board) }.to change { rook.instance_variable_get(:@moved) }.from(false).to(true)
+      end
     end
-  
+
     context 'when destination is not a valid move' do
-      it 'returns false and does not update position' do
-        rook = Rook.new(:white)
+
+      let(:rook) { Rook.new(:white) }
+
+      before do
         board.set_piece(rook, [3, 3])
-  
+      end
+
+      it 'returns false and does not update position' do
         # Try to move the rook to an invalid position
         expect(rook.move([5, 5], board)).to eq(false)
-  
+
         # Check that the rook's position has not been updated
         expect(rook.position).to eq([3, 3])
       end
+      it 'does not update the @moved variable to true' do
+        rook.move([5, 5], board)
+        expect(rook.instance_variable_get(:@moved)).to be_falsey
+      end
     end
-  
+
     context 'when destination is occupied by an enemy piece' do
       it 'captures the piece and returns chess notation of the move' do
         rook = Rook.new(:white)
         board.set_piece(rook, [3, 3])
         board.set_piece(Pawn.new(:black), [3, 6])
-  
+
         # Move the rook to capture the black pawn
         expect(rook.move([3, 6], board).uncolorize).to eq("♖d5x♟g5")
-  
+
         # Check that the rook's position has been updated
         expect(rook.position).to eq([3, 6])
-  
+
         # Check that the black pawn has been removed from the board
         expect(board[[3, 6]]).to be rook
         expect(board[[3, 3]]).to be nil
@@ -93,10 +109,10 @@ describe Rook do
         rook = Rook.new(:white)
         board.set_piece(rook, [3, 3])
         board.set_piece(Pawn.new(:white), [3, 6])
-    
+
         # Try to move the rook to a square occupied by a friendly pawn
-        expect { rook.move([3, 6], board) }.to raise_error("Cannot set piece: position [3, 6] is not empty")
-    
+        expect { rook.move([3, 6], board) }.to raise_error('Cannot set piece: position [3, 6] is not empty')
+
         # Check that the rook's position has not been updated
         expect(rook.position).to eq([3, 3])
       end

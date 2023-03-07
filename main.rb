@@ -8,8 +8,10 @@ require_relative 'lib/gamemanager'
 # gm.draw_board
 
 board = Board.new
-white_rook = Rook.new('white')
-black_pawn = Pawn.new('black')
-board.set_piece(white_rook, [3, 3])
-board.set_piece(black_pawn, [3, 6])
+white_knight = Knight.new('white')
+black_knight = Knight.new('black')
+
+board.set_piece(white_knight, [3, 3])
+board.set_piece(black_knight, [5, 2])
+
 board.draw_board
