@@ -3,7 +3,6 @@
 require 'colorize'
 
 class Piece
-
   attr_reader :color, :type, :symbol, :moved
   attr_accessor :position
 
@@ -80,6 +79,27 @@ class Piece
     end
 
     moves.sort_by! { |move| [-move[0], move[1]] }
+
+    moves
+  end
+
+  def diagonal_moves(board, position, row_step, col_step)
+    moves = []
+    current_row, current_col = position
+
+    (1..7).each do |i|
+      row = current_row + i * row_step
+      col = current_col + i * col_step
+      break unless valid_position?([row, col])
+
+      destination = [row, col]
+      if can_move_diagonally?(position, destination, board)
+        moves << destination
+        break unless board[destination].nil?
+      else
+        break
+      end
+    end
 
     moves
   end

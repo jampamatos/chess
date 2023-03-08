@@ -15,60 +15,12 @@ class Bishop < Piece
 
   def possible_moves(board, position = @position)
     moves = []
-    row, col = position
-  
-    # top-right diagonal
-    i = 1
-    while row - i >= 0 && col + i <= 7
-      dest = [row - i, col + i]
-      if can_move_diagonally?(position, dest, board)
-        moves << dest
-        break if board[dest]
-      else
-        break
-      end
-      i += 1
-    end
-  
-    # top-left diagonal
-    i = 1
-    while row - i >= 0 && col - i >= 0
-      dest = [row - i, col - i]
-      if can_move_diagonally?(position, dest, board)
-        moves << dest
-        break if board[dest]
-      else
-        break
-      end
-      i += 1
-    end
-  
-    # bottom-right diagonal
-    i = 1
-    while row + i <= 7 && col + i <= 7
-      dest = [row + i, col + i]
-      if can_move_diagonally?(position, dest, board)
-        moves << dest
-        break if board[dest]
-      else
-        break
-      end
-      i += 1
-    end
-  
-    # bottom-left diagonal
-    i = 1
-    while row + i <= 7 && col - i >= 0
-      dest = [row + i, col - i]
-      if can_move_diagonally?(position, dest, board)
-        moves << dest
-        break if board[dest]
-      else
-        break
-      end
-      i += 1
-    end
 
-    moves.sort_by { |move| [-move[0], move[1]] }
+    moves += diagonal_moves(board, position, 1, 1)
+    moves += diagonal_moves(board, position, 1, -1)
+    moves += diagonal_moves(board, position, -1, 1)
+    moves += diagonal_moves(board, position, -1, -1)
+
+    moves
   end
 end
