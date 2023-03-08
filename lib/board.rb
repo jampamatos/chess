@@ -3,10 +3,11 @@
 BG_COLOR = :light_black
 
 class Board
-  attr_accessor :grid
+  attr_accessor :grid, :en_passant
 
   def initialize
     @grid = Array.new(8) { Array.new(8, nil) }
+    @en_passant = nil
   end
 
   def set_piece(piece, position)
