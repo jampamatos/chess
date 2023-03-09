@@ -26,6 +26,14 @@ class GameManager
     @board.set_piece(piece, position)
   end
 
+  def promote_pawn(pawn, new_piece)
+    position = pawn.position
+    color = pawn.color
+    set_piece(new_piece.new(color, position), position)
+    @active_pieces.delete_if { |_key, value| value == pawn }
+    @active_pieces["#{color}_#{new_piece.type.downcase}#{new_piece.id}"] = new_piece
+  end
+
   private
 
   def create_pieces(color, active_pieces)

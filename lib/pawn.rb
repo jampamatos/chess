@@ -56,10 +56,12 @@ class Pawn < Piece
   end
 
   def move(destination, board)
-    if board.en_passant == [destination[0] + (color == :white ? 1 : -1), destination[1]]
+    curr_row = @position[0]
+    row = destination[0]
+    col = destination[1]
+    if board.en_passant == [destination[0] + (color == 'white' ? 1 : -1), destination[1]]
       # En passant capture
-      row = destination[0] + (color == :white ? -1 : 1)
-      col = destination[1]
+      row += (color == 'white' ? -1 : 1)
       piece = board[[row, col]]
       board.remove_piece([row, col])
       board.en_passant = nil
@@ -67,22 +69,45 @@ class Pawn < Piece
       @position = destination
       @moved = true
       "#{to_chess_notation(position[0], position[1])}x#{to_chess_notation(destination[0], destination[1], piece.symbol)} e.p."
-    elsif destination[0] == (color == :white ? 0 : 7)
+    elsif destination[0] == (color == 'white' ? 0 : 7)
       puts 'Pawn promotion'
-      # board.remove_piece(position)
-      # promotion_piece = choose_promotion_piece(board)
-      # board.set_piece(promotion_piece, destination)
-      # promotion_piece.position = destination
-      # promotion_piece.moved = true
-      # "#{to_chess_notation(position[0], position[1])}-#{to_chess_notation(destination[0], destination[1])}=#{promotion_piece.symbol}"
+      new_piece = choose_promotion_piece
+      game_manager.promote_pawn(self, new_piece)
+      "#{to_chess_notation(position[0], position[1])}-#{to_chess_notation(destination[0], destination[1])}=#{new_piece.symbol}"
     else
-      super(destination, board)
-      row, _col = destination
-      two_steps = color == :white ? 6 : 1
-      if row == two_steps
-        board.en_passant = destination
+      notation = super(destination, board)
+      if (curr_row - row).abs == 2
+        en_passant_row = color == 'white' ? row + 1 : row - 1
+        board.en_passant = [en_passant_row, col]
       else
         board.en_passant = nil
+      end
+      notation
+    end
+  end
+
+  private
+
+  def choose_promotion_piece
+    puts 'Choose a piece to promote to: '
+    puts '1. Queen'
+    puts '2. Rook'
+    puts '3. Bishop'
+    puts '4. Knight'
+    choice = gets.chomp.to_i
+
+    loop do
+      case choice
+      when 1
+        return Queen.new(color)
+      when 2
+        return Rook.new(color)
+      when 3
+        return Bishop.new(color)
+      when 4
+        return Knight.new(color)
+      else
+        puts 'Invalid input, please try again.'
       end
     end
   end
