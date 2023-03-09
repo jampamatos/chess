@@ -5,16 +5,17 @@ require_relative 'dependencies'
 START_ROW = { 'white' => 7, 'black' => 0 }.freeze
 
 class GameManager
-  attr_reader :board, :white_pawn1
+  attr_reader :board, :active_pieces
 
   def initialize
     @board = Board.new
+    @active_pieces = {}
 
     # create white pieces
-    create_pieces('white')
+    create_pieces('white', @active_pieces)
 
     # create black pieces
-    create_pieces('black')
+    create_pieces('black', @active_pieces)
   end
 
   def draw_board(board = @board)
@@ -27,67 +28,59 @@ class GameManager
 
   private
 
-  def create_pieces(color)
-    create_pawns(color)
-    create_rooks(color)
-    create_knights(color)
-    create_bishops(color)
-    create_queen(color)
-    create_king(color)
+  def create_pieces(color, active_pieces)
+    create_pawns(color, active_pieces)
+    create_rooks(color, active_pieces)
+    create_knights(color, active_pieces)
+    create_bishops(color, active_pieces)
+    create_queen(color, active_pieces)
+    create_king(color, active_pieces)
   end
 
-  def create_pawns(color)
-    pawns = []
+  def create_pawns(color, active_pieces)
     start_pawn_row = color == 'white' ? 6 : 1
 
     8.times do |i|
       position = [start_pawn_row, i]
       pawn = Pawn.new(color, position)
-      pawns << pawn
       set_piece(pawn, position)
-      self.instance_variable_set("@#{color}_pawn#{i+1}", pawn)
+      active_pieces["#{color}_pawn#{i + 1}"] = pawn
     end
   end
 
-  def create_rooks(color)
-    rooks = []
+  def create_rooks(color, active_pieces)
     2.times do |i|
       rook = Rook.new(color.to_s)
-      rooks << rook
       set_piece(rook, [START_ROW[color], i == 0 ? 0 : 7])
-      self.instance_variable_set("@#{color}_rook#{i+1}", rook)
+      active_pieces["#{color}_rook#{i + 1}"] = rook
     end
   end
 
-  def create_knights(color)
-    knights = []
+  def create_knights(color, active_pieces)
     2.times do |i|
       knight = Knight.new(color.to_s)
-      knights << knight
       set_piece(knight, [START_ROW[color], i == 0 ? 1 : 6])
-      self.instance_variable_set("@#{color}_knight#{i+1}", knight)
+      active_pieces["#{color}_knight#{i + 1}"] = knight
     end
   end
 
-  def create_bishops(color)
-    bishops = []
+  def create_bishops(color, active_pieces)
     2.times do |i|
       bishop = Bishop.new(color.to_s)
-      bishops << bishop
       set_piece(bishop, [START_ROW[color], i == 0 ? 2 : 5])
-      self.instance_variable_set("@#{color}_bishop#{i+1}", bishop)
+      active_pieces["#{color}_bishop#{i + 1}"] = bishop
     end
   end
 
-  def create_queen(color)
+  def create_queen(color, active_pieces)
     queen = Queen.new(color)
     set_piece(queen, [START_ROW[color], 3])
-    self.instance_variable_set("@#{color}_queen", queen)
+    active_pieces["#{color}_queen"] = queen
   end
 
-  def create_king(color)
+  def create_king(color, active_pieces)
     king = King.new(color)
     set_piece(king, [START_ROW[color], 4])
-    self.instance_variable_set("@#{color}_king", king)
+    active_pieces["#{color}_king"] = king
   end
 end

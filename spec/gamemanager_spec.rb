@@ -6,13 +6,13 @@ describe GameManager do
   describe "#initialize" do
     it "creates a new board" do
       game = GameManager.new
-      expect(game.instance_variable_get("@board")).to be_a(Board)
+      expect(game.instance_variable_get('@board')).to be_a(Board)
     end
 
     it "creates white and black pieces" do
       game = GameManager.new
-      white_pawn = game.instance_variable_get("@white_pawn1")
-      black_pawn = game.instance_variable_get("@black_pawn1")
+      white_pawn = game.active_pieces['white_pawn1']
+      black_pawn = game.active_pieces['black_pawn1']
       expect(white_pawn).to be_a(Pawn)
       expect(black_pawn).to be_a(Pawn)
     end
@@ -22,15 +22,11 @@ describe GameManager do
       white_pieces = []
       black_pieces = []
 
-      # Collect all white and black pieces
-      game.instance_variables.each do |var|
-        piece = game.instance_variable_get(var)
-        if var.to_s.start_with?("@white_")
+      game.active_pieces.each do |_name, piece|
+        if piece.color == 'white'
           white_pieces << piece
-          puts "White piece found: #{var}"
-        elsif var.to_s.start_with?("@black_")
+        elsif piece.color == 'black'
           black_pieces << piece
-          puts "Black piece found: #{var}"
         end
       end
 

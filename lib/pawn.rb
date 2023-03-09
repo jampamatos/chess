@@ -54,4 +54,36 @@ class Pawn < Piece
 
     moves
   end
+
+  def move(destination, board)
+    if board.en_passant == [destination[0] + (color == :white ? 1 : -1), destination[1]]
+      # En passant capture
+      row = destination[0] + (color == :white ? -1 : 1)
+      col = destination[1]
+      piece = board[[row, col]]
+      board.remove_piece([row, col])
+      board.en_passant = nil
+      board.set_piece(self, destination)
+      @position = destination
+      @moved = true
+      "#{to_chess_notation(position[0], position[1])}x#{to_chess_notation(destination[0], destination[1], piece.symbol)} e.p."
+    elsif destination[0] == (color == :white ? 0 : 7)
+      puts 'Pawn promotion'
+      # board.remove_piece(position)
+      # promotion_piece = choose_promotion_piece(board)
+      # board.set_piece(promotion_piece, destination)
+      # promotion_piece.position = destination
+      # promotion_piece.moved = true
+      # "#{to_chess_notation(position[0], position[1])}-#{to_chess_notation(destination[0], destination[1])}=#{promotion_piece.symbol}"
+    else
+      super(destination, board)
+      row, _col = destination
+      two_steps = color == :white ? 6 : 1
+      if row == two_steps
+        board.en_passant = destination
+      else
+        board.en_passant = nil
+      end
+    end
+  end
 end

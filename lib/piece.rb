@@ -45,6 +45,7 @@ class Piece
     board.set_piece(self, destination)
     @position = destination
     @moved = true
+    board.en_passant = nil
 
     if capture.to_s.strip.empty?
       "#{to_chess_notation(position[0], position[1])}"
