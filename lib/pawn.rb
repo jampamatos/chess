@@ -20,7 +20,7 @@ class Pawn < Piece
     row, col = position
 
     # Determine the direction and distance the pawn can move
-    direction = color == :white ? -1 : 1
+    direction = color == 'white' ? -1 : 1
     step_one = [row + direction, col]
     step_two = [row + 2 * direction, col]
     diagonal_left = [row + direction, col - 1]
