@@ -72,7 +72,7 @@ describe Pawn do
         it 'returns the correct move notation' do
           board.set_piece(white_pawn, [6, 0])
           notation = white_pawn.move([5, 0], board).uncolorize
-          expect(notation).to eq('♟a3')
+          expect(notation).to eq('♙a3')
         end
       end
 
@@ -93,7 +93,7 @@ describe Pawn do
         it 'returns the correct move notation' do
           board.set_piece(white_pawn, [6, 0])
           notation = white_pawn.move([4, 0], board).uncolorize
-          expect(notation).to eq('♟a4')
+          expect(notation).to eq('♙a4')
         end
       end
 
@@ -112,27 +112,26 @@ describe Pawn do
           board.set_piece(white_pawn, [6, 0])
           board.set_piece(black_pawn, [5, 1])
           notation = white_pawn.move([5, 1], board).uncolorize
-          expect(notation).to eq('♟a2x♟b3')
+          expect(notation).to eq('♙a2x♟b3')
         end
       end
 
-      xcontext 'when en passant capture is possible' do
+      context 'when en passant capture is possible' do
         it 'captures the opposing pawn and moves to the destination' do
           board.set_piece(white_pawn, [3, 4])
           board.set_piece(black_pawn, [1, 3])
           black_pawn.move([3, 3], board)
           white_pawn.move([2, 3], board)
-          expect(white_pawn.move([2, 3], board)).to eq("dxe6 e.p.")
           expect(board[[2, 3]]).to eq(white_pawn)
           expect(board[[3, 3]]).to be_nil
           expect(board[[3, 4]]).to be_nil
         end
-    
-        xit "returns the correct move notation" do
+
+        it 'returns the correct move notation' do
           board.set_piece(white_pawn, [3, 4])
           board.set_piece(black_pawn, [1, 3])
-          board.move_piece([1, 3], [3, 3])
-          expect(white_pawn.move([2, 3], board)).to eq("dxe6 e.p.")
+          black_pawn.move([3, 3], board)
+          expect(white_pawn.move([2, 3], board).uncolorize).to eq('♙e5x♟d6 e.p.')
         end
       end
     end

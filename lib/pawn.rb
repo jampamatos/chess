@@ -5,7 +5,7 @@ require 'colorize'
 
 class Pawn < Piece
   def initialize(color, moved = false)
-    symbol = color == :white ? '♙'.colorize(color) : '♟'.colorize(color)
+    symbol = color == 'white' ? "\u2659".colorize(color) : "\u265F".colorize(color)
     super(color, :pawn, symbol)
     @moved = moved
   end
@@ -57,18 +57,20 @@ class Pawn < Piece
 
   def move(destination, board)
     curr_row = @position[0]
+    curr_col = @position[1]
     row = destination[0]
     col = destination[1]
-    if board.en_passant == [destination[0] + (color == 'white' ? 1 : -1), destination[1]]
+    if board.en_passant == destination
       # En passant capture
-      row += (color == 'white' ? -1 : 1)
-      piece = board[[row, col]]
-      board.remove_piece([row, col])
+      captured_col = board.en_passant[1]
+      captured_row = destination[0] + (color == 'white' ? 1 : -1)
+      captured_piece = board.grid[captured_row][captured_col]
+      board.remove_piece([captured_row, col])
       board.en_passant = nil
       board.set_piece(self, destination)
       @position = destination
       @moved = true
-      "#{to_chess_notation(position[0], position[1])}x#{to_chess_notation(destination[0], destination[1], piece.symbol)} e.p."
+      "#{to_chess_notation(curr_row, curr_col)}x#{to_chess_notation(destination[0], destination[1], captured_piece.symbol)} e.p."
     elsif destination[0] == (color == 'white' ? 0 : 7)
       puts 'Pawn promotion'
       new_piece = choose_promotion_piece
