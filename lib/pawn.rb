@@ -72,7 +72,6 @@ class Pawn < Piece
       @moved = true
       "#{to_chess_notation(curr_row, curr_col)}x#{to_chess_notation(destination[0], destination[1], captured_piece.symbol)} e.p."
     elsif destination[0] == (color == 'white' ? 0 : 7)
-      puts 'Pawn promotion'
       new_piece = choose_promotion_piece
       game_manager.promote_pawn(self, new_piece, destination)
       "#{to_chess_notation(position[0], position[1])}-#{to_chess_notation(destination[0], destination[1])}=#{new_piece.symbol}"
@@ -97,22 +96,19 @@ class Pawn < Piece
     puts '3. Bishop'
     puts '4. Knight'
     choice = gets.chomp.to_i
-
-    loop do
-      case choice
-      when 1
-        new_piece = Queen.new(color)
-        new_piece.moved = true
-        return new_piece
-      when 2
-        return Rook.new(color)
-      when 3
-        return Bishop.new(color)
-      when 4
-        return Knight.new(color)
-      else
-        puts 'Invalid input, please try again.'
-      end
+    until [1, 2, 3, 4].include?(choice)
+      puts 'Invalid input, please try again.'
+      choice = gets.chomp.to_i
+    end
+    case choice
+    when 1
+      Queen.new(color)
+    when 2
+      Knight.new(color)
+    when 3
+      Rook.new(color)
+    when 4
+      Bishop.new(color)
     end
   end
 end

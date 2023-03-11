@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 require_relative '../lib/pawn'
+require_relative '../lib/knight'
+require_relative '../lib/queen'
 require_relative '../lib/board'
+require_relative '../lib/gamemanager'
 
 describe Pawn do
   describe "#possible_moves" do
@@ -155,6 +158,39 @@ describe Pawn do
           expect(board[[6, 0]]).to eq(white_pawn)
           expect(board[[5, 0]]).to eq(black_pawn)
         end
+      end
+    end
+  end
+
+  describe "#promote" do
+    let(:gm) { GameManager.new }
+    let(:board) { Board.new }
+    let(:black_pawn) { Pawn.new('black') }
+    let(:white_pawn) { Pawn.new('white') }
+
+    before do
+      gm.board = board
+    end
+
+    context 'when black pawn arrives at row 1 and selects queen as promotion' do
+      it 'promotes to a queen' do
+        board.set_piece(black_pawn, [6, 0])
+        expect(black_pawn).to receive(:choose_promotion_piece).and_return(Queen.new('black'))
+        notation = black_pawn.move([7, 0], board, gm).uncolorize
+        expect(notation).to eq('♟a2-♟a1=♛')
+        expect(board[[7, 0]]).to be_a(Queen)
+        expect(board[[7, 0]].color).to eq('black')
+      end
+    end
+
+    context 'when white pawn arrives at row 8 and selects knight as promotion' do
+      it 'promotes to a knight' do
+        board.set_piece(white_pawn, [1, 0])
+        expect(white_pawn).to receive(:choose_promotion_piece).and_return(Knight.new('white'))
+        notation = white_pawn.move([0, 0], board, gm).uncolorize
+        expect(notation).to eq('♙a7-♙a8=♞')
+        expect(board[[0, 0]]).to be_a(Knight)
+        expect(board[[0, 0]].color).to eq('white')
       end
     end
   end
