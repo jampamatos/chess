@@ -11,11 +11,11 @@ class GameManager
     @board = Board.new
     @active_pieces = {}
 
-    # # create white pieces
-    # create_pieces('white', @active_pieces)
+    # create white pieces
+    create_pieces('white', @active_pieces)
 
-    # # create black pieces
-    # create_pieces('black', @active_pieces)
+    # create black pieces
+    create_pieces('black', @active_pieces)
   end
 
   def draw_board(board = @board)
