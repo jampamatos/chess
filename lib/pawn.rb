@@ -55,7 +55,7 @@ class Pawn < Piece
     moves
   end
 
-  def move(destination, board)
+  def move(destination, board, game_manager)
     curr_row = @position[0]
     curr_col = @position[1]
     row = destination[0]
@@ -74,7 +74,7 @@ class Pawn < Piece
     elsif destination[0] == (color == 'white' ? 0 : 7)
       puts 'Pawn promotion'
       new_piece = choose_promotion_piece
-      game_manager.promote_pawn(self, new_piece)
+      game_manager.promote_pawn(self, new_piece, destination)
       "#{to_chess_notation(position[0], position[1])}-#{to_chess_notation(destination[0], destination[1])}=#{new_piece.symbol}"
     else
       notation = super(destination, board)
@@ -101,7 +101,9 @@ class Pawn < Piece
     loop do
       case choice
       when 1
-        return Queen.new(color)
+        new_piece = Queen.new(color)
+        new_piece.moved = true
+        return new_piece
       when 2
         return Rook.new(color)
       when 3

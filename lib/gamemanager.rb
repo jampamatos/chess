@@ -11,11 +11,11 @@ class GameManager
     @board = Board.new
     @active_pieces = {}
 
-    # create white pieces
-    create_pieces('white', @active_pieces)
+    # # create white pieces
+    # create_pieces('white', @active_pieces)
 
-    # create black pieces
-    create_pieces('black', @active_pieces)
+    # # create black pieces
+    # create_pieces('black', @active_pieces)
   end
 
   def draw_board(board = @board)
@@ -26,12 +26,17 @@ class GameManager
     @board.set_piece(piece, position)
   end
 
-  def promote_pawn(pawn, new_piece)
+  def remove_piece(position)
+    @board.remove_piece(position)
+  end
+
+  def promote_pawn(pawn, new_piece, new_pos)
     position = pawn.position
-    color = pawn.color
-    set_piece(new_piece.new(color, position), position)
+    remove_piece(position)
+    set_piece(new_piece, new_pos)
     @active_pieces.delete_if { |_key, value| value == pawn }
-    @active_pieces["#{color}_#{new_piece.type.downcase}#{new_piece.id}"] = new_piece
+    @active_pieces["promoted_#{new_piece.color}_#{new_piece.type.downcase}"] = new_piece
+    puts @active_pieces
   end
 
   private

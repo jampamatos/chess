@@ -3,8 +3,8 @@
 require 'colorize'
 
 class Piece
-  attr_reader :color, :type, :symbol, :moved
-  attr_accessor :position
+  attr_reader :color, :type, :symbol
+  attr_accessor :position, :moved
 
   def initialize(color, type, symbol, position = nil)
     @color = color
