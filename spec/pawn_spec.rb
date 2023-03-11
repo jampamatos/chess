@@ -55,7 +55,7 @@ describe Pawn do
 
   describe "#move" do
     let(:board) { Board.new }
-    let(:game_manager) { instance_double('GameManager') }
+    let(:gm) { instance_double('GameManager') }
     let(:white_pawn) { Pawn.new('white') }
     let(:white_pawn2) { Pawn.new('white') }
     let(:black_pawn) { Pawn.new('black') }
@@ -64,14 +64,14 @@ describe Pawn do
       context 'when destination is one step ahead' do
         it 'moves the pawn to destination' do
           board.set_piece(white_pawn, [6, 0])
-          white_pawn.move([5, 0], board)
+          white_pawn.move([5, 0], board, gm)
           expect(board[[5, 0]]).to eq(white_pawn)
           expect(board[[6, 0]]).to be_nil
         end
 
         it 'returns the correct move notation' do
           board.set_piece(white_pawn, [6, 0])
-          notation = white_pawn.move([5, 0], board).uncolorize
+          notation = white_pawn.move([5, 0], board, gm).uncolorize
           expect(notation).to eq('♙a3')
         end
       end
@@ -79,20 +79,20 @@ describe Pawn do
       context 'when destination is two steps ahead' do
         it 'moves the pawn to destination' do
           board.set_piece(white_pawn, [6, 0])
-          white_pawn.move([4, 0], board)
+          white_pawn.move([4, 0], board, gm)
           expect(board[[4, 0]]).to eq(white_pawn)
           expect(board[[6, 0]]).to be_nil
         end
 
         it 'sets en passant to A3' do
           board.set_piece(white_pawn, [6, 0])
-          white_pawn.move([4, 0], board)
+          white_pawn.move([4, 0], board, gm)
           expect(board.en_passant).to eq([5, 0])
         end
 
         it 'returns the correct move notation' do
           board.set_piece(white_pawn, [6, 0])
-          notation = white_pawn.move([4, 0], board).uncolorize
+          notation = white_pawn.move([4, 0], board, gm).uncolorize
           expect(notation).to eq('♙a4')
         end
       end
@@ -102,7 +102,7 @@ describe Pawn do
           black_pawn = Pawn.new('black')
           board.set_piece(white_pawn, [6, 0])
           board.set_piece(black_pawn, [5, 1])
-          white_pawn.move([5, 1], board)
+          white_pawn.move([5, 1], board, gm)
           expect(board[[5, 1]]).to eq(white_pawn)
           expect(board[[6, 0]]).to be_nil
         end
@@ -111,7 +111,7 @@ describe Pawn do
           black_pawn = Pawn.new('black')
           board.set_piece(white_pawn, [6, 0])
           board.set_piece(black_pawn, [5, 1])
-          notation = white_pawn.move([5, 1], board).uncolorize
+          notation = white_pawn.move([5, 1], board, gm).uncolorize
           expect(notation).to eq('♙a2x♟b3')
         end
       end
@@ -120,8 +120,8 @@ describe Pawn do
         it 'captures the opposing pawn and moves to the destination' do
           board.set_piece(white_pawn, [3, 4])
           board.set_piece(black_pawn, [1, 3])
-          black_pawn.move([3, 3], board)
-          white_pawn.move([2, 3], board)
+          black_pawn.move([3, 3], board, gm)
+          white_pawn.move([2, 3], board, gm)
           expect(board[[2, 3]]).to eq(white_pawn)
           expect(board[[3, 3]]).to be_nil
           expect(board[[3, 4]]).to be_nil
@@ -130,8 +130,8 @@ describe Pawn do
         it 'returns the correct move notation' do
           board.set_piece(white_pawn, [3, 4])
           board.set_piece(black_pawn, [1, 3])
-          black_pawn.move([3, 3], board)
-          expect(white_pawn.move([2, 3], board).uncolorize).to eq('♙e5x♟d6 e.p.')
+          black_pawn.move([3, 3], board, gm)
+          expect(white_pawn.move([2, 3], board, gm).uncolorize).to eq('♙e5x♟d6 e.p.')
         end
       end
     end
@@ -141,7 +141,7 @@ describe Pawn do
         it 'raises an InvalidMoveError and does not move the pawn' do
           board.set_piece(white_pawn, [6, 0])
           board.set_piece(white_pawn2, [5, 0])
-          expect { white_pawn.move([6, 0], board) }.to raise_error(InvalidMoveError)
+          expect { white_pawn.move([6, 0], board, gm) }.to raise_error(InvalidMoveError)
           expect(board[[6, 0]]).to eq(white_pawn)
           expect(board[[5, 0]]).to eq(white_pawn2)
         end
@@ -151,7 +151,7 @@ describe Pawn do
         it 'raises an InvalidMoveError and does not move the pawn' do
           board.set_piece(white_pawn, [6, 0])
           board.set_piece(black_pawn, [5, 0])
-          expect { white_pawn.move([6, 0], board) }.to raise_error(InvalidMoveError)
+          expect { white_pawn.move([6, 0], board, gm) }.to raise_error(InvalidMoveError)
           expect(board[[6, 0]]).to eq(white_pawn)
           expect(board[[5, 0]]).to eq(black_pawn)
         end
