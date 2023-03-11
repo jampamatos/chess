@@ -35,8 +35,12 @@ class GameManager
     remove_piece(position)
     set_piece(new_piece, new_pos)
     @active_pieces.delete_if { |_key, value| value == pawn }
-    @active_pieces["promoted_#{new_piece.color}_#{new_piece.type.downcase}"] = new_piece
-    puts @active_pieces
+    count = 1
+    new_key = "promoted_#{new_piece.color}_#{new_piece.type.downcase}"
+    while @active_pieces.key?(new_key + count.to_s)
+      count += 1
+    end
+    @active_pieces[new_key + count.to_s] = new_piece
   end
 
   private

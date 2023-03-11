@@ -28,7 +28,7 @@ class Piece
     []
   end
 
-  def move(destination, board)
+  def move(destination, board, _game_manager = nil)
     unless possible_moves(board).include?(destination)
       raise InvalidMoveError, "Invalid move for #{self.class} at #{to_chess_notation(position[0], position[1])} to #{to_chess_notation(destination[0], destination[1])}"
     end
