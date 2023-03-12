@@ -6,21 +6,23 @@ gm = GameManager.new
 new_board = Board.new
 gm.board = new_board
 board = new_board
-white_pawn = Pawn.new('white')
+
+white_king = King.new('white')
+board.active_pieces['white_king'] = white_king
+board.set_piece(white_king, [4, 4])
+
 black_pawn = Pawn.new('black')
+board.active_pieces['black_pawn'] = black_pawn
+board.set_piece(black_pawn, [2, 2])
 
-board.set_piece(white_pawn, [2, 4])
-board.set_piece(black_pawn, [5, 4])
+p board.active_pieces
+
 board.draw_board
 
+p white_king.possible_moves(board)
 
-puts black_pawn.move([6, 4], board, gm)
-puts white_pawn.move([1, 4], board, gm)
+white_king.move([3, 5], board)
+p white_king.under_attack
 board.draw_board
 
-puts black_pawn.move([7, 4], board, gm)
-puts white_pawn.move([0, 4], board, gm)
-board.draw_board
-p board.grid[7][4].possible_moves(board)
-p board.grid[0][4].possible_moves(board)
-board.draw_board
+#C6

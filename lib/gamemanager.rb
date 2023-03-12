@@ -10,7 +10,7 @@ class GameManager
 
   def initialize
     @board = Board.new
-    @active_pieces = {}
+    @active_pieces = board.active_pieces
 
     # create white pieces
     create_pieces('white', @active_pieces)

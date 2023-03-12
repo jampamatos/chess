@@ -3,11 +3,12 @@
 BG_COLOR = :light_black
 
 class Board
-  attr_accessor :grid, :en_passant
+  attr_accessor :grid, :en_passant, :active_pieces
 
   def initialize
     @grid = Array.new(8) { Array.new(8, nil) }
     @en_passant = nil
+    @active_pieces = {}
   end
 
   def set_piece(piece, position)
@@ -45,5 +46,28 @@ class Board
       print " #{8 - i}\n"
     end
     puts "\n   A  B  C  D  E  F  G  H\n"
+  end
+
+  def square_under_attack?(position, color, target_king)
+    set_temporary_piece(color, position)
+
+    @active_pieces.any? do |_, piece|
+      next if piece.color == color || piece == target_king
+
+      piece.possible_moves(self).include?(position)
+    end.tap { remove_temporary_piece(position) }
+  end
+
+  private
+
+  def set_temporary_piece(color, position)
+    @grid[position[0]][position[1]] = Pawn.new(color, position)
+    @active_pieces = active_pieces.merge({ "temp_#{color}_pawn" => @grid[position[0]][position[1]] })
+  end
+
+  def remove_temporary_piece(position)
+    @grid[position[0]][position[1]] = nil
+    @active_pieces.delete("temp_white_pawn")
+    @active_pieces.delete("temp_black_pawn")
   end
 end
