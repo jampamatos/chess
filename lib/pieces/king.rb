@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'piece'
+require_relative '../piece'
 require 'colorize'
 
 class King < Piece
@@ -9,6 +9,7 @@ class King < Piece
     symbol = color == 'white' ? '♔'.colorize(color) : '♚'.colorize(color)
     super(color, :king, symbol)
     @under_attack = []
+    @check = false
   end
 
   def to_unicode
@@ -51,5 +52,17 @@ class King < Piece
 
     @under_attack = []
     super
+  end
+
+  def in_check?
+    @check
+  end
+
+  def check_king
+    @check = true
+  end
+
+  def uncheck_king
+    @check = false
   end
 end

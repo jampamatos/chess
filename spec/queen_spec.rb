@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-require_relative '../lib/queen'
-require_relative '../lib/pawn'
+require_relative '../lib/pieces/queen'
+require_relative '../lib/pieces/pawn'
 require_relative '../lib/board'
 
 RSpec.describe Queen do
