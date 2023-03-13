@@ -5,8 +5,8 @@ require_relative 'dependencies'
 START_ROW = { 'white' => 7, 'black' => 0 }.freeze
 
 class GameManager
-  attr_reader :active_pieces
-  attr_accessor :board
+  #attr_reader :active_pieces
+  attr_accessor :board, :active_pieces
 
   def initialize
     @board = Board.new

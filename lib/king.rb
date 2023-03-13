@@ -29,9 +29,8 @@ class King < Piece
         dest_piece = board[[dest_row, dest_col]]
 
         if dest_piece.nil? || dest_piece.color != @color
-          puts "Position before square_under_attack call: #{dest_row}, #{dest_col}"
           # check if the destination square is not under attack by an enemy piece
-          if board.square_under_attack?([dest_row, dest_col], @color, self)
+          if dest_piece.nil? && board.square_under_attack?([dest_row, dest_col], @color, self)
             @under_attack << [dest_row, dest_col]
             next
           else
