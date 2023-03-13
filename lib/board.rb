@@ -27,7 +27,9 @@ class Board
   end
 
   def remove_piece(position)
+    piece = @grid[position[0]][position[1]]
     @grid[position[0]][position[1]] = nil
+    @active_pieces.delete_if { |_, v| v == piece }
   end
 
   def [](position)

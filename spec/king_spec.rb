@@ -58,6 +58,7 @@ RSpec.describe King do
       end
 
       it 'returns 8 possible moves' do
+        white_king.possible_moves(board)
         expect(white_king.possible_moves(board).size).to eq 8
       end
 

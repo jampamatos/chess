@@ -5,18 +5,36 @@ require_relative 'dependencies'
 START_ROW = { 'white' => 7, 'black' => 0 }.freeze
 
 class GameManager
-  attr_reader :active_pieces
   attr_accessor :board
 
-  def initialize
+  def initialize(board = nil, active_pieces = nil, active_turn = nil, white_player_name = nil, black_player_name = nil)
+    @board = board
+    @active_pieces = active_pieces
+    @active_turn = active_turn
+
+    @white_player_name = white_player_name
+    @black_player_name = black_player_name
+
+    setup_game unless board
+  end
+
+  def setup_game
     @board = Board.new
     @active_pieces = board.active_pieces
+    @active_turn = 'white'
+
+    @white_player_name = nil
+    @black_player_name = nil
 
     # create white pieces
     create_pieces('white', @active_pieces)
 
     # create black pieces
     create_pieces('black', @active_pieces)
+  end
+
+  def active_pieces
+    @active_pieces = board.active_pieces
   end
 
   def draw_board(board = @board)
@@ -42,6 +60,14 @@ class GameManager
       count += 1
     end
     @active_pieces[new_key + count.to_s] = new_piece
+  end
+
+  def play_turn
+    color = @active_turn
+    king = @active_pieces["#{color}_king"]
+    # opposite_king = @active_pieces["#{opposite_color}_king"]
+
+    game_over('stalemate') if stalemate?(king)
   end
 
   private
@@ -100,5 +126,24 @@ class GameManager
     king = King.new(color)
     set_piece(king, [START_ROW[color], 4])
     active_pieces["#{color}_king"] = king
+  end
+
+  def opposite_color
+    @active_turn == 'white' ? 'black' : 'white'
+  end
+
+  def change_turn
+    @active_turn = opposite_color
+  end
+
+  def stalemate?(king)
+    !king.in_check? && king.possible_moves(@board).empty?
+  end
+
+  def game_over(type)
+    case type
+    when 'stalemate'
+      puts "Stalemate! #{@active_turn.capitalize} wins!"
+    end
   end
 end
