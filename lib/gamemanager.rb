@@ -1,10 +1,12 @@
 # frozen_string_literal: true
 
 require_relative 'dependencies'
+require 'pry-byebug'
 
 START_ROW = { 'white' => 7, 'black' => 0 }.freeze
 
 class GameManager
+  attr_reader :active_turn
   attr_accessor :board
 
   def initialize(board = nil, active_pieces = nil, active_turn = nil, white_player_name = nil, black_player_name = nil)
@@ -62,12 +64,12 @@ class GameManager
     @active_pieces[new_key + count.to_s] = new_piece
   end
 
-  def play_turn
-    color = @active_turn
+  def play_turn(color = @active_turn)
+    active_pieces
     king = @active_pieces["#{color}_king"]
     # opposite_king = @active_pieces["#{opposite_color}_king"]
 
-    game_over('stalemate') if stalemate?(king)
+    game_over('stalemate', color) if stalemate?(king)
   end
 
   private
@@ -140,10 +142,16 @@ class GameManager
     !king.in_check? && king.possible_moves(@board).empty?
   end
 
-  def game_over(type)
+  def game_over(type, color)
     case type
     when 'stalemate'
-      puts "Stalemate! #{@active_turn.capitalize} wins!"
+      stalemate_msg(color)
     end
+  end
+
+  def stalemate_msg(color)
+    puts 'Game Over!'.bold
+    puts 'Stalemate!'
+    puts "#{color.upcase.bold} wins!"
   end
 end

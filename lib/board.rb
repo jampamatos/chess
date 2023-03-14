@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 BG_COLOR = :light_black
+SELECTED = :blue
 
 class Board
   attr_accessor :grid, :en_passant, :active_pieces

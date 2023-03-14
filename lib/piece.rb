@@ -3,7 +3,7 @@
 require 'colorize'
 
 class Piece
-  attr_reader :color, :type, :symbol
+  attr_reader :color, :type, :symbol, :selected
   attr_accessor :position, :moved
 
   def initialize(color, type, symbol, position = nil)
@@ -12,6 +12,7 @@ class Piece
     @symbol = symbol
     @position = position
     @moved = false
+    @selected = false
   end
 
   def to_s
@@ -26,6 +27,14 @@ class Piece
 
   def possible_moves(_board, _position = @position)
     []
+  end
+
+  def select
+    @selected = true
+  end
+
+  def deselect
+    @selected = false
   end
 
   def move(destination, board, _game_manager = nil)

@@ -3,17 +3,19 @@
 require_relative 'lib/gamemanager'
 
 board = Board.new
+gm = GameManager.new(board, nil, 'black')
 
-white_king = King.new('white')
-black_pawn = Pawn.new('black')
+black_king = King.new('black')
+white_queen = Queen.new('white')
 
-board.set_piece(white_king, [4, 4])
-board.active_pieces['white_king'] = white_king
-board.set_piece(black_pawn, [3, 4])
-board.active_pieces['black_pawn'] = black_pawn
+board.set_piece(black_king, [0, 0])
+board.active_pieces['black_king'] = black_king
+board.set_piece(white_queen, [1, 5])
+board.active_pieces['white_queen'] = white_queen
+
 board.draw_board
-p board.active_pieces
-p white_king.possible_moves(board)
-white_king.move([3, 4], board)
+
+white_queen.move([1, 2], board)
 board.draw_board
-p board.active_pieces
+
+gm.play_turn
