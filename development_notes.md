@@ -20,16 +20,21 @@ Here's a suggested breakdown for a plan of attack:
    2. [ ] [Test alternating between players](#42-test-alternating-between-players).
    3. [ ] [Test validating moves and handling errors](#43-test-validating-moves-and-handling-errors).
    4. [ ] [Test displaying the board after each move](#44-test-displaying-the-board-after-each-move).
-5. [ ] [Implement a basic user interface (UI) for the terminal](#5-implement-a-basic-user-interface-ui-for-the-terminal).
-   1. [ ] [Test displaying the current board state in the terminal](#51-test-displaying-the-current-board-state-in-the-terminal).
-   2. [ ] [Test receiving and validating user input for moves](#52-test-receiving-and-validating-user-input-for-moves).
-   3. [ ] [Test displaying game status messages and handling user commands](#53-test-displaying-game-status-messages-and-handling-user-commands).
-6. [ ] [Add optional features and improvements](#6-add-optional-features-and-improvements).
-   1. [ ] [Test the improved visual presentation of the board and pieces](#61-test-the-improved-visual-presentation-of-the-board-and-pieces).
-   2. [ ] [Implement and test the move history feature](#62-implement-and-test-the-move-history-feature).
-   3. [ ] [Test save and load functionality](#63-test-save-and-load-functionality).
-   4. [ ] [Test basic AI for single-player mode, if implemented](#64-test-basic-ai-for-single-player-mode-if-implemented).
-   5. [ ] [Test the timer or clock feature, if implemented](#65-test-the-timer-or-clock-feature-if-implemented).
+5. [ ] [Refactor and optimize code](#5-refactor-and-optimize-code).
+   1. [ ] [Review code for readability and maintainability](#51-review-code-for-readability-and-maintainability).
+   2. [ ] [Optimize performance-critical sections of the code](#52-optimize-performance-critical-sections-of-the-code).
+   3. [ ] [Ensure consistent code styling and format](#53-ensure-consistent-code-styling-and-format).
+   4. [ ] [Review and improve test coverage](#54-review-and-improve-test-coverage).
+6. [ ] [Implement a basic user interface (UI) for the terminal](#6-implement-a-basic-user-interface-ui-for-the-terminal).
+   1. [ ] [Test displaying the current board state in the terminal](#61-test-displaying-the-current-board-state-in-the-terminal).
+   2. [ ] [Test receiving and validating user input for moves](#62-test-receiving-and-validating-user-input-for-moves).
+   3. [ ] [Test displaying game status messages and handling user commands](#63-test-displaying-game-status-messages-and-handling-user-commands).
+7. [ ] [Add optional features and improvements](#7-add-optional-features-and-improvements).
+   1. [ ] [Test the improved visual presentation of the board and pieces](#71-test-the-improved-visual-presentation-of-the-board-and-pieces).
+   2. [ ] [Implement and test the move history feature](#72-implement-and-test-the-move-history-feature).
+   3. [ ] [Test save and load functionality](#73-test-save-and-load-functionality).
+   4. [ ] [Test basic AI for single-player mode, if implemented](#74-test-basic-ai-for-single-player-mode-if-implemented).
+   5. [ ] [Test the timer or clock feature, if implemented](#75-test-the-timer-or-clock-feature-if-implemented).
 
 ---
 
@@ -506,17 +511,17 @@ This step is about ensuring that the GameManager class correctly validates the m
 
 Here's a high-level overview of what this sub-step entails:
 
-    Implement move validation in the GameManager class:
-        Utilize the move validation methods implemented for the Board class and Piece subclasses to determine if a move is legal based on the current game state and the specific rules for each piece.
-        In the game loop, check if the desired move is legal before applying it to the board. If the move is illegal, provide appropriate feedback to the player and prompt them for a new move.
+1. Implement move validation in the GameManager class:
+   - Utilize the move validation methods implemented for the Board class and Piece subclasses to determine if a move is legal based on the current game state and the specific rules for each piece.
+   - In the game loop, check if the desired move is legal before applying it to the board. If the move is illegal, provide appropriate feedback to the player and prompt them for a new move.
 
-    Implement error handling in the GameManager class:
-        Handle various types of errors that may arise during gameplay, such as invalid input, illegal moves, or other unexpected situations.
-        Provide clear and informative feedback to the player when an error occurs, and guide them towards making a valid move or taking the appropriate action to resolve the error.
+2. Implement error handling in the GameManager class:
+   - Handle various types of errors that may arise during gameplay, such as invalid input, illegal moves, or other unexpected situations.
+   - Provide clear and informative feedback to the player when an error occurs, and guide them towards making a valid move or taking the appropriate action to resolve the error.
 
-    Test move validation and error handling:
-        Create test scenarios that involve various types of legal and illegal moves, as well as different error situations that may arise during gameplay.
-        Ensure that the GameManager class correctly validates moves and provides appropriate feedback when illegal moves are attempted or errors occur.
+3. Test move validation and error handling:
+   - Create test scenarios that involve various types of legal and illegal moves, as well as different error situations that may arise during gameplay.
+   - Ensure that the GameManager class correctly validates moves and provides appropriate feedback when illegal moves are attempted or errors occur.
 
 By implementing and testing move validation and error handling, you will ensure that the game loop enforces the rules of chess and provides a smooth and enjoyable gameplay experience for the players. Players will receive clear guidance and feedback when attempting illegal moves or encountering errors, helping them better understand the game rules and requirements.
 
@@ -530,17 +535,17 @@ This step focuses on ensuring that the GameManager class correctly displays the 
 
 Here's a high-level overview of what this sub-step entails:
 
-    Implement board display in the GameManager class:
-        Integrate the board display functionality, which should have been implemented as part of the Board class, into the GameManager class.
-        In the game loop, after each valid move, call the appropriate method to display the updated board state in the terminal.
+1. Implement board display in the GameManager class:
+   - Integrate the board display functionality, which should have been implemented as part of the Board class, into the GameManager class.
+   - In the game loop, after each valid move, call the appropriate method to display the updated board state in the terminal.
 
-    Test various move scenarios:
-        Create test scenarios that involve different types of moves, such as captures, special moves like castling or en passant, and regular piece movements.
-        After each move in these scenarios, verify that the displayed board state accurately reflects the result of the move and the current state of the game.
+2. Test various move scenarios:
+   - Create test scenarios that involve different types of moves, such as captures, special moves like castling or en passant, and regular piece movements.
+   - After each move in these scenarios, verify that the displayed board state accurately reflects the result of the move and the current state of the game.
 
-    Test game state transitions:
-        Test scenarios where the game transitions to a new game state, such as check, checkmate, stalemate, or draw, and ensure that the board is displayed correctly after each move leading up to and including the game state transition.
-        Verify that any additional information related to the game state, such as an indication of check, is displayed correctly along with the board.
+3. Test game state transitions:
+   - Test scenarios where the game transitions to a new game state, such as check, checkmate, stalemate, or draw, and ensure that the board is displayed correctly after each move leading up to and including the game state transition.
+   - Verify that any additional information related to the game state, such as an indication of check, is displayed correctly along with the board.
 
 By testing the board display after each move, you will ensure that the GameManager class provides players with an accurate and up-to-date representation of the game state. This will help players make informed decisions during gameplay and create a more engaging and enjoyable experience.
 
@@ -548,26 +553,150 @@ By testing the board display after each move, you will ensure that the GameManag
 
 ---
 
-## 5. IMPLEMENT A BASIC USER INTERFACE (UI) FOR THE TERMINAL
+## 5. REFACTOR AND OPTIMIZE CODE
+
+This step focuses on improving the overall quality, readability, and performance of your codebase after completing the core functionalities of the chess game. By dedicating time to refactoring and optimization, you can ensure that your project is maintainable and efficient, making it easier to build upon and debug in the future.
+
+Here's a high-level overview of what this step entails:
+
+1. Review code for readability and maintainability:
+   - Go through the existing code and identify areas that can be improved in terms of readability, such as simplifying complex logic, breaking down large functions into smaller ones, or adding comments to clarify the purpose of specific sections of code.
+   - Assess the overall structure of the project and ensure that it follows best practices for organizing classes, methods, and variables, making adjustments as necessary.
+
+2. Optimize performance-critical sections of the code:
+   - Analyze the performance of your chess game implementation, focusing on areas that are computationally intensive or that may cause performance bottlenecks.
+   - Apply optimization techniques, such as caching results, reducing unnecessary computations, or using more efficient data structures and algorithms, to improve the performance of these critical sections of the code.
+   - Test the optimized code to ensure that the changes made do not introduce new bugs or negatively affect the functionality of the game.
+
+3. Ensure consistent code style and formatting:
+   - Review the entire codebase and ensure that it follows a consistent code style, such as using consistent naming conventions for variables and methods, proper indentation, and appropriate use of whitespace.
+   - If necessary, use a linter or formatter tool, such as RuboCop for Ruby, to automatically enforce a consistent style throughout the codebase.
+
+4. Review and improve test coverage:
+   - Analyze the current test suite to identify areas where test coverage may be lacking or could be improved. This might include adding new test cases, updating existing tests to cover additional edge cases, or refactoring tests to make them more comprehensive and maintainable.
+   - Ensure that the test suite is thorough and adequately covers the functionality of the chess game, providing confidence that any changes or optimizations made to the code will not introduce new bugs or regressions.
+
+By completing the refactoring and optimization step, you will create a more robust and efficient chess game implementation. The focus on code quality, maintainability, and performance will make it easier to add new features, address potential issues, and ensure a smooth and enjoyable experience for players. Additionally, having a comprehensive test suite will provide confidence in the stability and correctness of your game, allowing you to make improvements and modifications with greater assurance that the overall functionality will not be adversely affected.
+
+[TOP](#development-of-ruby-console-operated-chess-game)
+
+---
+
+### 5.1. Review code for readability and maintainability
+
+This sub-step focuses on evaluating the existing codebase to identify areas that can be improved in terms of readability and maintainability, ensuring that the project is easy to understand and modify in the future.
+
+Here's a high-level overview of what this sub-step entails:
+
+1. Assess code complexity and organization:
+   - Review the code for areas that have high complexity, such as nested loops or conditionals, long methods, or large classes. Consider simplifying complex logic or breaking down large functions and classes into smaller, more manageable pieces.
+   - Evaluate the overall organization of the project, including the structure of directories, modules, and classes. Make adjustments as needed to ensure that the project follows best practices for code organization and modularization.
+
+2. Check for code clarity and commenting:
+   - Go through the code to identify sections that may be difficult to understand, such as non-intuitive algorithms, uncommon design patterns, or code that relies on implicit assumptions. Add comments to clarify the purpose and functionality of these sections, explaining any complex logic or reasoning behind specific design choices.
+   - Ensure that comments are clear, concise, and informative, providing meaningful context to help other developers (or your future self) understand the code more easily.
+   - Check that method and class names are descriptive and self-explanatory, making it easier to understand the purpose and functionality of each component at a glance.
+
+3. Identify and remove dead or redundant code:
+   - Look for sections of code that are unused or have been superseded by newer implementations. Remove any dead or redundant code to reduce clutter and simplify the codebase.
+   - Review the code for any repetitive patterns or functionality that could be refactored into reusable methods or classes. Consolidating similar code into reusable components can help improve maintainability and reduce the likelihood of introducing bugs.
+
+By reviewing the code for readability and maintainability, you will ensure that your chess game project is easy to understand, modify, and extend. This will make it easier to build upon the codebase, address potential issues, and collaborate with other developers, ultimately contributing to a more successful and sustainable project.
+
+[TOP](#development-of-ruby-console-operated-chess-game)
+
+---
+
+### 5.2. Optimize performance-critical sections of the code
+
+This sub-step focuses on improving the performance of your chess game by identifying and optimizing sections of the code that are computationally intensive or could cause performance bottlenecks. By enhancing the efficiency of these critical areas, you can ensure that your game runs smoothly and responsively for players.
+
+Here's a high-level overview of what this sub-step entails:
+
+1. Profile and identify performance bottlenecks:
+   - Use profiling tools, such as Ruby's built-in Benchmark module or third-party libraries like ruby-prof, to measure the performance of your code and identify areas that are slow or computationally intensive.
+   - Focus on sections of the code that are executed frequently or have a significant impact on the overall performance of the game, such as move validation, board rendering, or game state evaluation processing.
+   - Implement the selected optimization techniques in a careful and controlled manner, ensuring that the changes made do not introduce new bugs or negatively affect the functionality of the game.
+
+2. Test and measure the impact of optimizations:
+   - After applying optimization techniques, test the functionality of the affected sections of the code to ensure that the changes made have not introduced new bugs or altered the expected behavior of the game.
+   - Use profiling tools to measure the performance improvements achieved through the optimizations. Compare the results with the baseline performance measurements to quantify the impact of the changes and verify that the optimizations have successfully addressed the identified bottlenecks.
+
+3. Continuously monitor and optimize performance:
+   - As you continue to develop your chess game, monitor the performance of the codebase and remain vigilant for new performance bottlenecks or regressions.
+   - Apply further optimizations as needed, following the same process of identifying bottlenecks, implementing optimization techniques, and measuring the impact on performance.
+
+By optimizing performance-critical sections of the code, you can ensure that your chess game runs smoothly and provides a responsive and enjoyable experience for players. Additionally, focusing on performance optimization can help you gain a deeper understanding of your codebase and the underlying algorithms, ultimately contributing to a more robust and efficient implementation.
+
+[TOP](#development-of-ruby-console-operated-chess-game)
+
+---
+
+### 5.3. Ensure consistent code styling and format
+
+This sub-step focuses on maintaining a consistent code style and formatting throughout your chess game project, which contributes to the readability and maintainability of your codebase. By adhering to established conventions and best practices, you can make it easier for other developers (or your future self) to understand and work with your code.
+
+Here's a high-level overview of what this sub-step entails:
+
+1. Establish a code style guide:
+   - Decide on a code style guide for your project, either by adopting an existing guide, such as the Ruby community style guide, or by creating your own set of rules and conventions.
+   - Ensure that the chosen style guide covers aspects such as naming conventions, indentation, whitespace usage, comment style, and code organization.
+
+2. Review the codebase for style consistency:
+   - Go through your existing code and ensure that it follows the chosen style guide. Identify and correct any inconsistencies or deviations from the established conventions.
+   - Pay special attention to areas such as variable and method names, which should be descriptive and follow a consistent naming convention throughout the project.
+
+3. Use a linter or formatter tool to enforce style consistency:
+   - Consider using a linter or formatter tool, such as RuboCop for Ruby, to automatically enforce a consistent style throughout your codebase.
+   - Configure the tool to follow the chosen style guide, and integrate it into your development workflow, such as running it as part of a pre-commit hook or as a step in your continuous integration (CI) pipeline.
+
+By ensuring consistent code styling and formatting, you can improve the readability and maintainability of your chess game project. A uniform code style makes it easier for developers to navigate and understand the codebase, reducing the learning curve for new contributors and enhancing
+
+[TOP](#development-of-ruby-console-operated-chess-game)
+
+---
+
+### 5.4. Review and improve test coverage
+
+This sub-step focuses on ensuring that your chess game project has comprehensive test coverage, which helps to identify and prevent potential issues, increases the reliability of your code, and facilitates future development and refactoring efforts.
+
+Here's a high-level overview of what this sub-step entails:
+
+1. Assess existing test coverage:
+   - Review the existing test suite to evaluate the scope and quality of the tests. Determine if there are any gaps in coverage, such as untested methods, edge cases, or specific game scenarios.
+   - Use tools like SimpleCov for Ruby to generate test coverage reports, which can help identify areas of the code that are not adequately covered by tests.
+
+2. Develop additional tests to increase coverage:
+   - Based on the assessment of the existing test coverage, identify areas where additional tests are needed. Develop new tests to cover untested functionality, edge cases, and complex game scenarios.
+   - Consider using different types of tests, such as unit tests, integration tests, and end-to-end tests, to ensure a comprehensive testing strategy that covers various aspects of the game's functionality.
+
+3. Refactor and improve existing tests:
+   - Review the existing tests to identify any areas that could be refactored or improved. This may include simplifying test setup, removing redundant tests, or increasing the clarity and readability of test code.
+   - Ensure that tests follow the same style guide and conventions as the main codebase, making it easier for developers to understand and maintain the test suite.
+
+By reviewing and improving test coverage, you can increase the reliability and maintainability of your chess game project. Comprehensive testing helps to identify and prevent potential issues, provides confidence in the code's functionality, and ensures that the codebase remains robust and resilient to future changes. Maintaining a strong test suite can also facilitate collaboration and code reviews, making it easier for developers to contribute to the project with confidence.
+
+[TOP](#development-of-ruby-console-operated-chess-game)
+
+---
+
+## 6. IMPLEMENT A BASIC USER INTERFACE (UI) FOR THE TERMINAL
 
 This step involves creating a simple, user-friendly interface for the chess game that runs in the terminal, allowing players to easily interact with the game and understand the current state.
 
 Here's a high-level overview of what this step entails:
 
-5.1 Test displaying the current board state in the terminal:
+1. Test displaying the current board state in the terminal:
+   - Ensure that the GameManager class displays the board state in a clear and visually appealing manner in the terminal.
+   - Test various board states to confirm that the display is accurate and easy to understand for players.
 
-    Ensure that the GameManager class displays the board state in a clear and visually appealing manner in the terminal.
-    Test various board states to confirm that the display is accurate and easy to understand for players.
+2. Test receiving and validating user input for moves:
+   - Implement a method or functionality within the GameManager class to receive user input for moves in a user-friendly format, such as algebraic notation (e.g., e2e4 or Nf3).
+   - Test the input validation process to ensure that it handles various types of valid and invalid inputs, providing appropriate feedback and guidance to the player when needed.
 
-5.2 Test receiving and validating user input for moves:
-
-    Implement a method or functionality within the GameManager class to receive user input for moves in a user-friendly format, such as algebraic notation (e.g., e2e4 or Nf3).
-    Test the input validation process to ensure that it handles various types of valid and invalid inputs, providing appropriate feedback and guidance to the player when needed.
-
-5.3 Test displaying game status messages and handling user commands:
-
-    Implement a system for displaying game status messages, such as indicating whose turn it is, whether a player is in check, or if the game has ended in checkmate or a draw.
-    Add support for user commands, such as saving/loading the game, undoing/redoing moves, or starting a new game. Implement these features as needed, and test the handling of these commands within the GameManager class.
+3. Test displaying game status messages and handling user commands:
+   - Implement a system for displaying game status messages, such as indicating whose turn it is, whether a player is in check, or if the game has ended in checkmate or a draw.
+   - Add support for user commands, such as saving/loading the game, undoing/redoing moves, or starting a new game. Implement these features as needed, and test the handling of these commands within the GameManager class.
 
 By implementing and testing a basic user interface for the terminal, you will make the game more accessible and enjoyable for players. A well-designed UI will help players understand the game state, make informed decisions, and easily interact with the game using intuitive inputs and commands.
 
@@ -575,23 +704,23 @@ By implementing and testing a basic user interface for the terminal, you will ma
 
 ---
 
-### 5.1. Test displaying the current board state in the terminal
+### 6.1. Test displaying the current board state in the terminal
 
- This step is about ensuring that the GameManager class effectively displays the current state of the chess board in the terminal, providing a clear and visually appealing representation for the players.
+This step is about ensuring that the GameManager class effectively displays the current state of the chess board in the terminal, providing a clear and visually appealing representation for the players.
 
 Here's a high-level overview of what this sub-step entails:
 
-    Implement a visually appealing board representation:
-        Utilize the display functionality already implemented in the Board class.
-        Consider enhancing the display by using Unicode chess symbols, colors, or other visual enhancements to make the board more engaging and easier to read.
+1. Implement a visually appealing board representation:
+   - Utilize the display functionality already implemented in the Board class.
+   - Consider enhancing the display by using Unicode chess symbols, colors, or other visual enhancements to make the board more engaging and easier to read.
 
-    Test various board states:
-        Create test scenarios that involve different board states, including the initial position, mid-game positions, and endgame positions.
-        Verify that the displayed board state in the terminal accurately reflects the actual board state and is easy to understand and visually appealing for the players.
+2. Test various board states:
+   - Create test scenarios that involve different board states, including the initial position, mid-game positions, and endgame positions.
+   - Verify that the displayed board state in the terminal accurately reflects the actual board state and is easy to understand and visually appealing for the players.
 
-    Test board display after different types of moves:
-        Test scenarios where players make various types of moves, such as captures, special moves (e.g., castling or en passant), and regular piece movements.
-        Verify that the displayed board state accurately reflects the result of the move and the current state of the game.
+3. Test board display after different types of moves:
+   - Test scenarios where players make various types of moves, such as captures, special moves (e.g., castling or en passant), and regular piece movements.
+   - Verify that the displayed board state accurately reflects the result of the move and the current state of the game.
 
 By testing the display of the current board state in the terminal, you will ensure that the GameManager class provides a clear and engaging visual representation of the game state. A well-designed board display helps players make informed decisions during gameplay and contributes to a more enjoyable overall experience.
 
@@ -599,23 +728,23 @@ By testing the display of the current board state in the terminal, you will ensu
 
 ---
 
-### 5.2. Test receiving and validating user input for moves
+### 6.2. Test receiving and validating user input for moves
 
 This step is about ensuring that the GameManager class effectively receives and validates user input for moves, allowing players to interact with the game using a user-friendly format and providing appropriate feedback when necessary.
 
 Here's a high-level overview of what this sub-step entails:
 
-    Implement user input handling in the GameManager class:
-        Design a method or functionality within the GameManager class to receive user input for moves, preferably in a user-friendly format, such as algebraic notation (e.g., e2e4 or Nf3).
-        Parse and validate the user input, checking if it corresponds to a valid move based on the current game state and the specific rules for each piece.
+1. Implement user input handling in the GameManager class:
+   - Design a method or functionality within the GameManager class to receive user input for moves, preferably in a user-friendly format, such as algebraic notation (e.g., e2e4 or Nf3).
+   - Parse and validate the user input, checking if it corresponds to a valid move based on the current game state and the specific rules for each piece.
 
-    Test various user inputs:
-        Create test scenarios that involve different types of valid and invalid user inputs, including legal moves, illegal moves, and inputs with incorrect syntax or format.
-        Verify that the GameManager class correctly handles these various inputs, providing appropriate feedback to the player when necessary and guiding them towards making a valid move.
+2. Test various user inputs:
+   - Create test scenarios that involve different types of valid and invalid user inputs, including legal moves, illegal moves, and inputs with incorrect syntax or format.
+   - Verify that the GameManager class correctly handles these various inputs, providing appropriate feedback to the player when necessary and guiding them towards making a valid move.
 
-    Test input validation integration with move validation:
-        Test scenarios where user input validation interacts with the move validation methods implemented for the Board class and Piece subclasses.
-        Ensure that the GameManager class effectively enforces the rules of chess and allows only legal moves based on the input provided by the player.
+3. Test input validation integration with move validation:
+   - Test scenarios where user input validation interacts with the move validation methods implemented for the Board class and Piece subclasses.
+   - Ensure that the GameManager class effectively enforces the rules of chess and allows only legal moves based on the input provided by the player.
 
 By implementing and testing user input handling and validation, you will ensure that the GameManager class provides a smooth and enjoyable gameplay experience for the players. Players will be able to interact with the game using a user-friendly notation, and they will receive clear guidance and feedback when attempting illegal moves or providing incorrect input.
 
@@ -623,24 +752,24 @@ By implementing and testing user input handling and validation, you will ensure 
 
 ---
 
-### 5.3. Test displaying game status messages and handling user commands
+### 6.3. Test displaying game status messages and handling user commands
 
 This step focuses on ensuring that the GameManager class effectively communicates the current game status to the players and allows them to execute various user commands as needed.
 
 Here's a high-level overview of what this sub-step entails:
 
-    Implement game status messages in the GameManager class:
-        Design a system for displaying game status messages, such as indicating whose turn it is, whether a player is in check, or if the game has ended in checkmate or a draw.
-        Update the game loop to display the relevant status messages at appropriate moments during gameplay, providing players with necessary information about the current game state.
+1. Implement game status messages in the GameManager class:
+   - Design a system for displaying game status messages, such as indicating whose turn it is, whether a player is in check, or if the game has ended in checkmate or a draw.
+   - Update the game loop to display the relevant status messages at appropriate moments during gameplay, providing players with necessary information about the current game state.
 
-    Implement user command handling in the GameManager class:
-        Add support for user commands, such as saving/loading the game, undoing/redoing moves, or starting a new game. Implement these features based on your design choices and project requirements.
-        Design methods or functionality within the GameManager class to handle the execution of these commands, ensuring a smooth user experience.
+2. Implement user command handling in the GameManager class:
+   - Add support for user commands, such as saving/loading the game, undoing/redoing moves, or starting a new game. Implement these features based on your design choices and project requirements.
+   - Design methods or functionality within the GameManager class to handle the execution of these commands, ensuring a smooth user experience.
 
-    Test game status messages and user command handling:
-        Create test scenarios that involve different game status messages being displayed, such as turns changing, players being put in check, or games ending in checkmate or a draw.
-        Verify that the GameManager class accurately displays the relevant game status messages and updates them as the game state changes.
-        Test the execution of various user commands, ensuring that the GameManager class handles them correctly and provides appropriate feedback to the player.
+3. Test game status messages and user command handling:
+   - Create test scenarios that involve different game status messages being displayed, such as turns changing, players being put in check, or games ending in checkmate or a draw.
+   - Verify that the GameManager class accurately displays the relevant game status messages and updates them as the game state changes.
+   - Test the execution of various user commands, ensuring that the GameManager class handles them correctly and provides appropriate feedback to the player.
 
 By implementing and testing game status messages and user command handling, you will ensure that the GameManager class effectively communicates the game state to the players and allows them to interact with the game in a more dynamic way. This will create a more engaging and enjoyable experience for players, helping them stay informed about the game state and allowing them to perform various actions as needed.
 
@@ -648,38 +777,28 @@ By implementing and testing game status messages and user command handling, you 
 
 ---
 
-## 6. ADD OPTIONAL FEATURES AND IMPROVEMENTS
+## 7. ADD OPTIONAL FEATURES AND IMPROVEMENTS
 
 This step involves implementing and testing additional features that can enhance the gameplay experience, improve the user interface, or provide extra functionality based on your specific design choices and project requirements.
 
 Here's a high-level overview of what this step entails:
 
-6.1 Test the improved visual presentation of the board and pieces:
+1. Test the improved visual presentation of the board and pieces:
+   - Implement and test any additional visual enhancements to the board and piece display, such as different colors, styles, or other visual elements that make the game more appealing and easier to understand for players.
 
-    Implement and test any additional visual enhancements to the board and piece display, such as different colors, styles, or other visual elements that make the game more appealing and easier to understand for players.
+2. Implement and test the move history feature:
+   - Design and implement a move history system that allows players to review the moves made during the game, either as a list of moves in algebraic notation or a more visual representation.
+   - Test the move history feature to ensure it accurately tracks and displays the moves made in the game.
 
-6.2 Implement and test the move history feature:
+3. Test save and load functionality:
+   - Implement and test a save/load feature that allows players to save their current game state and resume it later, providing a more convenient and flexible gameplay experience.
 
-    Design and implement a move history system that allows players to review the moves made during the game, either as a list of moves in algebraic notation or a more visual representation.
-    Test the move history feature to ensure it accurately tracks and displays the moves made in the game.
+4. Test basic AI for single-player mode, if implemented:
+   - Design and implement a basic AI opponent for a single-player mode, allowing players to play against the computer.
+   - Test the AI's decision-making and gameplay behavior to ensure it provides an engaging and challenging experience for the player.
 
-6.3 Test save and load functionality:
-
-    Implement and test a save/load feature that allows players to save their current game state and resume it later, providing a more convenient and flexible gameplay experience.
-
-6.4 Test basic AI for single-player mode, if implemented:
-
-    Design and implement a basic AI opponent for a single-player mode, allowing players to play against the computer.
-    Test the AI's decision-making and gameplay behavior to ensure it provides an engaging and challenging experience for the player.
-
-6.5 Test the timer or clock feature, if implemented:
-
-    Implement and test a timer or clock feature that limits the time each player has to make their moves, adding an extra layer of challenge and excitement to the game.
-
-6.6 Test undo and redo functionality, if implemented:
-
-    Design and implement an undo/redo feature that allows players to easily reverse or reapply their moves, providing more flexibility during gameplay.
-    Test the undo/redo functionality to ensure it accurately tracks and manages the game state.
+5. Test the timer or clock feature, if implemented:
+   - Implement and test a timer or clock feature that limits the time each player has to make their moves, adding an extra layer of challenge and excitement to the game.
 
 By implementing and testing optional features and improvements, you will be able to create a more engaging, enjoyable, and feature-rich chess game. These additional elements can help to set your project apart and provide players with a more dynamic and satisfying gameplay experience.
 
@@ -687,23 +806,23 @@ By implementing and testing optional features and improvements, you will be able
 
 ---
 
-### 6.1. Test the improved visual presentation of the board and pieces
+### 7.1. Test the improved visual presentation of the board and pieces
 
 Test the improved visual presentation of the board and pieces. This step involves enhancing the visual appearance of the chess board and pieces in the terminal to make the game more visually appealing, engaging, and easier to understand for players.
 
 Here's a high-level overview of what this sub-step entails:
 
-    Enhance the visual presentation of the board and pieces:
-        Implement improvements to the way the board and pieces are displayed in the terminal, such as using Unicode chess symbols, colors, or other visual elements to make the board more engaging and easier to read.
-        Adjust the spacing, alignment, and other aspects of the display to ensure a clean and visually appealing presentation.
+1. Enhance the visual presentation of the board and pieces:
+   - Implement improvements to the way the board and pieces are displayed in the terminal, such as using Unicode chess symbols, colors, or other visual elements to make the board more engaging and easier to read.
+   - Adjust the spacing, alignment, and other aspects of the display to ensure a clean and visually appealing presentation.
 
-    Test the improved visual presentation with different board states:
-        Create test scenarios with various board states, including the initial position, mid-game positions, and endgame positions.
-        Verify that the enhanced visual presentation is consistently appealing and easy to understand across different board states and scenarios.
+2. Test the improved visual presentation with different board states:
+   - Create test scenarios with various board states, including the initial position, mid-game positions, and endgame positions.
+   - Verify that the enhanced visual presentation is consistently appealing and easy to understand across different board states and scenarios.
 
-    Test the improved visual presentation with different terminal settings:
-        Test the display of the board and pieces in different terminal environments, such as different terminal emulators, font sizes, and color schemes.
-        Ensure that the enhanced visual presentation remains clear and visually appealing across different terminal settings and is adaptable to various user preferences.
+3. Test the improved visual presentation with different terminal settings:
+   - Test the display of the board and pieces in different terminal environments, such as different terminal emulators, font sizes, and color schemes.
+   - Ensure that the enhanced visual presentation remains clear and visually appealing across different terminal settings and is adaptable to various user preferences.
 
 By implementing and testing the improved visual presentation of the board and pieces, you will create a more engaging and visually appealing gameplay experience for the players. A well-designed board display not only looks better but also helps players make informed decisions during gameplay, contributing to a more enjoyable overall experience.
 
@@ -711,27 +830,27 @@ By implementing and testing the improved visual presentation of the board and pi
 
 ---
 
-### 6.2. Implement and test the move history feature
+### 7.2. Implement and test the move history feature
 
 This step involves creating a move history system that allows players to review the moves made during the game. This can be a valuable tool for players to analyze their gameplay and learn from their mistakes or successes.
 
 Here's a high-level overview of what this sub-step entails:
 
-    Design the move history system:
-        Decide on the format for storing move history, such as a list of moves in algebraic notation, a list of piece objects with their previous and current positions, or another suitable format.
-        Design a data structure or class to store the move history, making sure it can be easily accessed and updated during gameplay.
+1. Design the move history system:
+   - Decide on the format for storing move history, such as a list of moves in algebraic notation, a list of piece objects with their previous and current positions, or another suitable format.
+   - Design a data structure or class to store the move history, making sure it can be easily accessed and updated during gameplay.
 
-    Implement the move history system:
-        Add functionality to the GameManager and/or Board classes to record each move as it is made, storing the relevant information in the move history data structure.
-        Ensure that special moves, such as castling, en passant, and pawn promotion, are recorded accurately in the move history.
+2. Implement the move history system:
+   - Add functionality to the GameManager and/or Board classes to record each move as it is made, storing the relevant information in the move history data structure.
+   - Ensure that special moves, such as castling, en passant, and pawn promotion, are recorded accurately in the move history.
 
-    Display the move history to the player:
-        Implement a method for displaying the move history to the player, either as a list of moves in algebraic notation, a more visual representation, or another suitable format.
-        Allow the player to access the move history at any point during the game, either through a user command or as part of the regular game interface.
+3. Display the move history to the player:
+   - Implement a method for displaying the move history to the player, either as a list of moves in algebraic notation, a more visual representation, or another suitable format.
+   - Allow the player to access the move history at any point during the game, either through a user command or as part of the regular game interface.
 
-    Test the move history feature:
-        Create test scenarios with various game states and sequences of moves, ensuring that the move history system accurately records and displays the moves made during the game.
-        Test the move history feature with different types of moves, including regular moves, captures, and special moves like castling, en passant, and pawn promotion.
+4. Test the move history feature:
+   - Create test scenarios with various game states and sequences of moves, ensuring that the move history system accurately records and displays the moves made during the game.
+   - Test the move history feature with different types of moves, including regular moves, captures, and special moves like castling, en passant, and pawn promotion.
 
 By implementing and testing the move history feature, you will provide players with a valuable tool to review and analyze their gameplay. This can lead to a more engaging and educational experience, as players can learn from their moves and better understand their decision-making process during the game.
 
@@ -739,28 +858,28 @@ By implementing and testing the move history feature, you will provide players w
 
 ---
 
-### 6.3. Test save and load functionality
+### 7.3. Test save and load functionality
 
 This step involves implementing a system that allows players to save their current game state and load it later, providing a more convenient and flexible gameplay experience.
 
 Here's a high-level overview of what this sub-step entails:
 
-    Design the save and load system:
-        Determine the format for storing game state data, such as a serialized object, JSON, or another suitable format.
-        Design the methods or functionality needed to save the game state to a file and load it back into the game later.
+1. Design the save and load system:
+   - Determine the format for storing game state data, such as a serialized object, JSON, or another suitable format.
+   - Design the methods or functionality needed to save the game state to a file and load it back into the game later.
 
-    Implement the save and load system:
-        Add functionality to the GameManager class (or a separate class, if desired) for saving the current game state to a file, ensuring that all relevant information, including board positions, move history, and player information, is stored.
-        Add functionality for loading a saved game state from a file, ensuring that the game state is accurately restored and the game can continue from the saved point.
+2. Implement the save and load system:
+   - Add functionality to the GameManager class (or a separate class, if desired) for saving the current game state to a file, ensuring that all relevant information, including board positions, move history, and player information, is stored.
+   - Add functionality for loading a saved game state from a file, ensuring that the game state is accurately restored and the game can continue from the saved point.
 
-    Add save and load user commands:
-        Implement user commands that allow players to save and load games, integrating these commands into the GameManager's command handling system.
-        Ensure that appropriate error handling is in place for cases where a saved game file cannot be found, is corrupted, or is incompatible with the current game version.
+3. Add save and load user commands:
+   - Implement user commands that allow players to save and load games, integrating these commands into the GameManager's command handling system.
+   - Ensure that appropriate error handling is in place for cases where a saved game file cannot be found, is corrupted, or is incompatible with the current game version.
 
-    Test the save and load functionality:
-        Create test scenarios where a game is saved at various points during gameplay, including the initial position, mid-game positions, and endgame positions.
-        Verify that the saved game state can be accurately loaded and that the game can be resumed from the saved point without any issues.
-        Test the save and load functionality with different types of moves and game states, including special moves like castling, en passant, and pawn promotion, as well as check, checkmate, and draw situations.
+4. Test the save and load functionality:
+   - Create test scenarios where a game is saved at various points during gameplay, including the initial position, mid-game positions, and endgame positions.
+   - Verify that the saved game state can be accurately loaded and that the game can be resumed from the saved point without any issues.
+   - Test the save and load functionality with different types of moves and game states, including special moves like castling, en passant, and pawn promotion, as well as check, checkmate, and draw situations.
 
 By implementing and testing the save and load functionality, you will provide players with a convenient way to pause and resume their games as needed. This can be particularly useful for long games or for players who want to revisit a specific game state to analyze their moves and improve their strategy.
 
@@ -768,27 +887,27 @@ By implementing and testing the save and load functionality, you will provide pl
 
 ---
 
-### 6.4. Test basic AI for single-player mode, if implemented
+### 7.4. Test basic AI for single-player mode, if implemented
 
 This step involves designing and implementing a basic AI opponent for a single-player mode, allowing players to play against the computer. This can be a valuable addition to the game, providing an engaging and challenging experience for players who prefer to play solo or practice their skills.
 
 Here's a high-level overview of what this sub-step entails:
 
-    Design the AI opponent:
-        Decide on an AI strategy, such as a simple random move generator, a more advanced algorithm like minimax, or another suitable approach.
-        Design the methods or functionality needed for the AI to evaluate the board, generate legal moves, and select the best move according to its strategy.
+1. Design the AI opponent:
+   - Decide on an AI strategy, such as a simple random move generator, a more advanced algorithm like minimax, or another suitable approach.
+   - Design the methods or functionality needed for the AI to evaluate the board, generate legal moves, and select the best move according to its strategy.
 
-    Implement the AI opponent:
-        Add functionality to the GameManager class (or a separate AI class) for generating and executing AI moves during the game.
-        Implement the chosen AI strategy, ensuring that it can generate legal moves and select the best move according to its evaluation.
+2. Implement the AI opponent:
+   - Add functionality to the GameManager class (or a separate AI class) for generating and executing AI moves during the game.
+   - Implement the chosen AI strategy, ensuring that it can generate legal moves and select the best move according to its evaluation.
 
-    Integrate the AI opponent into the game:
-        Modify the GameManager class to support a single-player mode where one of the players is replaced by the AI opponent.
-        Ensure that the game flow works correctly when playing against the AI, with the AI making its moves when it's the AI's turn and the player making moves when it's the player's turn.
+3. Integrate the AI opponent into the game:
+   - Modify the GameManager class to support a single-player mode where one of the players is replaced by the AI opponent.
+   - Ensure that the game flow works correctly when playing against the AI, with the AI making its moves when it's the AI's turn and the player making moves when it's the player's turn.
 
-    Test the AI opponent:
-        Create test scenarios with various board states and positions, ensuring that the AI can generate legal moves and select the best move according to its strategy.
-        Play games against the AI, verifying that it provides an engaging and challenging experience for the player. Adjust the AI's strategy, if needed, to improve its gameplay behavior.
+4. Test the AI opponent:
+   - Create test scenarios with various board states and positions, ensuring that the AI can generate legal moves and select the best move according to its strategy.
+   - Play games against the AI, verifying that it provides an engaging and challenging experience for the player. Adjust the AI's strategy, if needed, to improve its gameplay behavior.
 
 By implementing and testing a basic AI for single-player mode, you will create a more engaging and versatile chess game, allowing players to practice their skills and enjoy the game even when a human opponent is not available. A well-designed AI can provide a challenging and entertaining experience, helping players improve their strategic thinking and decision-making during gameplay.
 
@@ -796,27 +915,27 @@ By implementing and testing a basic AI for single-player mode, you will create a
 
 ---
 
-### 6.5. Test the timer or clock feature, if implemented
+### 7.5. Test the timer or clock feature, if implemented
 
 This step involves designing, implementing, and testing a timer or clock system for the chess game, which can be used to add time controls and limits to each player's turn. This feature can help create a more competitive and engaging experience, as players need to make their moves within the allotted time or risk losing the game.
 
 Here's a high-level overview of what this sub-step entails:
 
-    Design the timer or clock system:
-        Determine the type of timer or clock system to use, such as a simple countdown timer, a chess clock with time increments, or another suitable approach.
-        Design the methods or functionality needed to start, stop, and reset the timer, as well as update and display the remaining time for each player.
+1. Design the timer or clock system:
+   - Determine the type of timer or clock system to use, such as a simple countdown timer, a chess clock with time increments, or another suitable approach.
+   - Design the methods or functionality needed to start, stop, and reset the timer, as well as update and display the remaining time for each player.
 
-    Implement the timer or clock system:
-        Add functionality to the GameManager class (or a separate Timer or Clock class) for managing the timer or clock during the game.
-        Implement the chosen timer or clock system, ensuring that it accurately tracks and updates the remaining time for each player during their turn.
+2. Implement the timer or clock system:
+   - Add functionality to the GameManager class (or a separate Timer or Clock class) for managing the timer or clock during the game.
+   - Implement the chosen timer or clock system, ensuring that it accurately tracks and updates the remaining time for each player during their turn.
 
-    Integrate the timer or clock system into the game:
-        Modify the GameManager class to support the timer or clock system, ensuring that the timer starts and stops correctly during each player's turn.
-        Update the game's user interface to display the remaining time for each player and any relevant timer or clock information.
+3. Integrate the timer or clock system into the game:
+   - Modify the GameManager class to support the timer or clock system, ensuring that the timer starts and stops correctly during each player's turn.
+   - Update the game's user interface to display the remaining time for each player and any relevant timer or clock information.
 
-    Test the timer or clock feature:
-        Create test scenarios with various time controls and limits, ensuring that the timer or clock system accurately tracks and updates the remaining time for each player during their turn.
-        Play games with the timer or clock feature enabled, verifying that it adds a competitive and engaging element to the game and functions correctly throughout the match.
+4. Test the timer or clock feature:
+   - Create test scenarios with various time controls and limits, ensuring that the timer or clock system accurately tracks and updates the remaining time for each player during their turn.
+   - Play games with the timer or clock feature enabled, verifying that it adds a competitive and engaging element to the game and functions correctly throughout the match.
 
 By implementing and testing the timer or clock feature, you will create a more competitive and dynamic chess game, allowing players to experience the excitement of time-controlled games. This feature can help players improve their decision-making skills under pressure and enjoy a more fast-paced and thrilling gameplay experience.
 
