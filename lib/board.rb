@@ -13,6 +13,7 @@ class Board
   def add_piece(piece, position)
     row, col = position
 
+    raise InvalidPositionError, position unless valid_position?(position)
     raise PositionNotEmptyError, position unless @grid[row][col].nil?
 
     @grid[row][col] = piece
@@ -21,14 +22,28 @@ class Board
   end
 
   def remove_piece(position)
+    raise InvalidPositionError, position unless valid_position?(position)
+
     piece = piece_at(position)
-    remove_active_pieces(piece)
+    remove_active_piece(piece)
     @grid[position[0]][position[1]] = nil
   end
 
   def move_piece(piece, destination)
-    remove_piece(piece.position)
-    add_piece(piece, destination)
+    raise NoPieceError, piece unless piece.is_a?(Piece)
+    raise InvalidPositionError, destination unless valid_position?(destination)
+    raise PositionNotEmptyError, destination unless valid_move?(piece, destination)
+
+    destination_piece = @grid[destination[0]][destination[1]]
+
+    # Update the grid
+    update_grid_on_move(piece, destination)
+
+    # Remove the destination piece from active_pieces if it exists
+    remove_active_piece(destination_piece) if destination_piece
+
+    # Update the moving piece's position
+    piece.position = destination
   end
 
   def valid_position?(position)
@@ -37,11 +52,15 @@ class Board
   end
 
   def piece_at(position)
+    return nil unless valid_position?(position)
+
     row, col = position
     @grid[row][col]
   end
 
   def position_of(piece)
+    raise NoPieceError, piece unless piece.is_a?(Piece)
+
     piece.position
   end
 
@@ -57,20 +76,32 @@ class Board
 
   def piece_key(piece)
     new_key = "#{piece.color.downcase}_#{piece.type.downcase}"
-    if piece.type == 'queen' || piece.type == 'king'
-      new_key
-    else
-      count = 1
-      count += 1 while @active_pieces.key?(new_key + count.to_s)
-      "#{new_key}#{count}"
-    end
+    piece.type == 'queen' || piece.type == 'king' ? new_key : "#{new_key}#{next_piece_count(new_key)}"
+  end
+
+  def next_piece_count(new_key)
+    count = 1
+    count += 1 while @active_pieces.key?(new_key + count.to_s)
+    count
   end
 
   def add_active_piece(piece)
     @active_pieces[piece_key(piece)] = piece
   end
 
-  def remove_active_pieces(piece)
+  def remove_active_piece(piece)
     @active_pieces.delete_if { |_, v| v == piece }
+  end
+
+  def valid_move?(piece, destination)
+    return false unless valid_position?(destination)
+
+    destination_piece = @grid[destination[0]][destination[1]]
+    !(destination_piece && destination_piece.color == piece.color)
+  end
+
+  def update_grid_on_move(piece, destination)
+    @grid[piece.position[0]][piece.position[1]] = nil
+    @grid[destination[0]][destination[1]] = piece
   end
 end

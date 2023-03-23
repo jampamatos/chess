@@ -3,6 +3,7 @@ require 'colorize'
 
 # Local Classes
 require_relative 'board'
+require_relative 'piece'
 
 # Piece subclasses
 

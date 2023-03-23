@@ -1,11 +1,27 @@
 # frozen_string_literal: true
 
+# Base error class for all chess-related errors
 class ChessError < StandardError
 end
 
+# Raised when a given position is outside the valid board coordinates
+class InvalidPositionError < ChessError
+  def initialize(position)
+    super("#{position} is not a valid position on the board")
+  end
+end
+
+# Raised when attempting to place a piece on an already occupied position
 class PositionNotEmptyError < ChessError
   def initialize(position)
     super("Cannot set piece: position #{position} is not empty")
+  end
+end
+
+# Raised when an object that is not an instance of Piece is passed as a piece
+class NoPieceError < ChessError
+  def initialize(piece)
+    super("#{piece} is not an instance of Piece")
   end
 end
 
