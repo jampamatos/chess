@@ -11,12 +11,10 @@ class Board
   end
 
   def add_piece(piece, position)
-    row, col = position
-
     raise InvalidPositionError, position unless valid_position?(position)
-    raise PositionNotEmptyError, position unless @grid[row][col].nil?
+    raise PositionNotEmptyError, position unless piece_at(position).nil?
 
-    @grid[row][col] = piece
+    change_piece_at(position, piece)
     piece.position = position
     add_active_piece(piece) unless @active_pieces.value?(piece)
   end
@@ -26,7 +24,7 @@ class Board
 
     piece = piece_at(position)
     remove_active_piece(piece)
-    @grid[position[0]][position[1]] = nil
+    change_piece_at(position, nil)
   end
 
   def move_piece(piece, destination)
@@ -34,7 +32,7 @@ class Board
     raise InvalidPositionError, destination unless valid_position?(destination)
     raise PositionNotEmptyError, destination unless valid_move?(piece, destination)
 
-    destination_piece = @grid[destination[0]][destination[1]]
+    destination_piece = piece_at(destination)
 
     # Update the grid
     update_grid_on_move(piece, destination)
@@ -103,5 +101,9 @@ class Board
   def update_grid_on_move(piece, destination)
     @grid[piece.position[0]][piece.position[1]] = nil
     @grid[destination[0]][destination[1]] = piece
+  end
+
+  def change_piece_at(position, piece)
+    @grid[position[0]][position[1]] = piece
   end
 end
