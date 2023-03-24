@@ -2,10 +2,10 @@
 
 Here's a suggested breakdown for a plan of attack:
 
-1. [ ] [Set up the chess board and pieces](#1-set-up-the-chess-board-and-pieces).
+1. [X] [Set up the chess board and pieces](#1-set-up-the-chess-board-and-pieces).
    1. [X] [Implement and test the Board class](#11-implement-and-test-the-board-class).
-   2. [ ] [Implement and test the Piece class and its subclasses](#12-implement-and-test-the-piece-class-and-its-subclasses).
-   3. [ ] [Test placing pieces in their initial positions on the board](#13-test-placing-pieces-in-their-initial-positions-on-the-board).
+   2. [X] [Implement and test the Piece class and its subclasses](#12-implement-and-test-the-piece-class-and-its-subclasses).
+   3. [X] [Test placing pieces in their initial positions on the board](#13-test-placing-pieces-in-their-initial-positions-on-the-board).
 2. [ ] [Handle special moves](#2-handle-special-moves).
    1. [ ] [Test castling rules for the King and Rook pieces](#21-test-castling-rules-for-the-king-and-rook-pieces).
    2. [ ] [Test en passant rules for Pawns](#22-test-en-passant-rules-for-pawns).

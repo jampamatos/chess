@@ -5,6 +5,9 @@ require_relative 'dependencies'
 BG_COLOR_EVEN = :light_black
 BG_COLOR_ODD = :black
 
+PIECES_RANK = { 'white' => 7, 'black' => 0 }.freeze
+PAWNS_RANK = { 'white' => 6, 'black' => 1 }.freeze
+
 class Board
   attr_reader :grid, :active_pieces
 
@@ -82,6 +85,11 @@ class Board
     @active_pieces.select { |_k, piece| piece.color == color }.values
   end
 
+  def set_up_board
+    generate_pieces('white')
+    generate_pieces('black')
+  end
+
   private
 
   def new_grid
@@ -121,5 +129,56 @@ class Board
 
   def change_piece_at(position, piece)
     @grid[position[0]][position[1]] = piece
+  end
+
+  def generate_pieces(color)
+    generate_pawns(color)
+    generate_rooks(color)
+    generate_knights(color)
+    generate_bishops(color)
+    generate_queen(color)
+    generate_king(color)
+  end
+
+  def generate_pawns(color)
+    8.times do |col|
+      position = [PAWNS_RANK[color], col]
+      pawn = Pawn.new(color)
+      add_piece(pawn, position)
+    end
+  end
+
+  def generate_rooks(color)
+    [0, 7].each do |col|
+      position = [PIECES_RANK[color], col]
+      rook = Rook.new(color)
+      add_piece(rook, position)
+    end
+  end
+
+  def generate_knights(color)
+    [1, 6].each do |col|
+      position = [PIECES_RANK[color], col]
+      knight = Knight.new(color)
+      add_piece(knight, position)
+    end
+  end
+
+  def generate_bishops(color)
+    [2, 5].each do |col|
+      position = [PIECES_RANK[color], col]
+      bishop = Bishop.new(color)
+      add_piece(bishop, position)
+    end
+  end
+
+  def generate_queen(color)
+    position = [PIECES_RANK[color], 3]
+    add_piece(Queen.new(color), position)
+  end
+
+  def generate_king(color)
+    position = [PIECES_RANK[color], 4]
+    add_piece(King.new(color), position)
   end
 end
