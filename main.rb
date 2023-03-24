@@ -3,7 +3,16 @@
 require_relative 'lib/dependencies'
 
 board = Board.new
-white_rook = Rook.new('white')
+white_pawn = Pawn.new(:white)
+black_pawn = Pawn.new(:black)
 
-board.add_piece(white_rook, [0, 0])
-board.draw_board
+board.place_piece(white_pawn, [1, 4])
+board.place_piece(black_pawn, [6, 4])
+gm = GameManager.new(board)
+
+gm.draw_board
+puts gm.move_piece([1, 4], [0, 4])
+gm.draw_board
+
+puts gm.move_piece([6, 4], [7, 4])
+gm.draw_board

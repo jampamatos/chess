@@ -4,8 +4,8 @@ require_relative '../piece'
 
 class Bishop < Piece
   def initialize(color)
-    symbol = color == 'white' ? '♗' : '♝'
-    super(color, 'bishop', symbol)
+    symbol = color == :white ? '♝' : '♝'.colorize(color)
+    super(color, :bishop, symbol)
   end
 
   def possible_moves(board)

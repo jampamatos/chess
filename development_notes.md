@@ -2,17 +2,17 @@
 
 Here's a suggested breakdown for a plan of attack:
 
-1. [ ] [Set up the chess board and pieces](#1-set-up-the-chess-board-and-pieces).
+1. [X] [Set up the chess board and pieces](#1-set-up-the-chess-board-and-pieces).
    1. [X] [Implement and test the Board class](#11-implement-and-test-the-board-class).
-   2. [ ] [Implement and test the Piece class and its subclasses](#12-implement-and-test-the-piece-class-and-its-subclasses).
-   3. [ ] [Test placing pieces in their initial positions on the board](#13-test-placing-pieces-in-their-initial-positions-on-the-board).
-2. [ ] [Handle special moves](#2-handle-special-moves).
-   1. [ ] [Test castling rules for the King and Rook pieces](#21-test-castling-rules-for-the-king-and-rook-pieces).
-   2. [ ] [Test en passant rules for Pawns](#22-test-en-passant-rules-for-pawns).
-   3. [ ] [Test pawn promotion rules](#23-test-pawn-promotion-rules).
-3. [ ] [Implement chess rules and piece movement](#3-implement-chess-rules-and-piece-movement).
-   1. [ ] [Add move validation to the Board class](#31-add-move-validation-to-the-board-class).
-   2. [ ] [Test the integration of valid move methods in the game flow](#32-test-the-integration-of-valid-move-methods-in-the-game-flow).
+   2. [X] [Implement and test the Piece class and its subclasses](#12-implement-and-test-the-piece-class-and-its-subclasses).
+   3. [X] [Test placing pieces in their initial positions on the board](#13-test-placing-pieces-in-their-initial-positions-on-the-board).
+2. [X] [Handle special moves](#2-handle-special-moves).
+   1. [X] [Test castling rules for the King and Rook pieces](#21-test-castling-rules-for-the-king-and-rook-pieces).
+   2. [X] [Test en passant rules for Pawns](#22-test-en-passant-rules-for-pawns).
+   3. [X] [Test pawn promotion rules](#23-test-pawn-promotion-rules).
+3. [X] [Implement chess rules and piece movement](#3-implement-chess-rules-and-piece-movement).
+   1. [X] [Add move validation to the Board class](#31-add-move-validation-to-the-board-class).
+   2. [X] [Test the integration of valid move methods in the game flow](#32-test-the-integration-of-valid-move-methods-in-the-game-flow).
    3. [ ] [Implement and test detecting check, checkmate, and stalemate](#33-implement-and-test-detecting-check-checkmate-and-stalemate).
    4. [ ] [Implement and test detecting and handling draw scenarios](#34-implement-and-test-detecting-and-handling-draw-scenarios).
 4. [ ] [Create a game loop that allows players to make moves](#4-create-a-game-loop-that-allows-players-to-make-moves).
@@ -938,6 +938,41 @@ Here's a high-level overview of what this sub-step entails:
    - Play games with the timer or clock feature enabled, verifying that it adds a competitive and engaging element to the game and functions correctly throughout the match.
 
 By implementing and testing the timer or clock feature, you will create a more competitive and dynamic chess game, allowing players to experience the excitement of time-controlled games. This feature can help players improve their decision-making skills under pressure and enjoy a more fast-paced and thrilling gameplay experience.
+
+[TOP](#development-of-ruby-console-operated-chess-game)
+
+---
+
+## NOTES
+
+### Notes to when we implement player move logic
+
+In our King or Pawn class, we can create a `special_moves` method that returns an array of castling or en passant moves if they're valid. Then, in the `possible_moves` method, we can concatenate the special moves to the moves array:
+
+```ruby
+def possible_moves(board)
+  moves = []
+
+  moves.concat(move_generator(board, 1, 1, 0))
+  # ... other move generators ...
+
+  moves.concat(special_moves(board))
+
+  moves
+end
+```
+
+Next, in our move logic, check if the piece is a King or a Pawn, and if so, check if the move is a special move:
+
+```ruby
+if (piece.is_a?(King) || piece.is_a?(Pawn)) && piece.special_moves(board).include?(move)
+  # Perform the special move (castling or en passant)
+elsif piece.possible_moves(board).include?(move)
+  # Perform the regular move
+else
+  # Raise an error
+end
+```
 
 [TOP](#development-of-ruby-console-operated-chess-game)
 
