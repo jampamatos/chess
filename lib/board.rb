@@ -2,12 +2,28 @@
 
 require_relative 'dependencies'
 
+BG_COLOR_EVEN = :light_black
+BG_COLOR_ODD = :black
+
 class Board
   attr_reader :grid, :active_pieces
 
   def initialize(grid = new_grid, active_pieces = {})
     @grid = grid
     @active_pieces = active_pieces
+  end
+
+  def draw_board
+    puts "\n   A  B  C  D  E  F  G  H\n"
+    @grid.each_with_index do |row, i|
+      print "#{8 - i} "
+      row.each_with_index do |piece, j|
+        bg_color = (i + j).even? ? BG_COLOR_EVEN : BG_COLOR_ODD
+        print piece ? " #{piece} ".colorize(background: bg_color) : '   '.colorize(background: bg_color)
+      end
+      print " #{8 - i}\n"
+    end
+    puts "\n   A  B  C  D  E  F  G  H\n"
   end
 
   def add_piece(piece, position)

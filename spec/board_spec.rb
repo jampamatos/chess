@@ -3,13 +3,12 @@
 require_relative '../lib/dependencies'
 
 RSpec.describe Board do
-
   let(:board) { Board.new }
-  let(:piece1) { Piece.new('white', 'pawn') }
-  let(:piece2) { Piece.new('black', 'pawn') }
-  let(:piece3) { Piece.new('white', 'pawn') }
-  let(:piece4) { Piece.new('black', 'pawn') }
-  let(:piece5) { Piece.new('white', 'pawn') }
+  let(:piece1) { Piece.new('white', 'pawn', 'P') }
+  let(:piece2) { Piece.new('black', 'pawn', 'P') }
+  let(:piece3) { Piece.new('white', 'pawn', 'P') }
+  let(:piece4) { Piece.new('black', 'pawn', 'P') }
+  let(:piece5) { Piece.new('white', 'pawn', 'P') }
 
   describe '#initialize' do
     it 'initializes an empty grid' do
