@@ -3,7 +3,8 @@
 require_relative 'dependencies'
 
 class Piece
-  attr_accessor :color, :type, :symbol, :position, :moved
+  attr_reader :moved
+  attr_accessor :color, :type, :symbol, :position
 
   def initialize(color, type, symbol = nil, position = nil, moved: false)
     @color = color
@@ -23,6 +24,10 @@ class Piece
 
   def possible_moves(_board)
     []
+  end
+
+  def mark_as_moved
+    @moved = true
   end
 
   private

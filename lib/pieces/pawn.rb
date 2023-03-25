@@ -17,8 +17,7 @@ class Pawn < Piece
   def forward_moves(board)
     step = @moved ? 1 : 2
     direction = @color == 'white' ? -1 : 1
-
-    move_generator(board, step, direction, 0)
+    forward_blocked?(board, direction) ? [] : move_generator(board, step, direction, 0)
   end
 
   def diagonal_captures(board)
@@ -31,8 +30,11 @@ class Pawn < Piece
       next unless board.valid_position?(target_position)
 
       target_piece = board.piece_at(target_position)
-      p target_piece
       target_piece && !target_piece.same_color_as(self) ? target_position : nil
     end.compact
+  end
+
+  def forward_blocked?(board, direction)
+    board.piece_at([position[0] + direction, position[1]])
   end
 end
