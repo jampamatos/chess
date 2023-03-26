@@ -18,4 +18,17 @@ class Rook < Piece
 
     moves
   end
+
+  def can_castle?(board)
+    return false if @moved
+
+    left_square = [position[0], position[1] - 1]
+    right_square = [position[0], position[1] + 1]
+
+    return true if board.valid_position?(left_square) && board.piece_at(left_square).nil?
+
+    return true if board.valid_position?(right_square) && board.piece_at(right_square).nil?
+
+    false
+  end
 end

@@ -148,6 +148,26 @@ RSpec.describe Board do
       it 'puts the piece correctly in the new position' do
         expect(board.piece_at(new_position)).to eq(piece1)
       end
+
+      it 'updates piece.position correctly' do
+        expect(piece1.position).to eq(new_position)
+      end
+
+      it 'does not change the active_pieces hash' do
+        expect(board.active_pieces.values).to include(piece1)
+      end
+
+      it 'does not change the number of active pieces' do
+        expect(board.active_pieces.size).to eq(1)
+      end
+
+      it 'does not change the number of pieces in the grid' do
+        expect(board.grid.flatten.compact.size).to eq(1)
+      end
+
+      it 'marks the piece as moved' do
+        expect(piece1.moved).to be(true)
+      end
     end
 
     context 'when we try to move a piece to a position occupied by a friendly piece' do
@@ -300,6 +320,125 @@ RSpec.describe Board do
         black_pieces = board.pieces_of_color('black')
         expect(black_pieces).to include(piece2)
         expect(black_pieces).to include(piece4)
+      end
+    end
+  end
+
+  describe '#friendly_pieces_of_type' do
+    before do
+      board.add_piece(piece1, [0, 0])
+      board.add_piece(piece2, [1, 1])
+      board.add_piece(piece3, [2, 2])
+      board.add_piece(piece4, [3, 3])
+      board.add_piece(piece5, [4, 4])
+    end
+
+    context 'when there are 3 white pawns and 2 black pawns in active_pieces' do
+      it "expect friendly_pieces_of_type('pawn', 'white') to return an array of size 3" do
+        white_pawns = board.friendly_pieces_of_type('pawn', 'white')
+        expect(white_pawns).to be_an(Array)
+        expect(white_pawns.size).to eq(3)
+      end
+
+      it "expect friendly_pieces_of_type('pawn', 'white') to return the three correct white pawns" do
+        white_pawns = board.friendly_pieces_of_type('pawn', 'white')
+        expect(white_pawns).to include(piece1)
+        expect(white_pawns).to include(piece3)
+        expect(white_pawns).to include(piece5)
+      end
+
+      it "expect friendly_pieces_of_type('pawn', 'black') to return an array of size 2" do
+        black_pawns = board.friendly_pieces_of_type('pawn', 'black')
+        expect(black_pawns).to be_an(Array)
+        expect(black_pawns.size).to eq(2)
+      end
+
+      it "expect friendly_pieces_of_type('pawn', 'black') to return the three correct black pawns" do
+        black_pawns = board.friendly_pieces_of_type('pawn', 'black')
+        expect(black_pawns).to include(piece2)
+        expect(black_pawns).to include(piece4)
+      end
+    end
+  end
+
+  describe '#set_up_board' do
+    context 'when we call set_up_board' do
+      before do
+        board.set_up_board
+      end
+
+      it 'adds 32 pieces to the board' do
+        expect(board.active_pieces.size).to eq(32)
+      end
+
+      it 'adds 16 white pieces to the board' do
+        white_pieces = board.pieces_of_color('white')
+        expect(white_pieces.size).to eq(16)
+      end
+
+      it 'adds 16 black pieces to the board' do
+        black_pieces = board.pieces_of_color('black')
+        expect(black_pieces.size).to eq(16)
+      end
+
+      it 'adds 8 white pawns to the board' do
+        pawns = board.friendly_pieces_of_type('pawn', 'white')
+        expect(pawns.size).to eq(8)
+      end
+
+      it 'adds 8 black pawns to the board' do
+        pawns = board.friendly_pieces_of_type('pawn', 'black')
+        expect(pawns.size).to eq(8)
+      end
+
+      it 'adds 2 white rooks to the board' do
+        rooks = board.friendly_pieces_of_type('rook', 'white')
+        expect(rooks.size).to eq(2)
+      end
+
+      it 'adds 2 black rooks to the board' do
+        rooks = board.friendly_pieces_of_type('rook', 'black')
+        expect(rooks.size).to eq(2)
+      end
+
+      it 'adds 2 white knights to the board' do
+        knights = board.friendly_pieces_of_type('knight', 'white')
+        expect(knights.size).to eq(2)
+      end
+
+      it 'adds 2 black knights to the board' do
+        knights = board.friendly_pieces_of_type('knight', 'black')
+        expect(knights.size).to eq(2)
+      end
+
+      it 'adds 2 white bishops to the board' do
+        bishops = board.friendly_pieces_of_type('bishop', 'white')
+        expect(bishops.size).to eq(2)
+      end
+
+      it 'adds 2 black bishops to the board' do
+        bishops = board.friendly_pieces_of_type('bishop', 'black')
+        expect(bishops.size).to eq(2)
+      end
+
+      it 'adds 1 white queen to the board' do
+        queens = board.friendly_pieces_of_type('queen', 'white')
+        expect(queens.size).to eq(1)
+      end
+
+      it 'adds 1 black queen to the board' do
+        queens = board.friendly_pieces_of_type('queen', 'black')
+        expect(queens.size).to eq(1)
+      end
+
+      it 'adds 1 white king to the board' do
+        kings = board.friendly_pieces_of_type('king', 'white')
+        expect(kings.size).to eq(1)
+      end
+
+      it 'adds 1 black king to the board' do
+        kings = board.friendly_pieces_of_type('king', 'black')
+        expect(kings.size).to eq(1)
       end
     end
   end

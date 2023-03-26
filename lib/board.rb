@@ -60,6 +60,7 @@ class Board
     remove_active_piece(destination_piece) if destination_piece
 
     # Update the moving piece's position
+    piece.mark_as_moved
     piece.position = destination
   end
 
@@ -85,9 +86,29 @@ class Board
     @active_pieces.select { |_k, piece| piece.color == color }.values
   end
 
+  def friendly_pieces_of_type(type, color)
+    pieces_of_color(color).select { |piece| piece.type == type }
+  end
+
+  def find_king(color)
+    friendly_pieces_of_type('king', color).first
+  end
+
+  def find_rook_at(position, color)
+    piece_at(position) if piece_at(position)&.type == 'rook' && piece_at(position)&.color == color
+  end
+
   def set_up_board
     generate_pieces('white')
     generate_pieces('black')
+  end
+
+  def pieces_rank(color)
+    PIECES_RANK[color]
+  end
+
+  def pawns_rank(color)
+    PAWNS_RANK[color]
   end
 
   private

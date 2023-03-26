@@ -942,3 +942,38 @@ By implementing and testing the timer or clock feature, you will create a more c
 [TOP](#development-of-ruby-console-operated-chess-game)
 
 ---
+
+## NOTES
+
+### Notes to when we implement player move logic
+
+In our King or Pawn class, we can create a `special_moves` method that returns an array of castling or en passant moves if they're valid. Then, in the `possible_moves` method, we can concatenate the special moves to the moves array:
+
+```ruby
+def possible_moves(board)
+  moves = []
+
+  moves.concat(move_generator(board, 1, 1, 0))
+  # ... other move generators ...
+
+  moves.concat(special_moves(board))
+
+  moves
+end
+```
+
+Next, in our move logic, check if the piece is a King or a Pawn, and if so, check if the move is a special move:
+
+```ruby
+if (piece.is_a?(King) || piece.is_a?(Pawn)) && piece.special_moves(board).include?(move)
+  # Perform the special move (castling or en passant)
+elsif piece.possible_moves(board).include?(move)
+  # Perform the regular move
+else
+  # Raise an error
+end
+```
+
+[TOP](#development-of-ruby-console-operated-chess-game)
+
+---

@@ -121,6 +121,94 @@ RSpec.shared_examples 'a rook' do |color, symbol|
       end
     end
   end
+
+  describe '#can_castle?' do
+    context 'when rook is the left corner' do
+      before do
+        board.add_piece(rook, [0, 0])
+      end
+
+      context 'when it has not moved and there is no piece to its right' do
+        it 'returns true' do
+          expect(rook.can_castle?(board)).to be_truthy
+        end
+      end
+
+      context 'when it has not moved and there is a piece to its right' do
+        before do
+          board.add_piece(same_color_piece, [0, 1])
+        end
+
+        it 'returns false' do
+          expect(rook.can_castle?(board)).to be_falsy
+        end
+      end
+
+      context 'when it has moved and there is no piece to its right' do
+        before do
+          rook.mark_as_moved
+        end
+
+        it 'returns false' do
+          expect(rook.can_castle?(board)).to be_falsy
+        end
+      end
+
+      context 'when it has moved and there is a piece to its right' do
+        before do
+          rook.mark_as_moved
+          board.add_piece(same_color_piece, [0, 1])
+        end
+
+        it 'returns false' do
+          expect(rook.can_castle?(board)).to be_falsy
+        end
+      end
+    end
+
+    context 'when rook is the right corner' do
+      before do
+        board.add_piece(rook, [0, 7])
+      end
+
+      context 'when it has not moved and there is no piece to its left' do
+        it 'returns true' do
+          expect(rook.can_castle?(board)).to be_truthy
+        end
+      end
+
+      context 'when it has not moved and there is a piece to its left' do
+        before do
+          board.add_piece(same_color_piece, [0, 6])
+        end
+
+        it 'returns false' do
+          expect(rook.can_castle?(board)).to be_falsy
+        end
+      end
+
+      context 'when it has moved and there is no piece to its left' do
+        before do
+          rook.mark_as_moved
+        end
+
+        it 'returns false' do
+          expect(rook.can_castle?(board)).to be_falsy
+        end
+      end
+
+      context 'when it has moved and there is a piece to its left' do
+        before do
+          rook.mark_as_moved
+          board.add_piece(same_color_piece, [0, 6])
+        end
+
+        it 'returns false' do
+          expect(rook.can_castle?(board)).to be_falsy
+        end
+      end
+    end
+  end
 end
 
 RSpec.describe Rook do
