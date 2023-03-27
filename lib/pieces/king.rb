@@ -5,9 +5,9 @@ require_relative '../piece'
 class King < Piece
 
   def initialize(color, in_check: false)
-    symbol = color == 'white' ? '♔' : '♚'
+    symbol = color == :white ? '♔' : '♚'
     @in_check = in_check
-    super(color, 'king', symbol)
+    super(color, :king, symbol)
   end
 
   def in_check?
@@ -58,6 +58,6 @@ class King < Piece
   def can_castle?(rook, board, row, col_range)
     return false unless rook&.can_castle?(board)
 
-    col_range.all? { |i| board.piece_at([row, i]).nil? }
+    col_range.all? { |i| board.piece_at([row, i]).nil? && !board.square_under_attack?([row, i], @color) }
   end
 end

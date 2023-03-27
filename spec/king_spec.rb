@@ -5,15 +5,15 @@ require_relative '../lib/dependencies'
 RSpec.shared_examples 'a king' do |color, symbol|
   let(:board) { Board.new }
   let(:king) { King.new(color) }
-  let(:same_color_piece) { Piece.new(color, 'piece', 'P') }
-  let(:opposing_color_piece) { Piece.new(color == 'white' ? 'black' : 'white', 'piece', 'P') }
+  let(:same_color_piece) { Piece.new(color, :piece, 'P') }
+  let(:opposing_color_piece) { Piece.new(color == :white ? :black : :white, :piece, 'P') }
 
   describe '#initialize' do
     it 'creates a piece of the correct color' do
       expect(king.color).to eq(color)
     end
     it 'creates a piece of the king type' do
-      expect(king.type).to eq('king')
+      expect(king.type).to eq(:king)
     end
     it 'prints the correct symbol' do
       expect(king.to_s).to eq(symbol)
@@ -236,15 +236,29 @@ RSpec.shared_examples 'a king' do |color, symbol|
         end
       end
     end
-  end  
+
+    context 'when a king is set for castling but some of the squares are under attack' do
+      before do
+        board.add_piece(king, [board.pieces_rank(king.color), 4])
+        board.add_piece(Rook.new(king.color), [board.pieces_rank(king.color), 0])
+        board.add_piece(Rook.new(king.color), [board.pieces_rank(king.color), 7])
+        board.add_piece(Queen.new(board.opposing_color(king.color)), [board.pieces_rank(:black), 2])
+        board.add_piece(Rook.new(board.opposing_color(king.color)), [board.pieces_rank(:black), 5])
+      end
+
+      it 'returns no special moves' do
+        expect(king.special_moves(board)).to be_empty
+      end
+    end
+  end
 end
 
 RSpec.describe King do
   describe 'white king' do
-    it_behaves_like 'a king', 'white', '♔'
+    it_behaves_like 'a king', :white, '♔'
   end
 
   describe 'black king' do
-    it_behaves_like 'a king', 'black', '♚'
+    it_behaves_like 'a king', :black, '♚'
   end
 end

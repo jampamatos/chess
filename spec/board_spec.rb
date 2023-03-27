@@ -4,11 +4,11 @@ require_relative '../lib/dependencies'
 
 RSpec.describe Board do
   let(:board) { Board.new }
-  let(:piece1) { Piece.new('white', 'pawn', 'P') }
-  let(:piece2) { Piece.new('black', 'pawn', 'P') }
-  let(:piece3) { Piece.new('white', 'pawn', 'P') }
-  let(:piece4) { Piece.new('black', 'pawn', 'P') }
-  let(:piece5) { Piece.new('white', 'pawn', 'P') }
+  let(:piece1) { Piece.new(:white, :pawn, 'P') }
+  let(:piece2) { Piece.new(:black, :pawn, 'P') }
+  let(:piece3) { Piece.new(:white, :pawn, 'P') }
+  let(:piece4) { Piece.new(:black, :pawn, 'P') }
+  let(:piece5) { Piece.new(:white, :pawn, 'P') }
 
   describe '#initialize' do
     it 'initializes an empty grid' do
@@ -138,6 +138,7 @@ RSpec.describe Board do
 
       before do
         board.add_piece(piece1, initial_position)
+        allow(piece1).to receive(:possible_moves).and_return([new_position])
         board.move_piece(piece1, new_position)
       end
 
@@ -176,6 +177,7 @@ RSpec.describe Board do
 
       before do
         board.add_piece(piece1, initial_position)
+        allow(piece1).to receive(:possible_moves).and_return([new_position])
         board.add_piece(piece3, new_position)
       end
 
@@ -202,6 +204,7 @@ RSpec.describe Board do
       before do
         board.add_piece(piece1, initial_position)
         board.add_piece(piece2, new_position)
+        allow(piece1).to receive(:possible_moves).and_return([new_position])
         board.move_piece(piece1, new_position)
       end
       it 'removes the opponent piece from the board' do
@@ -243,6 +246,31 @@ RSpec.describe Board do
     context "when we pass 'nil' as a piece argument" do
       it 'raises a NoPieceError' do
         expect { board.move_piece(nil, [0, 0]) }.to raise_error(NoPieceError)
+      end
+    end
+
+    context 'when we try to move a piece to a position that is not in its possible moves' do
+      let(:initial_position) { [0, 0] }
+      let(:new_position) { [1, 1] }
+
+      before do
+        board.add_piece(piece1, initial_position)
+        allow(piece1).to receive(:possible_moves).and_return([])
+      end
+
+      it 'raises a InvalidMoveError' do
+        expect { board.move_piece(piece1, new_position) }.to raise_error(InvalidMoveError)
+      end
+
+      it 'does not move the piece' do
+        begin
+          board.move_piece(piece1, new_position)
+        rescue InvalidMoveError
+          # Ignoring the error for this test case
+        end
+
+        expect(board.piece_at(initial_position)).to eq(piece1)
+        expect(board.piece_at(new_position)).to be_nil
       end
     end
   end
@@ -297,27 +325,27 @@ RSpec.describe Board do
       board.add_piece(piece5, [4, 4])
     end
     context 'when there are 3 white pieces and 2 black pieces in active_pieces' do
-      it "expect pieces_of_color('white') to return an array of size 3" do
-        white_pieces = board.pieces_of_color('white')
+      it "expect pieces_of_color(:white) to return an array of size 3" do
+        white_pieces = board.pieces_of_color(:white)
         expect(white_pieces).to be_an(Array)
         expect(white_pieces.size).to eq(3)
       end
 
-      it "expect pieces_of_color('white') to return the three correct white pieces" do
-        white_pieces = board.pieces_of_color('white')
+      it "expect pieces_of_color(:white) to return the three correct white pieces" do
+        white_pieces = board.pieces_of_color(:white)
         expect(white_pieces).to include(piece1)
         expect(white_pieces).to include(piece3)
         expect(white_pieces).to include(piece5)
       end
 
-      it "expect pieces_of_color('black') to return an array of size 2" do
-        black_pieces = board.pieces_of_color('black')
+      it "expect pieces_of_color(:black) to return an array of size 2" do
+        black_pieces = board.pieces_of_color(:black)
         expect(black_pieces).to be_an(Array)
         expect(black_pieces.size).to eq(2)
       end
 
-      it "expect pieces_of_color('black') to return the three correct white pieces" do
-        black_pieces = board.pieces_of_color('black')
+      it "expect pieces_of_color(:black) to return the three correct white pieces" do
+        black_pieces = board.pieces_of_color(:black)
         expect(black_pieces).to include(piece2)
         expect(black_pieces).to include(piece4)
       end
@@ -334,27 +362,27 @@ RSpec.describe Board do
     end
 
     context 'when there are 3 white pawns and 2 black pawns in active_pieces' do
-      it "expect friendly_pieces_of_type('pawn', 'white') to return an array of size 3" do
-        white_pawns = board.friendly_pieces_of_type('pawn', 'white')
+      it "expect friendly_pieces_of_type(:pawn, :white) to return an array of size 3" do
+        white_pawns = board.friendly_pieces_of_type(:pawn, :white)
         expect(white_pawns).to be_an(Array)
         expect(white_pawns.size).to eq(3)
       end
 
-      it "expect friendly_pieces_of_type('pawn', 'white') to return the three correct white pawns" do
-        white_pawns = board.friendly_pieces_of_type('pawn', 'white')
+      it "expect friendly_pieces_of_type(:pawn, :white) to return the three correct white pawns" do
+        white_pawns = board.friendly_pieces_of_type(:pawn, :white)
         expect(white_pawns).to include(piece1)
         expect(white_pawns).to include(piece3)
         expect(white_pawns).to include(piece5)
       end
 
-      it "expect friendly_pieces_of_type('pawn', 'black') to return an array of size 2" do
-        black_pawns = board.friendly_pieces_of_type('pawn', 'black')
+      it "expect friendly_pieces_of_type(:pawn, :black) to return an array of size 2" do
+        black_pawns = board.friendly_pieces_of_type(:pawn, :black)
         expect(black_pawns).to be_an(Array)
         expect(black_pawns.size).to eq(2)
       end
 
-      it "expect friendly_pieces_of_type('pawn', 'black') to return the three correct black pawns" do
-        black_pawns = board.friendly_pieces_of_type('pawn', 'black')
+      it "expect friendly_pieces_of_type(:pawn, :black) to return the three correct black pawns" do
+        black_pawns = board.friendly_pieces_of_type(:pawn, :black)
         expect(black_pawns).to include(piece2)
         expect(black_pawns).to include(piece4)
       end
@@ -372,72 +400,72 @@ RSpec.describe Board do
       end
 
       it 'adds 16 white pieces to the board' do
-        white_pieces = board.pieces_of_color('white')
+        white_pieces = board.pieces_of_color(:white)
         expect(white_pieces.size).to eq(16)
       end
 
       it 'adds 16 black pieces to the board' do
-        black_pieces = board.pieces_of_color('black')
+        black_pieces = board.pieces_of_color(:black)
         expect(black_pieces.size).to eq(16)
       end
 
       it 'adds 8 white pawns to the board' do
-        pawns = board.friendly_pieces_of_type('pawn', 'white')
+        pawns = board.friendly_pieces_of_type(:pawn, :white)
         expect(pawns.size).to eq(8)
       end
 
       it 'adds 8 black pawns to the board' do
-        pawns = board.friendly_pieces_of_type('pawn', 'black')
+        pawns = board.friendly_pieces_of_type(:pawn, :black)
         expect(pawns.size).to eq(8)
       end
 
       it 'adds 2 white rooks to the board' do
-        rooks = board.friendly_pieces_of_type('rook', 'white')
+        rooks = board.friendly_pieces_of_type(:rook, :white)
         expect(rooks.size).to eq(2)
       end
 
       it 'adds 2 black rooks to the board' do
-        rooks = board.friendly_pieces_of_type('rook', 'black')
+        rooks = board.friendly_pieces_of_type(:rook, :black)
         expect(rooks.size).to eq(2)
       end
 
       it 'adds 2 white knights to the board' do
-        knights = board.friendly_pieces_of_type('knight', 'white')
+        knights = board.friendly_pieces_of_type(:knight, :white)
         expect(knights.size).to eq(2)
       end
 
       it 'adds 2 black knights to the board' do
-        knights = board.friendly_pieces_of_type('knight', 'black')
+        knights = board.friendly_pieces_of_type(:knight, :black)
         expect(knights.size).to eq(2)
       end
 
       it 'adds 2 white bishops to the board' do
-        bishops = board.friendly_pieces_of_type('bishop', 'white')
+        bishops = board.friendly_pieces_of_type(:bishop, :white)
         expect(bishops.size).to eq(2)
       end
 
       it 'adds 2 black bishops to the board' do
-        bishops = board.friendly_pieces_of_type('bishop', 'black')
+        bishops = board.friendly_pieces_of_type(:bishop, :black)
         expect(bishops.size).to eq(2)
       end
 
       it 'adds 1 white queen to the board' do
-        queens = board.friendly_pieces_of_type('queen', 'white')
+        queens = board.friendly_pieces_of_type(:queen, :white)
         expect(queens.size).to eq(1)
       end
 
       it 'adds 1 black queen to the board' do
-        queens = board.friendly_pieces_of_type('queen', 'black')
+        queens = board.friendly_pieces_of_type(:queen, :black)
         expect(queens.size).to eq(1)
       end
 
       it 'adds 1 white king to the board' do
-        kings = board.friendly_pieces_of_type('king', 'white')
+        kings = board.friendly_pieces_of_type(:king, :white)
         expect(kings.size).to eq(1)
       end
 
       it 'adds 1 black king to the board' do
-        kings = board.friendly_pieces_of_type('king', 'black')
+        kings = board.friendly_pieces_of_type(:king, :black)
         expect(kings.size).to eq(1)
       end
     end

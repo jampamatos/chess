@@ -5,15 +5,15 @@ require_relative '../lib/dependencies'
 RSpec.shared_examples 'a knight' do |color, symbol|
   let(:board) { Board.new }
   let(:knight) { Knight.new(color) }
-  let(:same_color_piece) { Piece.new(color, 'piece', 'P') }
-  let(:opposing_color_piece) { Piece.new(color == 'white' ? 'black' : 'white', 'piece', 'P') }
+  let(:same_color_piece) { Piece.new(color, :piece, 'P') }
+  let(:opposing_color_piece) { Piece.new(color == :white ? :black : :white, :piece, 'P') }
 
   describe '#initialize' do
     it 'creates a piece of the correct color' do
       expect(knight.color).to eq(color)
     end
     it 'creates a piece of the knight type' do
-      expect(knight.type).to eq('knight')
+      expect(knight.type).to eq(:knight)
     end
     it 'prints the correct symbol' do
       expect(knight.to_s).to eq(symbol)
@@ -134,6 +134,6 @@ RSpec.shared_examples 'a knight' do |color, symbol|
 end
 
 RSpec.describe Knight do
-  it_behaves_like 'a knight', 'white', '♘'
-  it_behaves_like 'a knight', 'black', '♞'
+  it_behaves_like 'a knight', :white, '♘'
+  it_behaves_like 'a knight', :black, '♞'
 end

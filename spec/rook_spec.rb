@@ -5,15 +5,15 @@ require_relative '../lib/dependencies'
 RSpec.shared_examples 'a rook' do |color, symbol|
   let(:board) { Board.new }
   let(:rook) { Rook.new(color) }
-  let(:same_color_piece) { Piece.new(color, 'piece', 'P') }
-  let(:opposing_color_piece) { Piece.new(color == 'white' ? 'black' : 'white', 'piece', 'P') }
+  let(:same_color_piece) { Piece.new(color, :piece, 'P') }
+  let(:opposing_color_piece) { Piece.new(color == :white ? :black : :white, :piece, 'P') }
 
   describe '#initialize' do
     it 'creates a piece of the correct color' do
       expect(rook.color).to eq(color)
     end
     it 'creates a piece of the rook type' do
-      expect(rook.type).to eq('rook')
+      expect(rook.type).to eq(:rook)
     end
     it 'prints the correct symbol' do
       expect(rook.to_s).to eq(symbol)
@@ -213,10 +213,10 @@ end
 
 RSpec.describe Rook do
   describe 'white rook' do
-    include_examples 'a rook', 'white', '♖'
+    include_examples 'a rook', :white, '♖'
   end
 
   describe 'black rook' do
-    include_examples 'a rook', 'black', '♜'
+    include_examples 'a rook', :black, '♜'
   end
 end

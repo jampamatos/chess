@@ -5,15 +5,16 @@ require_relative 'dependencies'
 BG_COLOR_EVEN = :light_black
 BG_COLOR_ODD = :black
 
-PIECES_RANK = { 'white' => 7, 'black' => 0 }.freeze
-PAWNS_RANK = { 'white' => 6, 'black' => 1 }.freeze
+PIECES_RANK = { :white => 7, :black => 0 }.freeze
+PAWNS_RANK = { :white => 6, :black => 1 }.freeze
 
 class Board
-  attr_reader :grid, :active_pieces
+  attr_reader :grid, :active_pieces, :en_passant_target
 
-  def initialize(grid = new_grid, active_pieces = {})
+  def initialize(grid = new_grid, active_pieces = {}, en_passant_target: nil)
     @grid = grid
     @active_pieces = active_pieces
+    @en_passant_target = en_passant_target
   end
 
   def draw_board
@@ -47,11 +48,15 @@ class Board
   end
 
   def move_piece(piece, destination)
-    raise NoPieceError, piece unless piece.is_a?(Piece)
-    raise InvalidPositionError, destination unless valid_position?(destination)
-    raise PositionNotEmptyError, destination unless valid_move?(piece, destination)
+    validate_move(piece, destination)
 
     destination_piece = piece_at(destination)
+
+    # if the piece is a pawn and is moving to @en_passant_target, remove the piece 'behind' it
+    handle_en_passant_capture(piece, destination)
+
+    # set en passant target to the square 'behind' it if the piece is a pawn and is moving two squares
+    update_en_passant_target(piece, destination)
 
     # Update the grid
     update_grid_on_move(piece, destination)
@@ -60,8 +65,7 @@ class Board
     remove_active_piece(destination_piece) if destination_piece
 
     # Update the moving piece's position
-    piece.mark_as_moved
-    piece.position = destination
+    update_moving_piece(piece, destination)
   end
 
   def valid_position?(position)
@@ -91,16 +95,16 @@ class Board
   end
 
   def find_king(color)
-    friendly_pieces_of_type('king', color).first
+    friendly_pieces_of_type(:king, color).first
   end
 
   def find_rook_at(position, color)
-    piece_at(position) if piece_at(position)&.type == 'rook' && piece_at(position)&.color == color
+    piece_at(position) if piece_at(position)&.type == :rook && piece_at(position)&.color == color
   end
 
   def set_up_board
-    generate_pieces('white')
-    generate_pieces('black')
+    generate_pieces(:white)
+    generate_pieces(:black)
   end
 
   def pieces_rank(color)
@@ -111,6 +115,29 @@ class Board
     PAWNS_RANK[color]
   end
 
+  def square_under_attack?(position, color)
+    raise InvalidPositionError, position unless valid_position?(position)
+
+    # Create a temporary piece at the given position
+    temp_piece = Piece.new(color, :temp, 'T')
+    add_piece(temp_piece, position)
+
+    # Check if the temporary piece is under attack
+    under_attack = false
+    pieces_of_color(color == :white ? :black : :white).each do |piece|
+      under_attack = true if piece.possible_moves(self).include?(position)
+    end
+
+    # Remove the temporary piece
+    remove_piece(position)
+
+    under_attack
+  end
+
+  def opposing_color(color)
+    color == :white ? :black : :white
+  end
+
   private
 
   def new_grid
@@ -119,7 +146,7 @@ class Board
 
   def piece_key(piece)
     new_key = "#{piece.color.downcase}_#{piece.type.downcase}"
-    piece.type == 'queen' || piece.type == 'king' ? new_key : "#{new_key}#{next_piece_count(new_key)}"
+    piece.type == :queen || piece.type == :king ? new_key : "#{new_key}#{next_piece_count(new_key)}"
   end
 
   def next_piece_count(new_key)
@@ -201,5 +228,31 @@ class Board
   def generate_king(color)
     position = [PIECES_RANK[color], 4]
     add_piece(King.new(color), position)
+  end
+
+  def validate_move(piece, destination)
+    raise NoPieceError, piece unless piece.is_a?(Piece)
+    raise InvalidPositionError, destination unless valid_position?(destination)
+    raise PositionNotEmptyError, destination unless valid_move?(piece, destination)
+    raise InvalidMoveError.new(piece, destination) unless piece.possible_moves(self).include?(destination)
+  end
+
+  def update_en_passant_target(piece, destination)
+    if piece.type == :pawn && (destination[0] - piece.position[0]).abs == 2
+      @en_passant_target = [destination[0] + (piece.color == :white ? 1 : -1), destination[1]]
+    else
+      @en_passant_target = nil
+    end
+  end
+
+  def handle_en_passant_capture(piece, destination)
+    if piece.type == :pawn && destination == @en_passant_target
+      remove_piece([destination[0] + (piece.color == :white ? 1 : -1), destination[1]])
+    end
+  end
+
+  def update_moving_piece(piece, destination)
+    piece.mark_as_moved
+    piece.position = destination
   end
 end

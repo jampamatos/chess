@@ -7,9 +7,9 @@ RSpec.shared_examples 'a bishop' do |color, symbol|
 
   let(:bishop) { described_class.new(color) }
 
-  let(:friendly_color_piece) { Piece.new(color, 'piece', 'P') }
+  let(:friendly_color_piece) { Piece.new(color, :piece, 'P') }
 
-  let(:opposing_color_piece) { Piece.new(color == 'white' ? 'black' : 'white', 'piece', 'P') }
+  let(:opposing_color_piece) { Piece.new(color == :white ? :black : :white, :piece, 'P') }
 
   describe '#initialize' do
     context "when creating a #{color} bishop" do
@@ -18,7 +18,7 @@ RSpec.shared_examples 'a bishop' do |color, symbol|
       end
 
       it 'creates a piece of the bishop type' do
-        expect(bishop.type).to eq('bishop')
+        expect(bishop.type).to eq(:bishop)
       end
 
       it 'prints the correct symbol' do
@@ -105,10 +105,10 @@ end
 
 RSpec.describe Bishop do
   describe 'white bishop' do
-    include_examples 'a bishop', 'white', '♗'
+    include_examples 'a bishop', :white, '♗'
   end
 
   describe 'black bishop' do
-    include_examples 'a bishop', 'black', '♝'
+    include_examples 'a bishop', :black, '♝'
   end
 end
