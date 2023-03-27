@@ -35,6 +35,8 @@ class King < Piece
     moves.concat(move_generator(board, 1, 1, -1))
     moves.concat(move_generator(board, 1, -1, 1))
 
+    moves.concat(special_moves(board))
+
     moves
   end
 

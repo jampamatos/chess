@@ -2,15 +2,17 @@
 
 require_relative 'lib/dependencies'
 
-white_pawn = Pawn.new(:white)
-black_pawn = Pawn.new(:black)
 board = Board.new
+white_king = King.new(:white)
+white_rook1 = Rook.new(:white)
+white_rook2 = Rook.new(:white)
+black_rook1 = Rook.new(:black)
+black_rook2 = Rook.new(:black)
 
-board.add_piece(white_pawn, [6, 5])
-board.add_piece(black_pawn, [4, 4])
+board.add_piece(white_king, [7, 4])
+board.add_piece(white_rook1, [7, 0])
+board.add_piece(white_rook2, [7, 7])
+board.add_piece(black_rook1, [0, 1])
+board.add_piece(black_rook2, [0, 6])
 board.draw_board
-board.move_piece(white_pawn, [4, 5])
-board.draw_board
-p black_pawn.possible_moves(board)
-board.move_piece(black_pawn, [5, 5])
-board.draw_board
+p white_king.possible_moves(board)

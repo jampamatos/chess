@@ -5,8 +5,8 @@ require_relative 'dependencies'
 BG_COLOR_EVEN = :light_black
 BG_COLOR_ODD = :black
 
-PIECES_RANK = { :white => 7, :black => 0 }.freeze
-PAWNS_RANK = { :white => 6, :black => 1 }.freeze
+PIECES_RANK = { white: 7, black: 0 }.freeze
+PAWNS_RANK = { white: 6, black: 1 }.freeze
 
 class Board
   attr_reader :grid, :active_pieces, :en_passant_target
@@ -52,11 +52,8 @@ class Board
 
     destination_piece = piece_at(destination)
 
-    # if the piece is a pawn and is moving to @en_passant_target, remove the piece 'behind' it
-    handle_en_passant_capture(piece, destination)
-
-    # set en passant target to the square 'behind' it if the piece is a pawn and is moving two squares
-    update_en_passant_target(piece, destination)
+    handle_en_passant(piece, destination)
+    handle_castling(piece, destination)
 
     # Update the grid
     update_grid_on_move(piece, destination)
@@ -237,6 +234,14 @@ class Board
     raise InvalidMoveError.new(piece, destination) unless piece.possible_moves(self).include?(destination)
   end
 
+  def handle_en_passant(piece, destination)
+    # if the piece is a pawn and is moving to @en_passant_target, remove the piece 'behind' it
+    en_passant_capture(piece, destination)
+
+    # set en passant target to the square 'behind' it if the piece is a pawn and is moving two squares
+    update_en_passant_target(piece, destination)
+  end
+
   def update_en_passant_target(piece, destination)
     if piece.type == :pawn && (destination[0] - piece.position[0]).abs == 2
       @en_passant_target = [destination[0] + (piece.color == :white ? 1 : -1), destination[1]]
@@ -245,7 +250,7 @@ class Board
     end
   end
 
-  def handle_en_passant_capture(piece, destination)
+  def en_passant_capture(piece, destination)
     if piece.type == :pawn && destination == @en_passant_target
       remove_piece([destination[0] + (piece.color == :white ? 1 : -1), destination[1]])
     end
@@ -254,5 +259,30 @@ class Board
   def update_moving_piece(piece, destination)
     piece.mark_as_moved
     piece.position = destination
+  end
+
+  def handle_castling(piece, destination)
+    return unless castling_possible?(piece, destination)
+
+    direction = castling_direction(destination, piece.position[1])
+    rook_start_col = direction == -1 ? 0 : 7
+    rook = piece_at([piece.position[0], rook_start_col])
+
+    perform_castling(piece, destination, rook, direction)
+  end
+
+  def castling_possible?(piece, destination)
+    piece.type == :king && piece.special_moves(self).include?(destination)
+  end
+
+  def castling_direction(destination, position)
+    destination[1] < position ? -1 : 1
+  end
+
+  def perform_castling(king, destination, rook, direction)
+    update_grid_on_move(king, destination)
+    update_grid_on_move(rook, [rook.position[0], king.position[1] + direction])
+    king.mark_as_moved
+    rook.mark_as_moved
   end
 end
