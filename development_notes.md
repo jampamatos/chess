@@ -6,10 +6,10 @@ Here's a suggested breakdown for a plan of attack:
    1. [X] [Implement and test the Board class](#11-implement-and-test-the-board-class).
    2. [X] [Implement and test the Piece class and its subclasses](#12-implement-and-test-the-piece-class-and-its-subclasses).
    3. [X] [Test placing pieces in their initial positions on the board](#13-test-placing-pieces-in-their-initial-positions-on-the-board).
-2. [ ] [Handle special moves](#2-handle-special-moves).
+2. [X] [Handle special moves](#2-handle-special-moves).
    1. [X] [Test castling rules for the King and Rook pieces](#21-test-castling-rules-for-the-king-and-rook-pieces).
    2. [X] [Test en passant rules for Pawns](#22-test-en-passant-rules-for-pawns).
-   3. [ ] [Test pawn promotion rules](#23-test-pawn-promotion-rules).
+   3. [X] [Test pawn promotion rules](#23-test-pawn-promotion-rules).
 3. [ ] [Implement chess rules and piece movement](#3-implement-chess-rules-and-piece-movement).
    1. [ ] [Add move validation to the Board class](#31-add-move-validation-to-the-board-class).
    2. [ ] [Test the integration of valid move methods in the game flow](#32-test-the-integration-of-valid-move-methods-in-the-game-flow).

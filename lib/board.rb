@@ -63,6 +63,7 @@ class Board
 
     # Update the moving piece's position
     update_moving_piece(piece, destination)
+    handle_promotion(piece, destination)
   end
 
   def valid_position?(position)
@@ -242,6 +243,22 @@ class Board
     update_en_passant_target(piece, destination)
   end
 
+  def handle_castling(piece, destination)
+    return unless castling_possible?(piece, destination)
+
+    direction = castling_direction(destination, piece.position[1])
+    rook_start_col = direction == -1 ? 0 : 7
+    rook = piece_at([piece.position[0], rook_start_col])
+
+    perform_castling(piece, destination, rook, direction)
+  end
+
+  def handle_promotion(piece, destination)
+    return unless piece.type == :pawn && piece.can_promote?
+
+    promote_pawn(piece, destination)
+  end
+
   def update_en_passant_target(piece, destination)
     if piece.type == :pawn && (destination[0] - piece.position[0]).abs == 2
       @en_passant_target = [destination[0] + (piece.color == :white ? 1 : -1), destination[1]]
@@ -261,16 +278,6 @@ class Board
     piece.position = destination
   end
 
-  def handle_castling(piece, destination)
-    return unless castling_possible?(piece, destination)
-
-    direction = castling_direction(destination, piece.position[1])
-    rook_start_col = direction == -1 ? 0 : 7
-    rook = piece_at([piece.position[0], rook_start_col])
-
-    perform_castling(piece, destination, rook, direction)
-  end
-
   def castling_possible?(piece, destination)
     piece.type == :king && piece.special_moves(self).include?(destination)
   end
@@ -284,5 +291,49 @@ class Board
     update_grid_on_move(rook, [rook.position[0], king.position[1] + direction])
     king.mark_as_moved
     rook.mark_as_moved
+  end
+
+  # write a method called promote_pawn that takes a pawn and a destination. in this method, you should
+  # 1. prompt the user to choose a piece type to promote to like this:
+  # "Select a piece to promote to: (Q)ueen, (R)ook, (B)ishop, (K)night"
+  # based on the user imput:
+  # a) remove pawn from the board with remove_piece
+  # b) create a new piece of the selected type with the pawn's color and put it on destination without calling add_piece
+  # c) add the new piece to the active pieces without calling add_active_piece, with a key of "promoted_{new_piece_type}1 (or 2, 3, etc. if there are other promoted pieces of the same type)"
+
+  def promote_pawn(pawn, destination)
+    piece_type = request_piece_type
+    remove_piece(pawn.position)
+    new_piece = create_piece(piece_type, pawn.color)
+    change_piece_at(destination, new_piece)
+    add_promoted_active_piece(new_piece)
+    new_piece.mark_as_moved.position = destination
+  end
+
+  def request_piece_type
+    loop do
+      puts 'Select a piece to promote to: (Q)ueen, (R)ook, (B)ishop, (K)night'
+      $stdout.flush
+      input = gets.chomp.downcase
+      piece_type = piece_type_from_input(input)
+      return piece_type if piece_type
+    end
+  end
+
+  def piece_type_from_input(input)
+    piece_types = { 'q' => :queen, 'r' => :rook, 'b' => :bishop, 'k' => :knight }
+    piece_types[input] || (puts 'Invalid input. Please enter Q, R, B, or K.' && $stdout.flush)
+  end
+
+  def create_piece(piece_type, color)
+    Object.const_get(piece_type.capitalize).new(color)
+  end
+
+  def promoted_piece_key(piece)
+    "promoted_#{piece.color.downcase}_#{piece.type.downcase}#{next_piece_count("promoted_#{piece.color.downcase}_#{piece.type.downcase}")}"
+  end
+
+  def add_promoted_active_piece(piece)
+    @active_pieces[promoted_piece_key(piece)] = piece
   end
 end

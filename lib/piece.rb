@@ -28,6 +28,7 @@ class Piece
 
   def mark_as_moved
     @moved = true
+    self
   end
 
   private

@@ -4,11 +4,11 @@ require_relative '../lib/dependencies'
 
 RSpec.describe Board do
   let(:board) { Board.new }
-  let(:piece1) { Piece.new(:white, :pawn, 'P') }
-  let(:piece2) { Piece.new(:black, :pawn, 'P') }
-  let(:piece3) { Piece.new(:white, :pawn, 'P') }
-  let(:piece4) { Piece.new(:black, :pawn, 'P') }
-  let(:piece5) { Piece.new(:white, :pawn, 'P') }
+  let(:piece1) { Piece.new(:white, :piece, 'P') }
+  let(:piece2) { Piece.new(:black, :piece, 'P') }
+  let(:piece3) { Piece.new(:white, :piece, 'P') }
+  let(:piece4) { Piece.new(:black, :piece, 'P') }
+  let(:piece5) { Piece.new(:white, :piece, 'P') }
 
   describe '#initialize' do
     it 'initializes an empty grid' do
@@ -361,30 +361,30 @@ RSpec.describe Board do
       board.add_piece(piece5, [4, 4])
     end
 
-    context 'when there are 3 white pawns and 2 black pawns in active_pieces' do
-      it "expect friendly_pieces_of_type(:pawn, :white) to return an array of size 3" do
-        white_pawns = board.friendly_pieces_of_type(:pawn, :white)
-        expect(white_pawns).to be_an(Array)
-        expect(white_pawns.size).to eq(3)
+    context 'when there are 3 white pieces and 2 black pieces in active_pieces' do
+      it "expect friendly_pieces_of_type(:piece, :white) to return an array of size 3" do
+        white_pieces = board.friendly_pieces_of_type(:piece, :white)
+        expect(white_pieces).to be_an(Array)
+        expect(white_pieces.size).to eq(3)
       end
 
-      it "expect friendly_pieces_of_type(:pawn, :white) to return the three correct white pawns" do
-        white_pawns = board.friendly_pieces_of_type(:pawn, :white)
-        expect(white_pawns).to include(piece1)
-        expect(white_pawns).to include(piece3)
-        expect(white_pawns).to include(piece5)
+      it "expect friendly_pieces_of_type(:piece, :white) to return the three correct white pieces" do
+        white_pieces = board.friendly_pieces_of_type(:piece, :white)
+        expect(white_pieces).to include(piece1)
+        expect(white_pieces).to include(piece3)
+        expect(white_pieces).to include(piece5)
       end
 
-      it "expect friendly_pieces_of_type(:pawn, :black) to return an array of size 2" do
-        black_pawns = board.friendly_pieces_of_type(:pawn, :black)
-        expect(black_pawns).to be_an(Array)
-        expect(black_pawns.size).to eq(2)
+      it "expect friendly_pieces_of_type(:piece, :black) to return an array of size 2" do
+        black_pieces = board.friendly_pieces_of_type(:piece, :black)
+        expect(black_pieces).to be_an(Array)
+        expect(black_pieces.size).to eq(2)
       end
 
-      it "expect friendly_pieces_of_type(:pawn, :black) to return the three correct black pawns" do
-        black_pawns = board.friendly_pieces_of_type(:pawn, :black)
-        expect(black_pawns).to include(piece2)
-        expect(black_pawns).to include(piece4)
+      it "expect friendly_pieces_of_type(:piece, :black) to return the three correct black pieces" do
+        black_pieces = board.friendly_pieces_of_type(:piece, :black)
+        expect(black_pieces).to include(piece2)
+        expect(black_pieces).to include(piece4)
       end
     end
   end

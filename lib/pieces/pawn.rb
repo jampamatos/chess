@@ -12,6 +12,10 @@ class Pawn < Piece
     forward_moves(board) + diagonal_captures(board)
   end
 
+  def can_promote?
+    @color == :white && position[0] == 0 || @color == :black && position[0] == 7
+  end
+
   private
 
   def forward_moves(board)
