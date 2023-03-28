@@ -97,11 +97,11 @@ RSpec.shared_examples 'a king' do |color, symbol|
       context 'when there are opposing pieces in the path' do
         context 'when the pieces are in the same column' do
           before do
-            board.add_piece(opposing_color_piece, [3, 4])
-            board.add_piece(opposing_color_piece, [5, 4])
+            board.add_piece(opposing_color_piece, [2, 4])
+            board.add_piece(opposing_color_piece, [6, 4])
           end
 
-          it 'returns 6 possible moves' do
+          it 'returns 8 possible moves' do
             expect(king.possible_moves(board).size).to eq(8)
           end
 
@@ -114,7 +114,7 @@ RSpec.shared_examples 'a king' do |color, symbol|
         context 'when the pieces are in the same row' do
           before do
             board.add_piece(opposing_color_piece, [4, 3])
-            board.add_piece(opposing_color_piece, [4, 5])
+            board.add_piece(opposing_color_piece, [4, 6])
           end
 
           it 'returns 8 possible moves' do

@@ -23,6 +23,10 @@ class King < Piece
   end
 
   def possible_moves(board)
+    all_moves(board).reject { |move| board.king_move_will_put_it_in_check?(self, move) }
+  end
+
+  def all_moves(board)
     moves = []
 
     moves.concat(move_generator(board, 1, 1, 0))

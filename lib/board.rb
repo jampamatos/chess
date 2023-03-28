@@ -140,6 +140,25 @@ class Board
     color == :white ? :black : :white
   end
 
+  def king_in_check?(color)
+    pieces_of_color(opposing_color(color)).any? { |piece| piece.possible_moves(self).include?(find_king(color).position) }
+  end
+
+  def king_move_will_put_it_in_check?(king, destination)
+    # Temporarily update the board state
+    old_position = king.position
+    captured_piece = piece_at(destination)
+    move_piece!(king, destination)
+
+    # Check if the king is in check
+    in_check = king_in_check?(king.color)
+
+    # Revert the board state
+    move_piece!(king, old_position)
+    add_piece(captured_piece, destination) if captured_piece
+    in_check
+  end
+
   private
 
   def new_grid
@@ -236,6 +255,7 @@ class Board
     raise NoPieceError, piece unless piece.is_a?(Piece)
     raise InvalidPositionError, destination unless valid_position?(destination)
     raise PositionNotEmptyError, destination unless valid_move?(piece, destination)
+    raise MoveWillPutKingIntoCheckError.new(piece, destination) if piece.type == :king && king_move_will_put_it_in_check?(piece, destination)
     raise InvalidMoveError.new(piece, destination) unless piece.possible_moves(self).include?(destination)
   end
 

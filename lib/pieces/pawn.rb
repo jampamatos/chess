@@ -19,9 +19,12 @@ class Pawn < Piece
   private
 
   def forward_moves(board)
-    step = @moved ? 1 : 2
     direction = @color == :white ? -1 : 1
-    forward_blocked?(board, direction) ? [] : move_generator(board, step, direction, 0)
+    one_step_forward = move_generator(board, 1, direction, 0)
+    return one_step_forward if @moved || forward_blocked?(board, direction)
+
+    two_steps_forward = forward_blocked?(board, direction * 2) ? [] : move_generator(board, 2, direction, 0)
+    one_step_forward + two_steps_forward
   end
 
   def diagonal_captures(board)
@@ -40,5 +43,16 @@ class Pawn < Piece
 
   def forward_blocked?(board, direction)
     board.piece_at([position[0] + direction, position[1]])
+  end
+
+  # This method generates the forward moves for the pawn
+  def move_generator(board, step, row_offset, col_offset)
+    target_row = position[0] + row_offset * step
+    target_col = position[1] + col_offset * step
+    target_position = [target_row, target_col]
+
+    return [] unless board.valid_position?(target_position) && !forward_blocked?(board, row_offset * step)
+
+    [target_position]
   end
 end

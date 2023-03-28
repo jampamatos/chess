@@ -31,6 +31,12 @@ class InvalidMoveError < ChessError
   end
 end
 
+class MoveWillPutKingIntoCheckError < ChessError
+  def initialize(piece, destination)
+    super("Invalid move: moving #{piece} to #{destination} will put king into check")
+  end
+end
+
 # Now, when you need to handle this error, you can rescue the specific PositionNotEmptyError exception:
 
 # begin
