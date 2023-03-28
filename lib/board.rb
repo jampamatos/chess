@@ -48,8 +48,14 @@ class Board
   end
 
   def move_piece(piece, destination)
+    puts "Moving #{piece} to #{destination}"
+    puts "Now, #{piece}'s possible moves are: #{piece.possible_moves(self)}"
     validate_move(piece, destination)
 
+    move_piece!(piece, destination)
+  end
+
+  def move_piece!(piece, destination)
     destination_piece = piece_at(destination)
 
     handle_en_passant(piece, destination)
@@ -122,7 +128,7 @@ class Board
 
     # Check if the temporary piece is under attack
     under_attack = false
-    pieces_of_color(color == :white ? :black : :white).each do |piece|
+    pieces_of_color(opposing_color(color)).each do |piece|
       under_attack = true if piece.possible_moves(self).include?(position)
     end
 
@@ -292,14 +298,6 @@ class Board
     king.mark_as_moved
     rook.mark_as_moved
   end
-
-  # write a method called promote_pawn that takes a pawn and a destination. in this method, you should
-  # 1. prompt the user to choose a piece type to promote to like this:
-  # "Select a piece to promote to: (Q)ueen, (R)ook, (B)ishop, (K)night"
-  # based on the user imput:
-  # a) remove pawn from the board with remove_piece
-  # b) create a new piece of the selected type with the pawn's color and put it on destination without calling add_piece
-  # c) add the new piece to the active pieces without calling add_active_piece, with a key of "promoted_{new_piece_type}1 (or 2, 3, etc. if there are other promoted pieces of the same type)"
 
   def promote_pawn(pawn, destination)
     piece_type = request_piece_type
