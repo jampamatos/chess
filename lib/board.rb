@@ -48,8 +48,6 @@ class Board
   end
 
   def move_piece(piece, destination)
-    puts "Moving #{piece} to #{destination}"
-    puts "Now, #{piece}'s possible moves are: #{piece.possible_moves(self)}"
     validate_move(piece, destination)
 
     move_piece!(piece, destination)
