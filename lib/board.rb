@@ -164,6 +164,18 @@ class Board
     in_check
   end
 
+  # create a method that will gather all possible_moves from all pieces of one color.
+  # return them in the form of a hash with the piece as the key and the possible_moves as the value
+  def all_possible_moves(color)
+    all_moves = {}
+    pieces_of_color(color).each do |piece|
+      all_moves[piece] = piece.possible_moves(self)
+    end
+    all_moves
+  end
+
+  
+
   private
 
   def new_grid
