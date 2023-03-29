@@ -4,8 +4,12 @@ require_relative 'lib/dependencies'
 
 board = Board.new
 white_king = King.new(:white)
-black_queen = Queen.new(:black)
+white_rook = Rook.new(:white)
 
-board.add_piece(white_king, [0, 0])
-board.add_piece(black_queen, [6, 5])
+board.add_piece(white_king, [7, 4])
+board.add_piece(white_rook, [7, 7])
+
+board.draw_board
+
+board.move_piece(white_king, [7, 6])
 board.draw_board
