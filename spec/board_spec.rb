@@ -470,4 +470,31 @@ RSpec.describe Board do
       end
     end
   end
+
+  describe '#king_in_check?' do
+    let(:white_king) { King.new(:white) }
+    let(:black_queen) { Queen.new(:black) }
+
+    context 'when there is no piece attacking the king' do
+      before do
+        board.add_piece(white_king, [0, 0])
+        board.add_piece(black_queen, [6, 5])
+      end
+
+      it 'returns false' do
+        expect(board.king_in_check?(:white)).to be(false)
+      end
+    end
+
+    context 'when there is a piece attacking the king' do
+      before do
+        board.add_piece(white_king, [0, 0])
+        board.add_piece(black_queen, [0, 5])
+      end
+
+      it 'returns true' do
+        expect(board.king_in_check?(:white)).to be(true)
+      end
+    end
+  end
 end

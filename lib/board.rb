@@ -148,13 +148,18 @@ class Board
     # Temporarily update the board state
     old_position = king.position
     captured_piece = piece_at(destination)
-    move_piece!(king, destination)
+    # manually remove the piece from the old position, set it to the new position and set the piece's position to the new position
+    change_piece_at(old_position, nil)
+    change_piece_at(destination, king)
+    king.position = destination
 
     # Check if the king is in check
     in_check = king_in_check?(king.color)
 
     # Revert the board state
-    move_piece!(king, old_position)
+    change_piece_at(destination, nil)
+    change_piece_at(old_position, king)
+    king.position = old_position
     add_piece(captured_piece, destination) if captured_piece
     in_check
   end

@@ -31,6 +31,11 @@ class Piece
     self
   end
 
+  def mark_as_not_moved
+    @moved = false
+    self
+  end
+
   private
 
   def move_generator(board, step, row_increment, col_increment)
