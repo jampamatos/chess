@@ -4,7 +4,7 @@ require_relative '../piece'
 
 class Queen < Piece
   def initialize(color)
-    symbol = color == :white ? '♕' : '♛'
+    symbol = color == :white ? '♛' : '♛'.colorize(color)
     super(color, :queen, symbol)
   end
 

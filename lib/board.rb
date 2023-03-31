@@ -17,21 +17,6 @@ class Board
     @en_passant_target = en_passant_target
   end
 
-  def draw_board
-    puts "\n   A  B  C  D  E  F  G  H\n"
-    @grid.each_with_index { |row, i| print_row(row, i) }
-    puts "\n   A  B  C  D  E  F  G  H\n"
-  end
-
-  def print_row(row, i)
-    print "#{8 - i} "
-    row.each_with_index do |piece, j|
-      bg_color = (i + j).even? ? BG_COLOR_EVEN : BG_COLOR_ODD
-      print piece ? " #{piece} ".colorize(background: bg_color) : '   '.colorize(background: bg_color)
-    end
-    print " #{8 - i}\n"
-  end
-
   def add_piece(piece, position)
     raise InvalidPositionError, position unless valid_position?(position)
     raise PositionNotEmptyError, position unless piece_at(position).nil?

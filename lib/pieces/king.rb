@@ -5,7 +5,7 @@ require_relative '../piece'
 class King < Piece
 
   def initialize(color, in_check: false)
-    symbol = color == :white ? '♔' : '♚'
+    symbol = color == :white ? '♚' : '♚'.colorize(color)
     @in_check = in_check
     super(color, :king, symbol)
   end
