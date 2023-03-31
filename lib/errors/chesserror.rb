@@ -25,12 +25,14 @@ class NoPieceError < ChessError
   end
 end
 
+# Raised when a piece is moved to a position that is not a valid move for that piece
 class InvalidMoveError < ChessError
   def initialize(piece, destination)
     super("Invalid move: cannot move #{piece} to #{destination}")
   end
 end
 
+# Raised when a piece is moved to a position that will put the king into check
 class MoveWillPutKingIntoCheckError < ChessError
   def initialize(piece, destination)
     super("Invalid move: moving #{piece} to #{destination} will put king into check")

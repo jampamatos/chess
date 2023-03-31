@@ -39,12 +39,12 @@ class King < Piece
     moves.concat(move_generator(board, 1, 1, -1))
     moves.concat(move_generator(board, 1, -1, 1))
 
-    moves.concat(special_moves(board))
+    moves.concat(castling_move(board))
 
     moves
   end
 
-  def special_moves(board)
+  def castling_move(board)
     return [] if @moved || in_check?
 
     row = board.pieces_rank(@color)
@@ -62,7 +62,7 @@ class King < Piece
   private
 
   def can_castle?(rook, board, row, col_range)
-    return false unless rook&.can_castle?(board)
+    return false unless rook&.moved == false
 
     col_range.all? { |i| board.piece_at([row, i]).nil? && !board.square_under_attack?([row, i], @color) }
   end

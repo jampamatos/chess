@@ -166,7 +166,7 @@ RSpec.shared_examples 'a king' do |color, symbol|
     end
   end
 
-  describe '#special_moves' do
+  describe '#castling_move' do
     context 'when set to the starting position' do
       before do
         board.set_up_board
@@ -176,7 +176,7 @@ RSpec.shared_examples 'a king' do |color, symbol|
         let(:king) { board.find_king(color) }
 
         it 'returns no special moves' do
-          expect(king.special_moves(board)).to be_empty
+          expect(king.castling_move(board)).to be_empty
         end
       end
 
@@ -186,7 +186,7 @@ RSpec.shared_examples 'a king' do |color, symbol|
         end
 
         it 'returns no special moves' do
-          expect(king.special_moves(board)).to be_empty
+          expect(king.castling_move(board)).to be_empty
         end
       end
     end
@@ -200,12 +200,12 @@ RSpec.shared_examples 'a king' do |color, symbol|
 
       context 'when king is not in check and no pieces are in between' do
         it 'returns 2 special moves' do
-          expect(king.special_moves(board).size).to eq(2)
+          expect(king.castling_move(board).size).to eq(2)
         end
 
         it 'returns the correct special moves array' do
           row = board.pieces_rank(king.color)
-          expect(king.special_moves(board)).to contain_exactly(
+          expect(king.castling_move(board)).to contain_exactly(
             [row, 2], [row, 6]
           )
         end
@@ -217,7 +217,7 @@ RSpec.shared_examples 'a king' do |color, symbol|
         end
 
         it 'returns no special moves' do
-          expect(king.special_moves(board)).to be_empty
+          expect(king.castling_move(board)).to be_empty
         end
       end
 
@@ -227,12 +227,12 @@ RSpec.shared_examples 'a king' do |color, symbol|
         end
 
         it 'returns 1 special move' do
-          expect(king.special_moves(board).size).to eq(1)
+          expect(king.castling_move(board).size).to eq(1)
         end
 
         it 'returns the correct special moves array' do
           row = board.pieces_rank(king.color)
-          expect(king.special_moves(board)).to contain_exactly([row, 6])
+          expect(king.castling_move(board)).to contain_exactly([row, 6])
         end
       end
     end
@@ -247,7 +247,7 @@ RSpec.shared_examples 'a king' do |color, symbol|
       end
 
       it 'returns no special moves' do
-        expect(king.special_moves(board)).to be_empty
+        expect(king.castling_move(board)).to be_empty
       end
     end
   end

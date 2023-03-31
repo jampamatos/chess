@@ -2,13 +2,13 @@
 
 require_relative 'dependencies'
 
-BG_COLOR_EVEN = :light_black
-BG_COLOR_ODD = :black
-
-PIECES_RANK = { white: 7, black: 0 }.freeze
-PAWNS_RANK = { white: 6, black: 1 }.freeze
-
 class Board
+  BG_COLOR_EVEN = :light_black
+  BG_COLOR_ODD = :black
+
+  PIECES_RANK = { white: 7, black: 0 }.freeze
+  PAWNS_RANK = { white: 6, black: 1 }.freeze
+
   attr_reader :grid, :active_pieces, :en_passant_target
 
   def initialize(grid = new_grid, active_pieces = {}, en_passant_target: nil)
@@ -19,15 +19,17 @@ class Board
 
   def draw_board
     puts "\n   A  B  C  D  E  F  G  H\n"
-    @grid.each_with_index do |row, i|
-      print "#{8 - i} "
-      row.each_with_index do |piece, j|
-        bg_color = (i + j).even? ? BG_COLOR_EVEN : BG_COLOR_ODD
-        print piece ? " #{piece} ".colorize(background: bg_color) : '   '.colorize(background: bg_color)
-      end
-      print " #{8 - i}\n"
-    end
+    @grid.each_with_index { |row, i| print_row(row, i) }
     puts "\n   A  B  C  D  E  F  G  H\n"
+  end
+
+  def print_row(row, i)
+    print "#{8 - i} "
+    row.each_with_index do |piece, j|
+      bg_color = (i + j).even? ? BG_COLOR_EVEN : BG_COLOR_ODD
+      print piece ? " #{piece} ".colorize(background: bg_color) : '   '.colorize(background: bg_color)
+    end
+    print " #{8 - i}\n"
   end
 
   def add_piece(piece, position)
@@ -101,7 +103,8 @@ class Board
   end
 
   def find_rook_at(position, color)
-    piece_at(position) if piece_at(position)&.type == :rook && piece_at(position)&.color == color
+    piece = piece_at(position)
+    piece if piece&.type == :rook && piece&.color == color
   end
 
   def set_up_board
@@ -320,7 +323,7 @@ class Board
   end
 
   def castling_possible?(piece, destination)
-    piece.type == :king && piece.special_moves(self).include?(destination)
+    piece.type == :king && piece.castling_move(self).include?(destination)
   end
 
   def castling_direction(destination, position)
