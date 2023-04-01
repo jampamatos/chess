@@ -13,9 +13,9 @@ class Move
   end
 
   def to_s
-    # generate a string to represent chess notation
-    # e.g. d2, dxc3, Bc3, Qxh8, O-O, Rxg4+, etc.
-    "#{piece.symbol}#{start_position}#{capture? ? 'x' : '-'}#{end_position}"
+    return notation_for_pawn if @piece.type == :pawn
+    return notation_for_castling if castling?
+    return notation_general if @piece.type != :pawn
   end
 
   def reset
@@ -29,9 +29,62 @@ class Move
     @captured_piece ? true : false
   end
 
-  def castling?; end
+  def castling?
+    @piece.type == :king && (@start_position[1] - @end_position[1]).abs == 2
+  end
 
   def en_passant?; end
 
   def promotion?; end
+
+  def check?; end
+
+  def checkmate?; end
+
+  private
+
+  def convert_coordinates(position)
+    row, col = position
+    row = 8 - row
+    col = ('a'..'h').to_a[col]
+    "#{col}#{row}"
+  end
+
+  def letter_for_piece_notation(piece)
+    case piece.type
+    when :rook then 'R'
+    when :knight then 'N'
+    when :bishop then 'B'
+    when :queen then 'Q'
+    when :king then 'K'
+    end
+  end
+
+  def notation_for_pawn
+    notation = ''
+    notation += convert_coordinates(@start_position)[0] if capture?
+    notation += 'x' if capture?
+    notation += convert_coordinates(@end_position)
+    notation += 'e.p.' if en_passant?
+    notation += '+' if check?
+    notation += '#' if checkmate?
+    # notation += '=' + letter_for_piece_notation(new_piece) if promotion?
+    notation
+  end
+
+  def notation_for_castling
+    notation = ''
+    notation += 'O-O' if @end_position[1] == 6
+    notation += 'O-O-O' if @end_position[1] == 2
+    notation
+  end
+
+  def notation_general
+    notation = letter_for_piece_notation(@piece)
+    notation += 'x' if capture?
+    notation += convert_coordinates(@end_position)
+    notation += '+' if check?
+    notation += '#' if checkmate?
+    notation
+  end
 end

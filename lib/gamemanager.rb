@@ -30,7 +30,7 @@ class GameManager
     # Check if the move is a capture
     capture_piece(destination_piece, move) if capture_move?(moving_piece, destination_piece)
     # Check if the move is a castling
-    handle_castling(moving_piece, end_position, move) if moving_piece.type == :king
+    handle_castling(moving_piece, end_position) if moving_piece.type == :king
     # Check if the move is an en passant
     # Check if the move is a promotion
 
@@ -76,18 +76,17 @@ class GameManager
     @board.take_piece(captured_piece.position)
   end
 
-  def handle_castling(king, destination, move)
+  def handle_castling(king, destination)
     return unless castling_move?(king, destination)
 
     rook_position, rook_destination = calculate_rook_positions(king, destination)
     rook = @board.piece_at(rook_position)
     return unless rook.type == :rook && rook.moved == false
 
-    move.castling = true
     @board.update_grid_on_move(rook, rook_destination)
-    @board.update_grid_on_move(king, destination)
+    #@board.update_grid_on_move(king, destination)
     rook.position = rook_destination
-    king.position = destination
+    #king.position = destination
   end
 
   def castling_move?(piece, destination)
