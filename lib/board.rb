@@ -17,7 +17,7 @@ class Board
     @en_passant_target = en_passant_target
   end
 
-  def add_piece(piece, position)
+  def place_piece(piece, position)
     raise InvalidPositionError, position unless valid_position?(position)
     raise PositionNotEmptyError, position unless piece_at(position).nil?
 
@@ -26,7 +26,7 @@ class Board
     add_active_piece(piece) unless @active_pieces.value?(piece)
   end
 
-  def remove_piece(position)
+  def take_piece(position)
     raise InvalidPositionError, position unless valid_position?(position)
 
     piece = piece_at(position)
@@ -34,28 +34,33 @@ class Board
     change_piece_at(position, nil)
   end
 
-  def move_piece(piece, destination)
-    validate_move(piece, destination)
-
-    move_piece!(piece, destination)
+  def update_grid_on_move(piece, destination)
+    @grid[piece.position[0]][piece.position[1]] = nil
+    @grid[destination[0]][destination[1]] = piece
   end
 
-  def move_piece!(piece, destination)
-    destination_piece = piece_at(destination)
+  # def move_piece(piece, destination)
+  #   validate_move(piece, destination)
 
-    handle_en_passant(piece, destination)
-    handle_castling(piece, destination)
+  #   move_piece!(piece, destination)
+  # end
 
-    # Update the grid
-    update_grid_on_move(piece, destination)
+  # def move_piece!(piece, destination)
+  #   destination_piece = piece_at(destination)
 
-    # Remove the destination piece from active_pieces if it exists
-    remove_active_piece(destination_piece) if destination_piece
+  #   handle_en_passant(piece, destination)
+  #   handle_castling(piece, destination)
 
-    # Update the moving piece's position
-    update_moving_piece(piece, destination)
-    handle_promotion(piece, destination)
-  end
+  #   # Update the grid
+  #   update_grid_on_move(piece, destination)
+
+  #   # Remove the destination piece from active_pieces if it exists
+  #   remove_active_piece(destination_piece) if destination_piece
+
+  #   # Update the moving piece's position
+  #   update_moving_piece(piece, destination)
+  #   handle_promotion(piece, destination)
+  # end
 
   def valid_position?(position)
     row, col = position
@@ -110,7 +115,7 @@ class Board
 
     # Create a temporary piece at the given position
     temp_piece = Piece.new(color, :temp, 'T')
-    add_piece(temp_piece, position)
+    place_piece(temp_piece, position)
 
     # Check if the temporary piece is under attack
     under_attack = false
@@ -119,7 +124,7 @@ class Board
     end
 
     # Remove the temporary piece
-    remove_piece(position)
+    take_piece(position)
 
     under_attack
   end
@@ -148,7 +153,7 @@ class Board
     change_piece_at(destination, nil)
     change_piece_at(old_position, king)
     king.position = old_position
-    add_piece(captured_piece, destination) if captured_piece
+    place_piece(captured_piece, destination) if captured_piece
     in_check
   end
 
@@ -189,21 +194,16 @@ class Board
     @active_pieces.delete_if { |_, v| v == piece }
   end
 
-  def valid_move?(piece, destination)
-    return false unless valid_position?(destination)
-
-    destination_piece = @grid[destination[0]][destination[1]]
-    !(destination_piece && destination_piece.color == piece.color)
-  end
-
-  def update_grid_on_move(piece, destination)
-    @grid[piece.position[0]][piece.position[1]] = nil
-    @grid[destination[0]][destination[1]] = piece
-  end
-
   def change_piece_at(position, piece)
     @grid[position[0]][position[1]] = piece
   end
+
+  # def valid_move?(piece, destination)
+  #   return false unless valid_position?(destination)
+
+  #   destination_piece = @grid[destination[0]][destination[1]]
+  #   !(destination_piece && destination_piece.color == piece.color)
+  # end
 
   def generate_pieces(color)
     generate_pawns(color)
@@ -218,7 +218,7 @@ class Board
     8.times do |col|
       position = [PAWNS_RANK[color], col]
       pawn = Pawn.new(color)
-      add_piece(pawn, position)
+      place_piece(pawn, position)
     end
   end
 
@@ -226,7 +226,7 @@ class Board
     [0, 7].each do |col|
       position = [PIECES_RANK[color], col]
       rook = Rook.new(color)
-      add_piece(rook, position)
+      place_piece(rook, position)
     end
   end
 
@@ -234,7 +234,7 @@ class Board
     [1, 6].each do |col|
       position = [PIECES_RANK[color], col]
       knight = Knight.new(color)
-      add_piece(knight, position)
+      place_piece(knight, position)
     end
   end
 
@@ -242,26 +242,18 @@ class Board
     [2, 5].each do |col|
       position = [PIECES_RANK[color], col]
       bishop = Bishop.new(color)
-      add_piece(bishop, position)
+      place_piece(bishop, position)
     end
   end
 
   def generate_queen(color)
     position = [PIECES_RANK[color], 3]
-    add_piece(Queen.new(color), position)
+    place_piece(Queen.new(color), position)
   end
 
   def generate_king(color)
     position = [PIECES_RANK[color], 4]
-    add_piece(King.new(color), position)
-  end
-
-  def validate_move(piece, destination)
-    raise NoPieceError, piece unless piece.is_a?(Piece)
-    raise InvalidPositionError, destination unless valid_position?(destination)
-    raise PositionNotEmptyError, destination unless valid_move?(piece, destination)
-    raise MoveWillPutKingIntoCheckError.new(piece, destination) if piece.type == :king && king_move_will_put_it_in_check?(piece, destination)
-    raise InvalidMoveError.new(piece, destination) unless piece.possible_moves(self).include?(destination)
+    place_piece(King.new(color), position)
   end
 
   def handle_en_passant(piece, destination)
@@ -298,7 +290,7 @@ class Board
 
   def en_passant_capture(piece, destination)
     if piece.type == :pawn && destination == @en_passant_target
-      remove_piece([destination[0] + (piece.color == :white ? 1 : -1), destination[1]])
+      take_piece([destination[0] + (piece.color == :white ? 1 : -1), destination[1]])
     end
   end
 
@@ -324,7 +316,7 @@ class Board
 
   def promote_pawn(pawn, destination)
     piece_type = request_piece_type
-    remove_piece(pawn.position)
+    take_piece(pawn.position)
     new_piece = create_piece(piece_type, pawn.color)
     change_piece_at(destination, new_piece)
     add_promoted_active_piece(new_piece)

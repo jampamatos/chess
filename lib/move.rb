@@ -12,6 +12,12 @@ class Move
     @captured_piece = captured_piece
   end
 
+  def to_s
+    # generate a string to represent chess notation
+    # e.g. d2, dxc3, Bc3, Qxh8, O-O, Rxg4+, etc.
+    "#{piece.symbol}#{start_position}#{capture? ? 'x' : '-'}#{end_position}"
+  end
+
   def reset
     @start_position = nil
     @end_position = nil
@@ -19,7 +25,9 @@ class Move
     @captured_piece = nil
   end
 
-  def capture?; end
+  def capture?
+    @captured_piece ? true : false
+  end
 
   def castling?; end
 
