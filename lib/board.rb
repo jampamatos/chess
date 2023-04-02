@@ -9,7 +9,8 @@ class Board
   PIECES_RANK = { white: 7, black: 0 }.freeze
   PAWNS_RANK = { white: 6, black: 1 }.freeze
 
-  attr_reader :grid, :active_pieces, :en_passant_target
+  attr_reader :grid, :active_pieces
+  attr_accessor :en_passant_target
 
   def initialize(grid = new_grid, active_pieces = {}, en_passant_target: nil)
     @grid = grid
@@ -167,8 +168,6 @@ class Board
     all_moves
   end
 
-  
-
   private
 
   def new_grid
@@ -256,63 +255,63 @@ class Board
     place_piece(King.new(color), position)
   end
 
-  def handle_en_passant(piece, destination)
-    # if the piece is a pawn and is moving to @en_passant_target, remove the piece 'behind' it
-    en_passant_capture(piece, destination)
+  # def handle_en_passant(piece, destination)
+  #   # if the piece is a pawn and is moving to @en_passant_target, remove the piece 'behind' it
+  #   en_passant_capture(piece, destination)
 
-    # set en passant target to the square 'behind' it if the piece is a pawn and is moving two squares
-    update_en_passant_target(piece, destination)
-  end
+  #   # set en passant target to the square 'behind' it if the piece is a pawn and is moving two squares
+  #   update_en_passant_target(piece, destination)
+  # end
 
-  def handle_castling(piece, destination)
-    return unless castling_possible?(piece, destination)
+  # def handle_castling(piece, destination)
+  #   return unless castling_possible?(piece, destination)
 
-    direction = castling_direction(destination, piece.position[1])
-    rook_start_col = direction == -1 ? 0 : 7
-    rook = piece_at([piece.position[0], rook_start_col])
+  #   direction = castling_direction(destination, piece.position[1])
+  #   rook_start_col = direction == -1 ? 0 : 7
+  #   rook = piece_at([piece.position[0], rook_start_col])
 
-    perform_castling(piece, destination, rook, direction)
-  end
+  #   perform_castling(piece, destination, rook, direction)
+  # end
 
-  def handle_promotion(piece, destination)
-    return unless piece.type == :pawn && piece.can_promote?
+  # def handle_promotion(piece, destination)
+  #   return unless piece.type == :pawn && piece.can_promote?
 
-    promote_pawn(piece, destination)
-  end
+  #   promote_pawn(piece, destination)
+  # end
 
-  def update_en_passant_target(piece, destination)
-    if piece.type == :pawn && (destination[0] - piece.position[0]).abs == 2
-      @en_passant_target = [destination[0] + (piece.color == :white ? 1 : -1), destination[1]]
-    else
-      @en_passant_target = nil
-    end
-  end
+  # def update_en_passant_target(piece, destination)
+  #   if piece.type == :pawn && (destination[0] - piece.position[0]).abs == 2
+  #     @en_passant_target = [destination[0] + (piece.color == :white ? 1 : -1), destination[1]]
+  #   else
+  #     @en_passant_target = nil
+  #   end
+  # end
 
-  def en_passant_capture(piece, destination)
-    if piece.type == :pawn && destination == @en_passant_target
-      take_piece([destination[0] + (piece.color == :white ? 1 : -1), destination[1]])
-    end
-  end
+  # def en_passant_capture(piece, destination)
+  #   if piece.type == :pawn && destination == @en_passant_target
+  #     take_piece([destination[0] + (piece.color == :white ? 1 : -1), destination[1]])
+  #   end
+  # end
 
-  def update_moving_piece(piece, destination)
-    piece.mark_as_moved
-    piece.position = destination
-  end
+  # def update_moving_piece(piece, destination)
+  #   piece.mark_as_moved
+  #   piece.position = destination
+  # end
 
-  def castling_possible?(piece, destination)
-    piece.type == :king && piece.castling_move(self).include?(destination)
-  end
+  # def castling_possible?(piece, destination)
+  #   piece.type == :king && piece.castling_move(self).include?(destination)
+  # end
 
-  def castling_direction(destination, position)
-    destination[1] < position ? -1 : 1
-  end
+  # def castling_direction(destination, position)
+  #   destination[1] < position ? -1 : 1
+  # end
 
-  def perform_castling(king, destination, rook, direction)
-    update_grid_on_move(king, destination)
-    update_grid_on_move(rook, [rook.position[0], king.position[1] + direction])
-    king.mark_as_moved
-    rook.mark_as_moved
-  end
+  # def perform_castling(king, destination, rook, direction)
+  #   update_grid_on_move(king, destination)
+  #   update_grid_on_move(rook, [rook.position[0], king.position[1] + direction])
+  #   king.mark_as_moved
+  #   rook.mark_as_moved
+  # end
 
   def promote_pawn(pawn, destination)
     piece_type = request_piece_type

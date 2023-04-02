@@ -19,21 +19,28 @@ class GameManager
 
   def move_piece(start_position, end_position)
     moving_piece = @board.piece_at(start_position)
-    destination_piece = @board.piece_at(end_position)
-
+    if @board.piece_at(end_position)
+      destination_piece = @board.piece_at(end_position)
+    elsif @board.en_passant_target == end_position
+      destination_piece = @board.piece_at([start_position[0] + (moving_piece.color == :white ? -1 : 1), end_position[1]])
+    else
+      destination_piece = nil
+    end
+  
     # Validate moves
     validate_move(moving_piece, end_position)
-
+  
     # Store information about the move
-    move = Move.new(start_position, end_position, moving_piece, destination_piece)
-
+    move = Move.new(start_position, end_position, moving_piece, destination_piece, @board.en_passant_target)
+  
     # Check if the move is a capture
     capture_piece(destination_piece, move) if capture_move?(moving_piece, destination_piece)
     # Check if the move is a castling
     handle_castling(moving_piece, end_position) if moving_piece.type == :king
     # Check if the move is an en passant
+    handle_en_passant(moving_piece, end_position) if moving_piece.type == :pawn
     # Check if the move is a promotion
-
+  
     # Move the piece
     @board.update_grid_on_move(moving_piece, end_position)
     moving_piece.position = end_position
@@ -84,9 +91,8 @@ class GameManager
     return unless rook.type == :rook && rook.moved == false
 
     @board.update_grid_on_move(rook, rook_destination)
-    #@board.update_grid_on_move(king, destination)
     rook.position = rook_destination
-    #king.position = destination
+    rook.mark_as_moved
   end
 
   def castling_move?(piece, destination)
@@ -99,5 +105,27 @@ class GameManager
     rook_destination_file = destination[1] > piece.position[1] ? 5 : 3
     rook_destination = [piece.position[0], rook_destination_file]
     [rook_position, rook_destination]
+  end
+
+  def handle_en_passant(piece, destination)
+    # if the piece is a pawn and is moving to @en_passant_target, remove the piece 'behind' it
+    en_passant_capture(piece, destination)
+
+    # set en passant target to the square 'behind' it if the piece is a pawn and is moving two squares
+    update_en_passant_target(piece, destination)
+  end
+
+  def en_passant_capture(piece, destination)
+    if piece.type == :pawn && destination == @board.en_passant_target
+      @board.take_piece([destination[0] + (piece.color == :white ? 1 : -1), destination[1]])
+    end
+  end
+
+  def update_en_passant_target(piece, destination)
+    if piece.type == :pawn && (destination[0] - piece.position[0]).abs == 2
+      @board.en_passant_target = [destination[0] + (piece.color == :white ? 1 : -1), destination[1]]
+    else
+      @board.en_passant_target = nil
+    end
   end
 end
