@@ -40,29 +40,6 @@ class Board
     @grid[destination[0]][destination[1]] = piece
   end
 
-  # def move_piece(piece, destination)
-  #   validate_move(piece, destination)
-
-  #   move_piece!(piece, destination)
-  # end
-
-  # def move_piece!(piece, destination)
-  #   destination_piece = piece_at(destination)
-
-  #   handle_en_passant(piece, destination)
-  #   handle_castling(piece, destination)
-
-  #   # Update the grid
-  #   update_grid_on_move(piece, destination)
-
-  #   # Remove the destination piece from active_pieces if it exists
-  #   remove_active_piece(destination_piece) if destination_piece
-
-  #   # Update the moving piece's position
-  #   update_moving_piece(piece, destination)
-  #   handle_promotion(piece, destination)
-  # end
-
   def valid_position?(position)
     row, col = position
     row.between?(0, 7) && col.between?(0, 7)
@@ -93,11 +70,6 @@ class Board
     friendly_pieces_of_type(:king, color).first
   end
 
-  def find_rook_at(position, color)
-    piece = piece_at(position)
-    piece if piece&.type == :rook && piece&.color == color
-  end
-
   def set_up_board
     generate_pieces(:white)
     generate_pieces(:black)
@@ -116,7 +88,7 @@ class Board
 
     # Create a temporary piece at the given position
     temp_piece = Piece.new(color, :temp, 'T')
-    place_piece(temp_piece, position)
+    place_piece(temp_piece, position) unless piece_at(position)
 
     # Check if the temporary piece is under attack
     under_attack = false
@@ -125,47 +97,13 @@ class Board
     end
 
     # Remove the temporary piece
-    take_piece(position)
+    take_piece(position) if piece_at(position) == temp_piece
 
     under_attack
   end
 
   def opposing_color(color)
     color == :white ? :black : :white
-  end
-
-  def king_in_check?(color)
-    pieces_of_color(opposing_color(color)).any? { |piece| piece.possible_moves(self).include?(find_king(color).position) }
-  end
-
-  def king_move_will_put_it_in_check?(king, destination)
-    # Temporarily update the board state
-    old_position = king.position
-    captured_piece = piece_at(destination)
-    # manually remove the piece from the old position, set it to the new position and set the piece's position to the new position
-    change_piece_at(old_position, nil)
-    change_piece_at(destination, king)
-    king.position = destination
-
-    # Check if the king is in check
-    in_check = king_in_check?(king.color)
-
-    # Revert the board state
-    change_piece_at(destination, nil)
-    change_piece_at(old_position, king)
-    king.position = old_position
-    place_piece(captured_piece, destination) if captured_piece
-    in_check
-  end
-
-  # create a method that will gather all possible_moves from all pieces of one color.
-  # return them in the form of a hash with the piece as the key and the possible_moves as the value
-  def all_possible_moves(color)
-    all_moves = {}
-    pieces_of_color(color).each do |piece|
-      all_moves[piece] = piece.possible_moves(self)
-    end
-    all_moves
   end
 
   private
@@ -196,13 +134,6 @@ class Board
   def change_piece_at(position, piece)
     @grid[position[0]][position[1]] = piece
   end
-
-  # def valid_move?(piece, destination)
-  #   return false unless valid_position?(destination)
-
-  #   destination_piece = @grid[destination[0]][destination[1]]
-  #   !(destination_piece && destination_piece.color == piece.color)
-  # end
 
   def generate_pieces(color)
     generate_pawns(color)
@@ -255,97 +186,39 @@ class Board
     place_piece(King.new(color), position)
   end
 
-  # def handle_en_passant(piece, destination)
-  #   # if the piece is a pawn and is moving to @en_passant_target, remove the piece 'behind' it
-  #   en_passant_capture(piece, destination)
-
-  #   # set en passant target to the square 'behind' it if the piece is a pawn and is moving two squares
-  #   update_en_passant_target(piece, destination)
+  # def promote_pawn(pawn, destination)
+  #   piece_type = request_piece_type
+  #   take_piece(pawn.position)
+  #   new_piece = create_piece(piece_type, pawn.color)
+  #   change_piece_at(destination, new_piece)
+  #   add_promoted_active_piece(new_piece)
+  #   new_piece.mark_as_moved.position = destination
   # end
 
-  # def handle_castling(piece, destination)
-  #   return unless castling_possible?(piece, destination)
-
-  #   direction = castling_direction(destination, piece.position[1])
-  #   rook_start_col = direction == -1 ? 0 : 7
-  #   rook = piece_at([piece.position[0], rook_start_col])
-
-  #   perform_castling(piece, destination, rook, direction)
-  # end
-
-  # def handle_promotion(piece, destination)
-  #   return unless piece.type == :pawn && piece.can_promote?
-
-  #   promote_pawn(piece, destination)
-  # end
-
-  # def update_en_passant_target(piece, destination)
-  #   if piece.type == :pawn && (destination[0] - piece.position[0]).abs == 2
-  #     @en_passant_target = [destination[0] + (piece.color == :white ? 1 : -1), destination[1]]
-  #   else
-  #     @en_passant_target = nil
+  # def request_piece_type
+  #   loop do
+  #     puts 'Select a piece to promote to: (Q)ueen, (R)ook, (B)ishop, (K)night'
+  #     $stdout.flush
+  #     input = gets.chomp.downcase
+  #     piece_type = piece_type_from_input(input)
+  #     return piece_type if piece_type
   #   end
   # end
 
-  # def en_passant_capture(piece, destination)
-  #   if piece.type == :pawn && destination == @en_passant_target
-  #     take_piece([destination[0] + (piece.color == :white ? 1 : -1), destination[1]])
-  #   end
+  # def piece_type_from_input(input)
+  #   piece_types = { 'q' => :queen, 'r' => :rook, 'b' => :bishop, 'k' => :knight }
+  #   piece_types[input] || (puts 'Invalid input. Please enter Q, R, B, or K.' && $stdout.flush)
   # end
 
-  # def update_moving_piece(piece, destination)
-  #   piece.mark_as_moved
-  #   piece.position = destination
+  # def create_piece(piece_type, color)
+  #   Object.const_get(piece_type.capitalize).new(color)
   # end
 
-  # def castling_possible?(piece, destination)
-  #   piece.type == :king && piece.castling_move(self).include?(destination)
+  # def promoted_piece_key(piece)
+  #   "promoted_#{piece.color.downcase}_#{piece.type.downcase}#{next_piece_count("promoted_#{piece.color.downcase}_#{piece.type.downcase}")}"
   # end
 
-  # def castling_direction(destination, position)
-  #   destination[1] < position ? -1 : 1
+  # def add_promoted_active_piece(piece)
+  #   @active_pieces[promoted_piece_key(piece)] = piece
   # end
-
-  # def perform_castling(king, destination, rook, direction)
-  #   update_grid_on_move(king, destination)
-  #   update_grid_on_move(rook, [rook.position[0], king.position[1] + direction])
-  #   king.mark_as_moved
-  #   rook.mark_as_moved
-  # end
-
-  def promote_pawn(pawn, destination)
-    piece_type = request_piece_type
-    take_piece(pawn.position)
-    new_piece = create_piece(piece_type, pawn.color)
-    change_piece_at(destination, new_piece)
-    add_promoted_active_piece(new_piece)
-    new_piece.mark_as_moved.position = destination
-  end
-
-  def request_piece_type
-    loop do
-      puts 'Select a piece to promote to: (Q)ueen, (R)ook, (B)ishop, (K)night'
-      $stdout.flush
-      input = gets.chomp.downcase
-      piece_type = piece_type_from_input(input)
-      return piece_type if piece_type
-    end
-  end
-
-  def piece_type_from_input(input)
-    piece_types = { 'q' => :queen, 'r' => :rook, 'b' => :bishop, 'k' => :knight }
-    piece_types[input] || (puts 'Invalid input. Please enter Q, R, B, or K.' && $stdout.flush)
-  end
-
-  def create_piece(piece_type, color)
-    Object.const_get(piece_type.capitalize).new(color)
-  end
-
-  def promoted_piece_key(piece)
-    "promoted_#{piece.color.downcase}_#{piece.type.downcase}#{next_piece_count("promoted_#{piece.color.downcase}_#{piece.type.downcase}")}"
-  end
-
-  def add_promoted_active_piece(piece)
-    @active_pieces[promoted_piece_key(piece)] = piece
-  end
 end

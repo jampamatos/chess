@@ -15,7 +15,7 @@ class Piece
   end
 
   def to_s
-    @symbol
+    @symbol.colorize(color)
   end
 
   def same_color_as(piece)
