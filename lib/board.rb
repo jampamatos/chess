@@ -106,6 +106,35 @@ class Board
     color == :white ? :black : :white
   end
 
+  def find_rook_at(position, color)
+    piece = piece_at(position)
+    piece if piece&.type == :rook && piece&.color == color
+  end
+
+  def king_move_will_put_it_in_check?(king, destination)
+    # Temporarily update the board state
+    old_position = king.position
+    captured_piece = piece_at(destination)
+    # manually remove the piece from the old position, set it to the new position and set the piece's position to the new position
+    change_piece_at(old_position, nil)
+    change_piece_at(destination, king)
+    king.position = destination
+
+    # Check if the king is in check
+    in_check = king_in_check?(king.color)
+
+    # Revert the board state
+    change_piece_at(destination, nil)
+    change_piece_at(old_position, king)
+    king.position = old_position
+    place_piece(captured_piece, destination) if captured_piece
+    in_check
+  end
+
+  def king_in_check?(color)
+    pieces_of_color(opposing_color(color)).any? { |piece| piece.possible_moves(self).include?(find_king(color).position) }
+  end
+
   private
 
   def new_grid

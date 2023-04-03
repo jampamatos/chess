@@ -3,19 +3,16 @@
 require_relative 'lib/dependencies'
 
 board = Board.new
-board.place_piece(Pawn.new(:white), [6, 1])
-board.place_piece(Pawn.new(:black), [5, 1])
-board.place_piece(Rook.new(:white), [6, 0])
-board.place_piece(Rook.new(:black), [5, 2])
+white_king = King.new(:white)
+friendly_color_piece = Piece.new(:white, :piece, 'P')
+opposing_color_piece = Piece.new(:black, :piece, 'P')
+
+board.place_piece(white_king, [4, 4])
+board.place_piece(friendly_color_piece, [4, 3])
+board.place_piece(opposing_color_piece, [5, 4])
+
 gm = GameManager.new(board)
-
-p gm.board.active_pieces
-
-p gm.board.square_under_attack?([6, 1], :white)
-p gm.board.square_under_attack?([5, 1], :black)
-p gm.board.square_under_attack?([5, 2], :black)
-p gm.board.square_under_attack?([6, 0], :white)
-
-p gm.board.active_pieces
-
+gm.draw_board
+p white_king.possible_moves(gm.board)
+puts gm.move_piece([4, 4], [5, 3])
 gm.draw_board
