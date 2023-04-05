@@ -215,6 +215,7 @@ module ChessPiecesHelper
   RSpec.shared_examples 'a king' do |color|
     let(:board) { Board.new }
     let(:king) { King.new(color) }
+    let(:opposing_king) { King.new(opposing_color(color)) }
     let(:friendly_color_piece) { Piece.new(color, :piece, 'P') }
     let(:opposing_color_piece) { Piece.new(opposing_color(color), :piece, 'P') }
 
@@ -223,6 +224,7 @@ module ChessPiecesHelper
         context 'and the king is in the middle of the board' do
           before do
             board.place_piece(king, [4, 4])
+            board.place_piece(opposing_king, [0, 0])
           end
 
           it 'returns 8 possible moves' do
@@ -239,6 +241,7 @@ module ChessPiecesHelper
         context 'and the king is in the top left corner' do
           before do
             board.place_piece(king, [0, 0])
+            board.place_piece(opposing_king, [7, 7])
           end
 
           it 'returns 3 possible moves' do
@@ -255,6 +258,7 @@ module ChessPiecesHelper
         context 'and the king is in the bottom middle part of the board' do
           before do
             board.place_piece(king, [4, 7])
+            board.place_piece(opposing_king, [0, 0])
           end
 
           it 'returns 5 possible moves' do
@@ -281,6 +285,7 @@ module ChessPiecesHelper
             board.place_piece(friendly_color_piece, [3, 5])
             board.place_piece(friendly_color_piece, [4, 5])
             board.place_piece(friendly_color_piece, [6, 6])
+            board.place_piece(opposing_king, [0, 0])
           end
 
           it 'returns 2 possible moves' do
@@ -300,6 +305,7 @@ module ChessPiecesHelper
             board.place_piece(friendly_color_piece, [0, 1])
             board.place_piece(friendly_color_piece, [1, 0])
             board.place_piece(friendly_color_piece, [1, 1])
+            board.place_piece(opposing_king, [7, 7])
           end
 
           it 'returns 0 possible moves' do
@@ -319,6 +325,7 @@ module ChessPiecesHelper
             board.place_piece(friendly_color_piece, [5, 6])
             board.place_piece(friendly_color_piece, [3, 7])
             board.place_piece(friendly_color_piece, [5, 7])
+            board.place_piece(opposing_king, [0, 0])
           end
 
           it 'returns 0 possible moves' do
@@ -339,6 +346,7 @@ module ChessPiecesHelper
             board.place_piece(opposing_color_piece, [3, 5])
             board.place_piece(opposing_color_piece, [4, 5])
             board.place_piece(opposing_color_piece, [6, 6])
+            board.place_piece(opposing_king, [0, 0])
           end
 
           it 'returns 8 possible moves' do
@@ -358,6 +366,7 @@ module ChessPiecesHelper
             board.place_piece(opposing_color_piece, [0, 1])
             board.place_piece(opposing_color_piece, [1, 0])
             board.place_piece(opposing_color_piece, [1, 1])
+            board.place_piece(opposing_king, [7, 7])
           end
 
           it 'returns 3 possible moves' do
@@ -375,7 +384,9 @@ module ChessPiecesHelper
       context 'when possible moves square are attacked by opposing pieces' do
         before do
           board.place_piece(king, [4, 4])
+          board.place_piece(opposing_king, [7, 7])
           board.place_piece(Rook.new(opposing_color(king.color)), [3, 0])
+          board.place_piece(Rook.new(opposing_color(king.color)), [0, 0])
         end
 
         it 'returns 5 possible moves' do
@@ -389,7 +400,7 @@ module ChessPiecesHelper
         end
       end
 
-      xcontext 'when in a classic stalemate position' do
+      context 'when in a classic stalemate position' do
         before do
           board.place_piece(king, [0, 0])
           board.place_piece(Rook.new(opposing_color(king.color)), [1, 1])
@@ -408,6 +419,7 @@ module ChessPiecesHelper
           board.place_piece(king, [4, 4])
           board.place_piece(friendly_color_piece, [4, 3])
           board.place_piece(opposing_color_piece, [5, 4])
+          board.place_piece(opposing_king, [7, 7])
         end
 
         let(:game_manager) { GameManager.new(board) }

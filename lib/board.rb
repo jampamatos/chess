@@ -132,7 +132,7 @@ class Board
   end
 
   def king_in_check?(color)
-    pieces_of_color(opposing_color(color)).any? { |piece| piece.possible_moves(self).include?(find_king(color).position) }
+    pieces_of_color(opposing_color(color)).reject { |piece| piece.type == :king }.any? { |piece| piece.possible_moves(self).include?(find_king(color).position) }
   end
 
   private

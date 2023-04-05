@@ -23,7 +23,9 @@ class King < Piece
   end
 
   def possible_moves(board)
-    all_moves(board).reject { |move| board.king_move_will_put_it_in_check?(self, move) }
+    all_moves(board)
+      .reject { |move| board.king_move_will_put_it_in_check?(self, move) }
+      .select { |move| valid_king_move?(board, move) }
   end
 
   def all_moves(board)
@@ -65,5 +67,10 @@ class King < Piece
     return false unless rook&.moved == false
 
     col_range.all? { |i| board.piece_at([row, i]).nil? && !board.square_under_attack?([row, i], @color) }
+  end
+
+  def valid_king_move?(board, move)
+    opponent_king = board.find_king(board.opposing_color(color))
+    (move[0] - opponent_king.position[0]).abs > 1 || (move[1] - opponent_king.position[1]).abs > 1
   end
 end
