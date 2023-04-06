@@ -19,12 +19,13 @@ class Board
   end
 
   def place_piece(piece, position)
-    raise InvalidPositionError, position unless valid_position?(position)
-    raise PositionNotEmptyError, position unless piece_at(position).nil?
-
-    change_piece_at(position, piece)
-    piece.position = position
+    add_piece_to_board(piece, position)
     add_active_piece(piece) unless @active_pieces.value?(piece)
+  end
+
+  def place_promotion_piece(piece, position)
+    add_piece_to_board(piece, position)
+    add_promotion_active_piece(piece)
   end
 
   def take_piece(position)
@@ -141,9 +142,21 @@ class Board
     Array.new(8) { Array.new(8, nil) }
   end
 
+  def add_piece_to_board(piece, position)
+    raise InvalidPositionError, position unless valid_position?(position)
+    raise PositionNotEmptyError, position unless piece_at(position).nil?
+
+    change_piece_at(position, piece)
+    piece.position = position
+  end
+
   def piece_key(piece)
     new_key = "#{piece.color.downcase}_#{piece.type.downcase}"
     piece.type == :queen || piece.type == :king ? new_key : "#{new_key}#{next_piece_count(new_key)}"
+  end
+
+  def promotion_piece_key(piece)
+    "promoted_#{piece.color.downcase}_#{piece.type.downcase}#{next_piece_count("promoted_#{piece.color.downcase}_#{piece.type.downcase}")}"
   end
 
   def next_piece_count(new_key)
@@ -154,6 +167,10 @@ class Board
 
   def add_active_piece(piece)
     @active_pieces[piece_key(piece)] = piece
+  end
+
+  def add_promotion_active_piece(piece)
+    @active_pieces[promotion_piece_key(piece)] = piece
   end
 
   def remove_active_piece(piece)

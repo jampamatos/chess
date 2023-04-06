@@ -160,6 +160,35 @@ RSpec.shared_examples 'a pawn' do |color, symbol, &block|
       end
     end
   end
+
+  describe 'Pawn promotion' do
+    before do
+      board.place_piece(pawn, *promotion_start_square)
+    end
+
+    let(:gm) { GameManager.new(board) }
+
+
+    context 'when a pawn reaches the other side of the board' do
+      it 'promotes the pawn to a queen when user type "q"' do
+        allow(gm).to receive(:gets).and_return("q\n")
+        gm.move_piece(*promotion_start_square, *promotion_move)
+        expect(board.piece_at(*promotion_move)).to be_a(Queen)
+        expect(board.piece_at(*promotion_move).color).to eq(pawn.color)
+        expect(gm.board.active_pieces.values).to include(board.piece_at(*promotion_move))
+        expect(gm.board.active_pieces.values).not_to include(pawn)
+      end
+
+      it 'promotes the pawn to a queen when user type "queen"' do
+        allow(gm).to receive(:gets).and_return("queen\n")
+        gm.move_piece(*promotion_start_square, *promotion_move)
+        expect(board.piece_at(*promotion_move)).to be_a(Queen)
+        expect(board.piece_at(*promotion_move).color).to eq(pawn.color)
+        expect(gm.board.active_pieces.values).to include(board.piece_at(*promotion_move))
+        expect(gm.board.active_pieces.values).not_to include(pawn)
+      end
+    end
+  end
 end
 
 RSpec.describe Pawn do
@@ -178,6 +207,8 @@ RSpec.describe Pawn do
       let(:passant_possible_moves) { [[5, 5], [5, 4]] }
       let(:passant_capture_move) { [[5, 4]] }
       let(:passant_move_notation) { 'fxe3 e.p.'}
+      let(:promotion_start_square) { [[1, 4]] }
+      let(:promotion_move) { [[0, 4]] }
     end
   end
 
@@ -196,6 +227,8 @@ RSpec.describe Pawn do
       let(:passant_possible_moves) { [[3, 5], [3, 4]] }
       let(:passant_capture_move) { [[3, 4]] }
       let(:passant_move_notation) { 'fxe5 e.p.'}
+      let(:promotion_start_square) { [[6, 4]] }
+      let(:promotion_move) { [[7, 4]] }
     end
   end
 end

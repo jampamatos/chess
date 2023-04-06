@@ -26,10 +26,10 @@ class GameManager
     else
       destination_piece = nil
     end
-  
+
     # Validate moves
     validate_move(moving_piece, end_position)
-  
+
     # Store information about the move
     move = Move.new(start_position, end_position, moving_piece, destination_piece, @board.en_passant_target)
   
@@ -39,12 +39,14 @@ class GameManager
     handle_castling(moving_piece, end_position) if moving_piece.type == :king
     # Check if the move is an en passant
     handle_en_passant(moving_piece, end_position) if moving_piece.type == :pawn
-    # Check if the move is a promotion
-  
     # Move the piece
     @board.update_grid_on_move(moving_piece, end_position)
     moving_piece.position = end_position
     moving_piece.mark_as_moved
+    # Check if the move is a promotion
+    if moving_piece.type == :pawn && (end_position[0].zero? || end_position[0] == 7)
+      handle_promotion(moving_piece, end_position)
+    end
     @moves << move
     move
   end
@@ -126,6 +128,48 @@ class GameManager
       @board.en_passant_target = [destination[0] + (piece.color == :white ? 1 : -1), destination[1]]
     else
       @board.en_passant_target = nil
+    end
+  end
+
+  def handle_promotion(pawn, end_position)
+    @board.take_piece(end_position)
+    new_piece_type = get_promotion_piece_type
+
+    new_piece = create_promotion_piece(new_piece_type, pawn.color)
+    @board.place_promotion_piece(new_piece, end_position)
+  end
+
+  def get_promotion_piece_type
+    choices = {
+      'q' => :queen,
+      'r' => :rook,
+      'b' => :bishop,
+      'k' => :knight
+    }
+
+    loop do
+      puts 'Choose a piece to promote to: (Q)ueen, (R)ook, (B)ishop or (K)night.'
+      STDOUT.flush
+      user_input = gets.chomp.downcase
+
+      if choices.keys.include?(user_input[0]) || choices.values.map(&:to_s).include?(user_input)
+        return choices[user_input[0]] || user_input.to_sym
+      else
+        puts 'Invalid input. Please try again.'
+      end
+    end
+  end
+
+  def create_promotion_piece(type, color)
+    case type
+    when :queen
+      Queen.new(color)
+    when :rook
+      Rook.new(color)
+    when :bishop
+      Bishop.new(color)
+    when :knight
+      Knight.new(color)
     end
   end
 end
