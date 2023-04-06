@@ -1,6 +1,13 @@
 # External libraries
 require 'colorize'
 
+# Modules
+require_relative 'modules/activepiecesmanager'
+require_relative 'modules/boardsetup'
+require_relative 'modules/boardutility'
+require_relative 'modules/gamestatechecker'
+require_relative 'modules/movehandler'
+
 # Local Classes
 require_relative 'gamemanager'
 require_relative 'board'

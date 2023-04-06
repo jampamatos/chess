@@ -11,11 +11,8 @@ board.place_piece(black_pawn, [6, 4])
 gm = GameManager.new(board)
 
 gm.draw_board
-gm.move_piece([1, 4], [0, 4])
-p gm.board.active_pieces
+puts gm.move_piece([1, 4], [0, 4])
 gm.draw_board
 
-gm.move_piece([6, 4], [7, 4])
-p gm.board.active_pieces
+puts gm.move_piece([6, 4], [7, 4])
 gm.draw_board
-p gm.board.grid

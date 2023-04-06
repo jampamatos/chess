@@ -3,6 +3,7 @@
 require_relative '../piece'
 
 class King < Piece
+  include BoardSetup
 
   def initialize(color, in_check: false)
     symbol = color == :white ? '♚' : '♚'.colorize(color)
@@ -29,27 +30,15 @@ class King < Piece
   end
 
   def all_moves(board)
-    moves = []
-
-    moves.concat(move_generator(board, 1, 1, 0))
-    moves.concat(move_generator(board, 1, -1, 0))
-    moves.concat(move_generator(board, 1, 0, 1))
-    moves.concat(move_generator(board, 1, 0, -1))
-
-    moves.concat(move_generator(board, 1, 1, 1))
-    moves.concat(move_generator(board, 1, -1, -1))
-    moves.concat(move_generator(board, 1, 1, -1))
-    moves.concat(move_generator(board, 1, -1, 1))
-
+    moves = king_move_generator(board)
     moves.concat(castling_move(board))
-
     moves
   end
 
   def castling_move(board)
     return [] if @moved || in_check?
 
-    row = board.pieces_rank(@color)
+    row = BoardSetup.pieces_rank(@color)
     col = @position[1]
     left_rook = board.find_rook_at([row, 0], color)
     right_rook = board.find_rook_at([row, 7], color)
@@ -72,5 +61,19 @@ class King < Piece
   def valid_king_move?(board, move)
     opponent_king = board.find_king(board.opposing_color(color))
     (move[0] - opponent_king.position[0]).abs > 1 || (move[1] - opponent_king.position[1]).abs > 1
+  end
+
+  def king_move_generator(board)
+    moves = []
+    directions = [
+      [1, 0], [-1, 0], [0, 1], [0, -1], # horizontal and vertical moves
+      [1, 1], [-1, -1], [1, -1], [-1, 1] # diagonal moves
+    ]
+
+    directions.each do |row_increment, col_increment|
+      moves.concat(move_generator(board, 1, row_increment, col_increment))
+    end
+
+    moves
   end
 end

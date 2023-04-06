@@ -187,6 +187,11 @@ RSpec.shared_examples 'a pawn' do |color, symbol, &block|
         expect(gm.board.active_pieces.values).to include(board.piece_at(*promotion_move))
         expect(gm.board.active_pieces.values).not_to include(pawn)
       end
+
+      it 'returns correct move notation when called #to_s' do
+        allow(gm).to receive(:gets).and_return("queen\n")
+        expect(gm.move_piece(*promotion_start_square, *promotion_move).to_s).to eq(promotion_move_notation)
+      end
     end
   end
 end
@@ -209,6 +214,7 @@ RSpec.describe Pawn do
       let(:passant_move_notation) { 'fxe3 e.p.'}
       let(:promotion_start_square) { [[1, 4]] }
       let(:promotion_move) { [[0, 4]] }
+      let(:promotion_move_notation) { 'e8=Q' }
     end
   end
 
@@ -229,6 +235,7 @@ RSpec.describe Pawn do
       let(:passant_move_notation) { 'fxe5 e.p.'}
       let(:promotion_start_square) { [[6, 4]] }
       let(:promotion_move) { [[7, 4]] }
+      let(:promotion_move_notation) { 'e1=Q' }
     end
   end
 end

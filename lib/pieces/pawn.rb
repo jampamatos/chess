@@ -13,10 +13,14 @@ class Pawn < Piece
   end
 
   def can_promote?
-    @color == :white && position[0] == 0 || @color == :black && position[0] == 7
+    @color == :white && position[0].zero? || @color == :black && position[0] == 7
   end
 
   private
+
+  def forward_blocked?(board, direction)
+    board.piece_at([position[0] + direction, position[1]])
+  end
 
   def forward_moves(board)
     direction = @color == :white ? -1 : 1
@@ -28,21 +32,26 @@ class Pawn < Piece
   end
 
   def diagonal_captures(board)
-    direction = @color == :white ? -1 : 1
-    [-1, 1].map do |col_offset|
-      target_row = position[0] + direction
-      target_col = position[1] + col_offset
-      target_position = [target_row, target_col]
-
+    [-1, 1].each_with_object([]) do |col_offset, captures|
+      target_position = capture_target_position(col_offset)
       next unless board.valid_position?(target_position)
 
-      target_piece = board.piece_at(target_position)
-      target_piece && !target_piece.same_color_as(self) || target_position == board.en_passant_target ? target_position : nil
-    end.compact
+      captures << target_position if valid_capture_or_en_passant?(board, target_position)
+    end
   end
 
-  def forward_blocked?(board, direction)
-    board.piece_at([position[0] + direction, position[1]])
+  def capture_target_position(col_offset)
+    direction = @color == :white ? -1 : 1
+    target_row = position[0] + direction
+    target_col = position[1] + col_offset
+    [target_row, target_col]
+  end
+
+  def valid_capture_or_en_passant?(board, target_position)
+    target_piece = board.piece_at(target_position)
+    valid_capture = target_piece && !target_piece.same_color_as(self)
+    valid_en_passant = target_position == board.en_passant_target
+    valid_capture || valid_en_passant
   end
 
   # This method generates the forward moves for the pawn
