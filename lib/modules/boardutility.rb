@@ -12,4 +12,8 @@ module BoardUtility
     row, col = position
     row.between?(0, 7) && col.between?(0, 7)
   end
+
+  def switch_turn
+    @turn = opposing_color(@turn)
+  end
 end

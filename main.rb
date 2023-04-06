@@ -3,16 +3,27 @@
 require_relative 'lib/dependencies'
 
 board = Board.new
-white_pawn = Pawn.new(:white)
-black_pawn = Pawn.new(:black)
+black_king = King.new(:black)
+black_rook1 = Rook.new(:black)
+black_rook2 = Rook.new(:black)
 
-board.place_piece(white_pawn, [1, 4])
-board.place_piece(black_pawn, [6, 4])
+white_king = King.new(:white)
+
+board.place_piece(white_king, [0, 7])
+board.place_piece(black_king, [7, 3])
+board.place_piece(black_rook1, [1, 1])
+board.place_piece(black_rook2, [2, 0])
+
 gm = GameManager.new(board)
+gm.draw_board
+p gm.check?
+p gm.checkmate?
 
+gm.move_piece([2, 0], [0, 0])
 gm.draw_board
-puts gm.move_piece([1, 4], [0, 4])
-gm.draw_board
-
-puts gm.move_piece([6, 4], [7, 4])
-gm.draw_board
+p gm.check?
+p gm.checkmate?
+puts "Swtiching turn"
+gm.board.switch_turn
+p gm.check?
+p gm.checkmate?

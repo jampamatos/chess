@@ -5,12 +5,13 @@ require_relative 'dependencies'
 class GameManager
   include GameStateChecker
   include MoveHandler
-  attr_reader :board, :board_render, :moves
+  attr_reader :board, :board_render, :moves, :turn
 
-  def initialize(board = Board.new, board_render = BoardRender.new(board))
+  def initialize(board = Board.new, board_render = BoardRender.new(board), moves = [], turn = :white)
     @board = board
     @board_render = board_render
-    @moves = []
+    @moves = moves
+    @turn = turn
 
     board.set_up_board if board.grid.flatten.compact.empty?
   end
