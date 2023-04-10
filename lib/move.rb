@@ -3,15 +3,17 @@
 require_relative 'dependencies'
 
 class Move
-  attr_accessor :start_position, :end_position, :piece, :captured_piece, :en_passant_target, :promotion_piece
+  attr_accessor :start_position, :end_position, :piece, :captured_piece, :en_passant_target, :promotion_piece, :check, :checkmate
 
-  def initialize(start_position, end_position, piece, captured_piece = nil, en_passant_target = nil, promotion_piece = nil)
+  def initialize(start_position, end_position, piece, captured_piece = nil, en_passant_target = nil)
     @start_position = start_position
     @end_position = end_position
     @piece = piece
     @captured_piece = captured_piece
     @en_passant_target = en_passant_target
-    @promotion_piece = promotion_piece
+    @promotion_piece = nil
+    @check = false
+    @checkmate = false
   end
 
   def to_s
@@ -41,10 +43,6 @@ class Move
     @end_position == expected_en_passant_target
   end
 
-  def check?; end
-
-  def checkmate?; end
-
   private
 
   def convert_coordinates(position)
@@ -70,8 +68,8 @@ class Move
     notation += 'x' if capture?
     notation += convert_coordinates(@end_position)
     notation += ' e.p.' if en_passant?
-    notation += '+' if check?
-    notation += '#' if checkmate?
+    notation += '+' if @check
+    notation += '#' if @checkmate
     notation += '=' + letter_for_piece_notation(promotion_piece) if promotion?
     notation
   end
@@ -87,8 +85,13 @@ class Move
     notation = letter_for_piece_notation(@piece)
     notation += 'x' if capture?
     notation += convert_coordinates(@end_position)
-    notation += '+' if check?
-    notation += '#' if checkmate?
+    
+    if @checkmate
+      notation += '#'
+    elsif @check
+      notation += '+'
+    end
+    
     notation
   end
 end

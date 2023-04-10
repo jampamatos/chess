@@ -8,6 +8,8 @@ RSpec.shared_examples 'a pawn' do |color, symbol, &block|
   let(:opposing_pawn) { Pawn.new(color == :white ? :black : :white) }
   let(:same_color_piece) { Piece.new(color, :piece, 'P') }
   let(:opposing_color_piece) { Piece.new(color == :white ? :black : :white, :piece, 'P') }
+  let(:friendly_king) { King.new(color) }
+  let(:opposing_king) { King.new(color == :white ? :black : :white) }
 
   describe '#initialize' do
     it 'creates a piece of the correct color' do
@@ -96,6 +98,8 @@ RSpec.shared_examples 'a pawn' do |color, symbol, &block|
       board.place_piece(pawn, *move_start_square)
       pawn.mark_as_moved
       board.place_piece(opposing_pawn, [4, 4])
+      board.place_piece(friendly_king, [7, 7])
+      board.place_piece(opposing_king, [0, 0])
     end
 
     let(:gm) { GameManager.new(board) }
@@ -164,6 +168,8 @@ RSpec.shared_examples 'a pawn' do |color, symbol, &block|
   describe 'Pawn promotion' do
     before do
       board.place_piece(pawn, *promotion_start_square)
+      board.place_piece(friendly_king, [7, 7])
+      board.place_piece(opposing_king, [0, 0])
     end
 
     let(:gm) { GameManager.new(board) }

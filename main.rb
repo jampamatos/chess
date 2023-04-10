@@ -19,7 +19,7 @@ gm.draw_board
 p gm.check?
 p gm.checkmate?
 
-gm.move_piece([2, 0], [0, 0])
+puts gm.move_piece([2, 0], [0, 0])
 gm.draw_board
 p gm.check?
 p gm.checkmate?

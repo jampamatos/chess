@@ -28,6 +28,9 @@ class GameManager
     move = create_move(start_position, end_position, moving_piece, destination_piece)
     perform_move(moving_piece, destination_piece, end_position, move)
 
+    move.check = check?
+    move.checkmate = checkmate?
+
     @moves << move
     move
   end

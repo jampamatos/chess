@@ -12,8 +12,9 @@ module GameStateChecker
   def checkmate?
     return false unless check?
 
-    king = @board.find_king(@turn)
-    king.possible_moves(@board).empty?
+    @board.pieces_of_color(@turn).all? do |piece|
+      piece.possible_moves(@board).empty?
+    end
   end
 
   def stalemate?

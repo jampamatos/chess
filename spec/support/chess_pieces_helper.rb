@@ -23,6 +23,8 @@ module ChessPiecesHelper
     let(:bishop) { described_class.new(color) }
     let(:friendly_color_piece) { Piece.new(color, :piece, 'P') }
     let(:opposing_color_piece) { Piece.new(opposing_color(color), :piece, 'P') }
+    let(:friendly_king) { King.new(color) }
+    let(:opposing_king) { King.new(opposing_color(color)) }
 
     describe 'Bishop#possible_moves' do
       context 'when there are no pieces in the way' do
@@ -151,6 +153,8 @@ module ChessPiecesHelper
           board.place_piece(bishop, [4, 4])
           board.place_piece(friendly_color_piece, [7, 7])
           board.place_piece(opposing_color_piece, [0, 0])
+          board.place_piece(friendly_king, [7, 4])
+          board.place_piece(opposing_king, [0, 4])
         end
 
         let(:game_manager) { GameManager.new(board) }
@@ -486,6 +490,8 @@ module ChessPiecesHelper
     let(:knight) {described_class.new(color)}
     let(:friendly_color_piece) {Piece.new(color, :piece, 'P') }
     let(:opposing_color_piece) {Piece.new(opposing_color(color), :piece, 'P') }
+    let(:opposing_king) {King.new(opposing_color(color)) }
+    let(:friendly_king) {King.new(color) }
 
     describe 'Knight#possible_moves' do
       context 'when there are no pieces in the way' do
@@ -621,6 +627,8 @@ module ChessPiecesHelper
             board.place_piece(knight, [4, 4])
             board.place_piece(friendly_color_piece, [2, 3])
             board.place_piece(opposing_color_piece, [2, 5])
+            board.place_piece(friendly_king, [3, 2])
+            board.place_piece(opposing_king, [3, 6])
           end
 
           let(:game_manager) { GameManager.new(board) }
@@ -688,6 +696,8 @@ module ChessPiecesHelper
     let(:queen) { described_class.new(color) }
     let(:friendly_color_piece) { described_class.new(color) }
     let(:opposing_color_piece) { described_class.new(opposing_color(color)) }
+    let(:friendly_king) { King.new(color) }
+    let(:opposing_king) { King.new(opposing_color(color)) }
 
     describe 'Queen#possible_moves' do
       context 'when there are no pieces in the way' do
@@ -782,6 +792,8 @@ module ChessPiecesHelper
           board.place_piece(queen, [4, 4])
           board.place_piece(friendly_color_piece, [4, 0])
           board.place_piece(opposing_color_piece, [0, 4])
+          board.place_piece(friendly_king, [6, 6])
+          board.place_piece(opposing_king, [1, 1])
         end
 
         let(:game_manager) { GameManager.new(board) }
@@ -843,6 +855,8 @@ module ChessPiecesHelper
     let(:rook) { described_class.new(color) }
     let(:friendly_color_piece) { described_class.new(color) }
     let(:opposing_color_piece) { described_class.new(opposing_color(color)) }
+    let(:friendly_king) { King.new(color) }
+    let(:opposing_king) { King.new(opposing_color(color)) }
 
     describe 'Rook#possible_moves' do
       context 'when there are no pieces in the way' do
@@ -930,6 +944,8 @@ module ChessPiecesHelper
           board.place_piece(rook, [4, 4])
           board.place_piece(friendly_color_piece, [4, 0])
           board.place_piece(opposing_color_piece, [0, 4])
+          board.place_piece(friendly_king, [1, 1])
+          board.place_piece(opposing_king, [6, 6])
         end
 
         let(:game_manager) { GameManager.new(board) }
