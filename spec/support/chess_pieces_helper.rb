@@ -160,6 +160,10 @@ module ChessPiecesHelper
         let(:game_manager) { GameManager.new(board) }
 
         context 'to a valid location' do
+          before do
+            game_manager.turn = color
+          end
+
           it 'moves the bishop to the new location' do
             game_manager.move_piece([4, 4], [6, 6])
             expect(game_manager.board.piece_at([6, 6])).to eq(bishop)
@@ -176,18 +180,30 @@ module ChessPiecesHelper
         end
 
         context 'to an invalid location' do
+          before do
+            game_manager.turn = color
+          end
+
           it 'raises an InvalidMoveError' do
             expect { game_manager.move_piece([4, 4], [6, 5]) }.to raise_error(InvalidMoveError)
           end
         end
 
         context 'to a location occupied by a friendly piece' do
+          before do
+            game_manager.turn = color
+          end
+
           it 'raises a PositionNotEmptyError' do
             expect { game_manager.move_piece([4, 4], [7, 7]) }.to raise_error(PositionNotEmptyError)
           end
         end
 
         context 'to a location occupied by an opposing piece' do
+          before do
+            game_manager.turn = color
+          end
+
           it 'moves the bishop to the new location' do
             game_manager.move_piece([4, 4], [0, 0])
             expect(board.grid[0][0]).to eq(bishop)
@@ -429,6 +445,10 @@ module ChessPiecesHelper
         let(:game_manager) { GameManager.new(board) }
 
         context 'to a valid location' do
+          before do
+            game_manager.turn = color
+          end
+
           it 'moves the king to the new location' do
             game_manager.move_piece([4, 4], [5, 3])
             expect(game_manager.board.piece_at([5, 3])).to eq(king)
@@ -445,18 +465,30 @@ module ChessPiecesHelper
         end
 
         context 'to an invalid location' do
+          before do
+            game_manager.turn = color
+          end
+
           it 'raises an InvalidMoveError' do
             expect { game_manager.move_piece([4, 4], [6, 2]) }.to raise_error(InvalidMoveError)
           end
         end
 
         context 'to a location occupied by a friendly piece' do
+          before do
+            game_manager.turn = color
+          end
+
           it 'raises a PositionNotEmtpyError' do
             expect { game_manager.move_piece([4, 4], [4, 3]) }.to raise_error(PositionNotEmptyError)
           end
         end
 
         context 'to a location occupied by an opposing piece' do
+          before do
+            game_manager.turn = color
+          end
+
           it 'moves the king to the new location' do
             game_manager.move_piece([4, 4], [5, 4])
             expect(game_manager.board.piece_at([5, 4])).to eq(king)
@@ -634,6 +666,10 @@ module ChessPiecesHelper
           let(:game_manager) { GameManager.new(board) }
 
           context 'to a valid location' do
+            before do
+              game_manager.turn = color
+            end
+
             it 'moves the knight to the new location' do
               game_manager.move_piece([4, 4], [6, 5])
               expect(game_manager.board.piece_at([6, 5])).to eq(knight)
@@ -650,18 +686,30 @@ module ChessPiecesHelper
           end
 
           context 'to an invalid location' do
+            before do
+              game_manager.turn = color
+            end
+
             it 'raises an InvalidMoveError' do
               expect { game_manager.move_piece([4, 4], [4, 5]) }.to raise_error(InvalidMoveError)
             end
           end
 
           context 'to a location occupied by a friendly piece' do
+            before do
+              game_manager.turn = color
+            end
+
             it 'raises a PositionNotEmtpyError' do
               expect { game_manager.move_piece([4, 4], [2, 3]) }.to raise_error(PositionNotEmptyError)
             end
           end
 
           context 'to a location occupied by an opposing piece' do
+            before do
+              game_manager.turn = color
+            end
+
             it 'moves the knight to the new location' do
               game_manager.move_piece([4, 4], [2, 5])
               expect(game_manager.board.piece_at([2, 5])).to eq(knight)
@@ -799,6 +847,10 @@ module ChessPiecesHelper
         let(:game_manager) { GameManager.new(board) }
 
         context 'to a valid location' do
+          before do
+            game_manager.turn = color
+          end
+
           it 'moves the queen to the new location' do
             game_manager.move_piece([4, 4], [3, 3])
             expect(game_manager.board.piece_at([3, 3])).to eq(queen)
@@ -815,18 +867,30 @@ module ChessPiecesHelper
         end
 
         context 'to an invalid location' do
+          before do
+            game_manager.turn = color
+          end
+
           it 'raises an InvalidMoveError' do
             expect { game_manager.move_piece([4, 4], [0, 7]) }.to raise_error(InvalidMoveError)
           end
         end
 
         context 'to a location occupied by a friendly piece' do
+          before do
+            game_manager.turn = color
+          end
+
           it 'raises an PositionNotEmptyError' do
             expect { game_manager.move_piece([4, 4], [4, 0]) }.to raise_error(PositionNotEmptyError)
           end
         end
 
         context 'to a location occupied by an opposing piece' do
+          before do
+            game_manager.turn = color
+          end
+
           it 'moves the queen to the new location' do
             game_manager.move_piece([4, 4], [0, 4])
             expect(game_manager.board.piece_at([0, 4])).to eq(queen)
@@ -951,6 +1015,10 @@ module ChessPiecesHelper
         let(:game_manager) { GameManager.new(board) }
 
         context 'to a valid location' do
+          before do
+            game_manager.turn = color
+          end
+
           it 'moves the rook to the new location' do
             game_manager.move_piece([4, 4], [4, 3])
             expect(game_manager.board.piece_at([4, 3])).to eq(rook)
@@ -967,18 +1035,30 @@ module ChessPiecesHelper
         end
 
         context 'to an invalid location' do
+          before do
+            game_manager.turn = color
+          end
+
           it 'raises an InvalidMoveError' do
             expect { game_manager.move_piece([4, 4], [0, 0]) }.to raise_error(InvalidMoveError)
           end
         end
 
         context 'to a location with a friendly piece' do
+          before do
+            game_manager.turn = color
+          end
+
           it 'raises a PositionNotEmptyError' do
             expect { game_manager.move_piece([4, 4], [4, 0]) }.to raise_error(PositionNotEmptyError)
           end
         end
 
         context 'to a location with an opposing piece' do
+          before do
+            game_manager.turn = color
+          end
+
           it 'moves the rook to the new location' do
             game_manager.move_piece([4, 4], [0, 4])
             expect(game_manager.board.piece_at([0, 4])).to eq(rook)

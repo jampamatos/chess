@@ -105,6 +105,9 @@ RSpec.shared_examples 'a pawn' do |color, symbol, &block|
     let(:gm) { GameManager.new(board) }
 
     context 'when pawn can move normally' do
+      before do
+        gm.turn = color
+      end
       context 'and it moves one square forward' do
         it 'moves the pawn to the correct square' do
           gm.move_piece(*move_start_square, *move_end_square)
@@ -143,6 +146,7 @@ RSpec.shared_examples 'a pawn' do |color, symbol, &block|
 
     context 'when pawn can capture en passant' do
       before do
+        gm.turn = color
         gm.move_piece([4, 4], *passant_end_square)
       end
 
@@ -176,6 +180,9 @@ RSpec.shared_examples 'a pawn' do |color, symbol, &block|
 
 
     context 'when a pawn reaches the other side of the board' do
+      before do
+        gm.turn = color
+      end
       it 'promotes the pawn to a queen when user type "q"' do
         allow(gm).to receive(:gets).and_return("q\n")
         gm.move_piece(*promotion_start_square, *promotion_move)
